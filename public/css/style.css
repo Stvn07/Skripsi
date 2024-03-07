@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.form-container {
+    flex: 1;
+    padding: 10px; /* Sesuaikan dengan kebutuhan */
+}
+
+.banner {
+    flex: 1;
+    padding: 30px; /* Sesuaikan dengan kebutuhan */
+    text-align: center; /* Untuk memusatkan gambar secara horizontal */
+}
+
+/* Opsional: styling untuk gambar banner */
+.banner img {
+    width: 100%;
+    height: auto;
+}
