@@ -21,3 +21,11 @@
     width: 100%;
     height: auto;
 }
+
+h6 {
+    font-size: small;
+}
+
+a {
+    text-decoration: none;
+}
