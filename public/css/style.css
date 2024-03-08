@@ -8,6 +8,7 @@
 .form-container {
     flex: 1;
     padding: 10px; /* Sesuaikan dengan kebutuhan */
+    border: 1px solid black;
 }
 
 .banner {
@@ -28,4 +29,12 @@ h6 {
 
 a {
     text-decoration: none;
+}
+
+.btn {
+    background-color: rgb(33, 246, 136);
+}
+
+.btn :hover {
+    background-color: aliceblue;
 }

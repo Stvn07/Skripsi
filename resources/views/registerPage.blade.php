@@ -8,36 +8,62 @@
             <h6>To Enjoy the Feature, Kindly Sign Up Here</h6>
         </div>
 
-        <form>
+        <div class="mt-2">
+            @if($errors -> any())
+            <div class="col-12">
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">
+                        {{$error}}
+                    </div>
+                @endforeach
+            </div>
+            @endif
+
+            @if(session()->has('error'))
+            <div class="alert alert-danger">
+                {{session('error')}}
+            </div>
+            @endif
+
+            @if(session()->has('success'))
+            <div class="alert alert-success">
+                {{session('success')}}
+            </div>
+            @endif
+
+        </div>
+
+        <form action="{{route('register.post')}}" method="POST">
+            @csrf
             <div class="mb-3">
                 <div class="mb-2">
-                    <label for="fullName" class="form-label">Full Name</label>
+                    <label class="form-label">Full Name</label>
                 </div>
-                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" id="fullName">
+                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" name="user_full_name">
               </div>
             <div class="mb-3">
                 <div class="mb-2">
-                    <label for="fullName" class="form-label">Email</label>
+                    <label class="form-label">Email</label>
                 </div>
-                <input style="max-width: 270px; border: 2px solid black" type="email" class="form-control" id="email">
+                <input style="max-width: 270px; border: 2px solid black" type="email" class="form-control" name="user_email">
             </div>
             <div class="mb-3">
                 <div class="mb-2">
-                    <label for="fullName" class="form-label">Password</label>
+                    <label class="form-label">Password</label>
                 </div>
-              <input style="max-width: 270px; border: 2px solid black" type="password" class="form-control" id="password">
+              <input style="max-width: 270px; border: 2px solid black" type="password" class="form-control" name="password">
             </div>
             <div class="mb-3">
                 <div class="mb-2">
-                    <label for="fullName" class="form-label">Address</label>
+                    <label class="form-label">Address</label>
                 </div>
-                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" id="address">
+                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" name="user_address">
               </div>
             <div class="mb-3">
                 <div class="mb-2">
-                    <label for="fullName" class="form-label">Phone Number</label>
+                    <label class="form-label">Phone Number</label>
                 </div>
-                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" id="phoneNumber">
+                <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control" name="user_phone_number">
               </div>
             <div style="justify-content: center; align-items: center; margin: 50px 50px 20px;">
                 <button style="width: 170px; border: 2px solid black" type="submit" class="btn">Submit</button>
