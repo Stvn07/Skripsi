@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'showHome'])->name('home');
 
 Route::get('/home', function () {
     return view('sidebar\dashboard');
@@ -28,4 +29,7 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
-Route::get('logout', [AuthController::class,'logout'])->name('logout');
+Route::get('/firstBalance', [BalanceController::class,'openFirstBalance'])->name('openFirstBalance');
+Route::post('/firstBalance', [BalanceController::class,'postFirstBalance'])->name('openFirstBalance.post');
+
+Route::get('/logout', [AuthController::class,'logout'])->name('logout');
