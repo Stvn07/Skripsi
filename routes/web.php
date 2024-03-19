@@ -32,4 +32,10 @@ Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 Route::get('/firstBalance', [BalanceController::class,'openFirstBalance'])->name('openFirstBalance');
 Route::post('/firstBalance', [BalanceController::class,'postFirstBalance'])->name('openFirstBalance.post');
 
+Route::get('/income', [BalanceController::class,'openAddIncome'])->name('addIncome');
+Route::post('/income', [BalanceController::class,'postIncome'])->name('addIncome.post');
+
+Route::get('/outcome', [BalanceController::class,'openAddOutcome'])->name('addOutcome');
+Route::post('/outcome', [BalanceController::class,'postOutcome'])->name('addOutcome.post');
+
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
