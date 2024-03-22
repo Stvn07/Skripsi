@@ -14,4 +14,8 @@ class Outcome extends Model
         'outcome_date',
         'outcome_amount',
     ];
+
+    public function transaction() {
+        return $this->belongsTo(Transaction::class);
+    }
 }

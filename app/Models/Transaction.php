@@ -13,4 +13,16 @@ class Transaction extends Model
         'transaction_date',
         'transaction_amount',
     ];
+
+    public function User() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function Income() {
+        return $this->hasMany(Income::class);
+    }
+
+    public function Outcome() {
+        return $this->hasMany(Outcome::class);
+    }
 }

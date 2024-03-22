@@ -14,4 +14,8 @@ class Income extends Model
         'income_date',
         'income_amount',
     ];
+
+    public function transaction() {
+        return $this->belongsTo(Transaction::class);
+    }
 }

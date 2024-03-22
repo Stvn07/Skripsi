@@ -67,3 +67,28 @@ td {
 tr:hover {
     background-color: #f5f5f5;
 }
+
+.red-text {
+    color: red;
+}
+
+.green-text {
+    color: green;
+}
+
+.container-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-bar {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.filter {
+    flex: 1;
+    margin-left: 10px;
+}
