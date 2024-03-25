@@ -122,16 +122,30 @@
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search..." name="search"
                         value="{{ request('search') }}">
+                    <input type="date" class="form-control" name="start_date" value="{{ request('start_date') }}">
+                    <input type="date" class="form-control" name="end_date" value="{{ request('end_date') }}">
+                    <input type="date" class="form-control" name="one_date" value="{{ request('one_date') }}">
+                    <input type="month" class="form-control" name="month_only" value="{{ request('month_only') }}">
+                    <input type="month" class="form-control" name="start_month" value="{{ request('start_only') }}">
+                    <input type="month" class="form-control" name="end_month" value="{{ request('end_only') }}">
+                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="year_only"
+                        value="{{ request('year_only') }}">
+                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="start_year"
+                        value="{{ request('start_year') }}">
+                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="end_year"
+                        value="{{ request('end_year') }}">
                     <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg"
                             width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path
                                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                         </svg>
                     </button>
+                    <button class="btn btn-outline-dark" type="reset">Reset
+                    </button>
                 </div>
             </form>
 
-            <form class="mt-3" action="/">
+            {{-- <form class="mt-3" action="/">
                 <div class="input-group mb-3">
                     <input type="date" class="form-control" placeholder="Search..." name="first_date"
                         value="{{ request('first_date') }}">
@@ -144,7 +158,7 @@
                         </svg>
                     </button>
                 </div>
-            </form>
+            </form> --}}
         </div>
         @if (request('search'))
             <table style="border: 1px solid black">
@@ -195,7 +209,7 @@
                     @endif
                 </tbody>
             </table>
-        @elseif (request('first_date') && request('second_date'))
+        @elseif (request('start_date') && request('end_date'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
                     <tr>
@@ -220,6 +234,251 @@
                         </tr>
                     @else
                         @foreach ($results as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('one_date'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($one_date_results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($one_date_results as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('month_only'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($month_only_results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($month_only_results as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('start_month') && request('end_month'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($range_month_results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($range_month_results as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('year_only'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($year_only_results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($year_only_results as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('start_year') && request('end_year'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($range_year_results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($range_year_results as $transaction)
                             <tr>
                                 <td>
                                     {{ $transaction->id }}
