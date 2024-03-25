@@ -14,14 +14,18 @@ class HomeController extends Controller
     function showHome(Request $request)
     {
         $search_query = $request->query('search');
+        $first_date_query = $request->input('first_date');
+        $second_date_query = $request->input('second_date');
+        $date_query = Transaction::query();
         echo "<script>";
         // Write more JavaScript code
         echo "console.log($search_query);";
+
         echo "</script>";
         if ($search_query && $search_query != '') {
             $searchResults = DB::table('transaction')
                 ->where('transaction_date', 'like', '%' . $search_query . '%')
-                ->orWhere('transaction_amount', 'like', '%' . $search_query . '%')
+                ->orWhere('transaction_amount', $search_query)
                 ->orWhere('transaction_type', 'like', '%' . $search_query . '%')
                 ->paginate(10)
                 ->appends(['search' => $search_query]);
@@ -29,6 +33,13 @@ class HomeController extends Controller
             $outcomeTable = DB::table('outcome')->get();
             $transactionTable = DB::table('transaction')->get();
             return view('home', compact('searchResults', 'transactionTable', 'incomeTable', 'outcomeTable'));
+        } else if ($first_date_query && $second_date_query) {
+            $date_query->whereBetween('transaction_date', [$first_date_query, $second_date_query]);
+            $incomeTable = DB::table('income')->get();
+            $outcomeTable = DB::table('outcome')->get();
+            $transactionTable = DB::table('transaction')->get();
+            $results = $date_query->get();
+            return view('home', compact('results', 'transactionTable', 'incomeTable', 'outcomeTable'));
         } else {
             $sumBalance = DB::table('first_balance')->sum('first_balance_amount');
             $incomeTable = DB::table('income')->get();

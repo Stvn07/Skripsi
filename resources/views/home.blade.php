@@ -118,13 +118,25 @@
 
     <div class="mt-3">
         <div class="container-table">
-            {{-- <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search...">
-            </div> --}}
             <form action="/">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search..." name="search"
                         value="{{ request('search') }}">
+                    <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <form class="mt-3" action="/">
+                <div class="input-group mb-3">
+                    <input type="date" class="form-control" placeholder="Search..." name="first_date"
+                        value="{{ request('first_date') }}">
+                    <input type="date" class="form-control" placeholder="Search..." name="second_date"
+                        value="{{ request('second_date') }}">
                     <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg"
                             width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path
@@ -153,12 +165,61 @@
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
-                    @if (count($transactionTable) === 0)
+                    @if (count($searchResults) === 0)
                         <tr>
-                            <td colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
                         </tr>
                     @else
                         @foreach ($searchResults as $transaction)
+                            <tr>
+                                <td>
+                                    {{ $transaction->id }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_date }}
+                                </td>
+
+                                <td>
+                                    {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                </td>
+
+                                <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                    @if ($transaction->income_id)
+                                        INCOME
+                                    @else
+                                        OUTCOME
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        @elseif (request('first_date') && request('second_date'))
+            <table style="border: 1px solid black">
+                <thead style="text-align: center">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Transaction Amount
+                        </th>
+                        <th>
+                            Transaction Type
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center">
+                    @if (count($results) === 0)
+                        <tr>
+                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                        </tr>
+                    @else
+                        @foreach ($results as $transaction)
                             <tr>
                                 <td>
                                     {{ $transaction->id }}
@@ -234,5 +295,4 @@
             </table>
         @endif
     </div>
-
 @endsection
