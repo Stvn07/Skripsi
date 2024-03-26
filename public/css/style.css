@@ -88,7 +88,21 @@ tr:hover {
     margin-right: 10px;
 }
 
-.filter {
-    flex: 1;
+.filter-container {
+    display: flex;
+    align-items: center;
+}
+
+.filter-label {
+    width: 150px; /* Atur lebar label sesuai kebutuhan Anda */
+}
+
+.filter-inputs {
+    display: flex;
+    align-items: center;
+}
+
+.filter-inputs input {
     margin-left: 10px;
+    margin-right: 10px; /* Atur jarak antara input sesuai kebutuhan Anda */
 }
