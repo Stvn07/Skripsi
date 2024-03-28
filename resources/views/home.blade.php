@@ -271,7 +271,6 @@
 
                                 }
                             </script>
-
                         </form>
                     </div>
                 </div>
@@ -304,7 +303,7 @@
                         @foreach ($searchResults as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -326,6 +325,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $searchResults->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('start_date') && request('end_date'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -353,7 +353,7 @@
                         @foreach ($results as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -375,6 +375,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $results->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('one_date'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -402,7 +403,7 @@
                         @foreach ($one_date_results as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -424,6 +425,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $one_date_results->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('month_only'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -451,7 +453,7 @@
                         @foreach ($month_only_results as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -473,6 +475,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $month_only_results->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('start_month') && request('end_month'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -522,6 +525,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $range_month_results->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('year_only'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -549,7 +553,7 @@
                         @foreach ($year_only_results as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -571,6 +575,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $year_only_results->withQueryString()->links('pagination::bootstrap-4') }}
         @elseif (request('start_year') && request('end_year'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -598,7 +603,7 @@
                         @foreach ($range_year_results as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -620,6 +625,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $range_year_results->withQueryString()->links('pagination::bootstrap-4') }}
         @else
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -647,7 +653,7 @@
                         @foreach ($transactionTable as $transaction)
                             <tr>
                                 <td>
-                                    {{ $transaction->id }}
+                                    {{ $transaction->nomor_urut }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}
@@ -669,6 +675,7 @@
                     @endif
                 </tbody>
             </table>
+            {{ $transactionTable->withQueryString()->links('pagination::bootstrap-4') }}
         @endif
     </div>
 @endsection
