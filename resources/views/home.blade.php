@@ -1,26 +1,157 @@
 @extends('sidebar.dashboard')
 @section('content')
     <div class="mb-2">
-        <a href="{{ route('openFirstBalance') }}" class="btn btn-primary">Input First Balance</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
+            Tambah First Balance
+        </button>
+
+        <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-form-content">
+                    <form action="{{ route('addIncome.post') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h2 style="text-align: center">Tambah First Balance</h2>
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="first_balance_amount">First Balance Amount</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="number" id="first_balance_amount" name="first_balance_amount">
+                                </div>
+                            </div>
+
+                            <div class="buttons mt-4">
+                                <button type="submit" class="send">Tambah</button>
+
+                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="mb-2">
-        <a href="{{ route('addIncome') }}" class="btn btn-primary">Add Income</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
+            Tambah Income
+        </button>
+
+        <div class="modal fade modal-form" id="incomeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-form-content">
+                    <form action="{{ route('addIncome.post') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h2 style="text-align: center">Tambah Income</h2>
+
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="income_name">Income Name</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="text" id="income_name" name="income_name">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- Label untuk filter -->
+                                <div class="filter-label">
+                                    <label for="income_date">Income Date</label>
+                                </div>
+
+                                <!-- Field tanggal awal dan akhir -->
+                                <div class="filter-inputs">
+                                    <input type="date" id="income_date" name="income_date">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="income_amount">Income Amount</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="number" id="income_amount" name="income_amount">
+                                </div>
+                            </div>
+
+                            <div class="buttons mt-4">
+                                <button type="submit" class="send">Tambah</button>
+
+                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div>
-        <a href="{{ route('addOutcome') }}" class="btn btn-primary">Add Outcome</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
+            Tambah Outcome
+        </button>
+
+        <div class="modal fade modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-form-content">
+                    <form action="{{ route('addOutcome.post') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h2 style="text-align: center">Tambah Outcome</h2>
+
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="outcome_name">Outcome Name</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="text" id="outcome_name" name="outcome_name">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- Label untuk filter -->
+                                <div class="filter-label">
+                                    <label for="outcome_date">Outcome Date</label>
+                                </div>
+
+                                <!-- Field tanggal awal dan akhir -->
+                                <div class="filter-inputs">
+                                    <input type="date" id="outcome_date" name="outcome_date">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="outcome_amount">Outcome Amount</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="number" id="outcome_amount" name="outcome_amount">
+                                </div>
+                            </div>
+
+                            <div class="buttons mt-4">
+                                <button type="submit" class="send">Tambah</button>
+
+                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    {{-- @foreach ($firstBalances as $firstBalance)
-<ul>
-    <li>
-        {{$firstBalance->first_balance_amount}}
-    </li>
-</ul>
-@endforeach --}}
 
 
-    {{-- Total Balance: {{ 'Rp' . number_format($totalBalance, 0, ',', '.') }} --}}
 
     <div class="mt-3">
         <table style="border: 1px solid black">
@@ -122,18 +253,6 @@
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Search..." name="search"
                         value="{{ request('search') }}">
-                    {{-- <input type="date" class="form-control" name="start_date" value="{{ request('start_date') }}">
-                    <input type="date" class="form-control" name="end_date" value="{{ request('end_date') }}">
-                    <input type="date" class="form-control" name="one_date" value="{{ request('one_date') }}">
-                    <input type="month" class="form-control" name="month_only" value="{{ request('month_only') }}">
-                    <input type="month" class="form-control" name="start_month" value="{{ request('start_only') }}">
-                    <input type="month" class="form-control" name="end_month" value="{{ request('end_only') }}">
-                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="year_only"
-                        value="{{ request('year_only') }}">
-                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="start_year"
-                        value="{{ request('start_year') }}">
-                    <input type="number" min="1900" max="{{ date('Y') }}" class="form-control" name="end_year"
-                        value="{{ request('end_year') }}"> --}}
                     <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg"
                             width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path
@@ -149,12 +268,14 @@
             </button>
 
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
-                            <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="reset" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <form action="/">
                             <div class="modal-body">
@@ -325,7 +446,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $searchResults->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $searchResults->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('start_date') && request('end_date'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -375,7 +498,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('one_date'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -425,7 +550,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $one_date_results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $one_date_results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('month_only'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -475,7 +602,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $month_only_results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $month_only_results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('start_month') && request('end_month'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -525,7 +654,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $range_month_results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $range_month_results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('year_only'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -575,7 +706,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $year_only_results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $year_only_results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @elseif (request('start_year') && request('end_year'))
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -625,7 +758,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $range_year_results->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $range_year_results->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @else
             <table style="border: 1px solid black">
                 <thead style="text-align: center">
@@ -675,7 +810,9 @@
                     @endif
                 </tbody>
             </table>
-            {{ $transactionTable->withQueryString()->links('pagination::bootstrap-4') }}
+            <div class="mt-2">
+                {{ $transactionTable->withQueryString()->links('pagination::bootstrap-4') }}
+            </div>
         @endif
     </div>
 @endsection

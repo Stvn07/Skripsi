@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class BalanceController extends Controller
 {
-    //
     function postFirstBalance(Request $request)
     {
         $validateManyBalance = DB::table('first_balance')->get();
@@ -40,16 +39,6 @@ class BalanceController extends Controller
         }
     }
 
-    function openFirstBalance()
-    {
-        return view('balance.firstBalance');
-    }
-
-    function openAddIncome()
-    {
-        return view('balance.income');
-    }
-
     function postIncome(Request $request)
     {
         $request->validate([
@@ -73,11 +62,6 @@ class BalanceController extends Controller
             return redirect(route('addIncome'))->with("error", "Please Input Data Correctly");
         }
         return redirect(route('home'))->with("success", "Success Input The First Balance");
-    }
-
-    function openAddOutcome()
-    {
-        return view('balance.outcome');
     }
 
     function postOutcome(Request $request)

@@ -94,7 +94,7 @@ tr:hover {
 }
 
 .filter-label {
-    width: 150px; /* Atur lebar label sesuai kebutuhan Anda */
+    width: 200px; /* Atur lebar label sesuai kebutuhan Anda */
 }
 
 .filter-inputs {
@@ -105,4 +105,89 @@ tr:hover {
 .filter-inputs input {
     margin-left: 10px;
     margin-right: 10px; /* Atur jarak antara input sesuai kebutuhan Anda */
+}
+
+.modal-form {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-form-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.modal-form-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 45%;
+}
+
+.buttons button.cancel {
+    background-color: #ff3333;
+    color: #fff;
+}
+
+.buttons button.send {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+    .modal-form-content {
+        margin: 10% auto;
+        padding: 10px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .buttons button {
+        width: 100%;
+        margin-top: 20px;
+    }
 }
