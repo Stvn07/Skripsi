@@ -11,7 +11,6 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    // function login(Request $request)
     function login() {
         return view('loginPage');
     }

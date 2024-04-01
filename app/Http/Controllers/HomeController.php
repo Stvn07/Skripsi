@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Income;
 use App\Models\Transaction;
 
 class HomeController extends Controller
 {
-    //
     function showHome(Request $request)
     {
         $search_query = $request->query('search');
@@ -33,14 +31,6 @@ class HomeController extends Controller
         $end_year = date('Y', strtotime($end_month_query));
         $end_month = date('m', strtotime($end_month_query));
 
-        // $start_year_only = date('Y', strtotime($start_year_query));
-        // $end_year_only = date('Y', strtotime($end_year_query));
-
-        echo "<script>";
-        // Write more JavaScript code
-        echo "console.log($search_query);";
-
-        echo "</script>";
         if ($search_query && $search_query != '') {
             $searchResults = DB::table('transaction')
                 ->where('transaction_date', 'like', '%' . $search_query . '%')
@@ -56,7 +46,13 @@ class HomeController extends Controller
                 $result->nomor_urut = $nomorUrut++;
             }
             $transactionTable = DB::table('transaction')->get();
-            return view('home', compact('searchResults', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view('home', compact(
+                'searchResults',
+                'transactionTable',
+                'incomeTable',
+                'outcomeTable'
+            )
+            );
         } else if ($start_date_query && $end_date_query) {
             $date_range_query->whereBetween('transaction_date', [$start_date_query, $end_date_query]);
             $incomeTable = DB::table('income')->get();
@@ -67,7 +63,15 @@ class HomeController extends Controller
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else if ($one_date_query) {
             $date_query->whereDate('transaction_date', $one_date_query);
             $incomeTable = DB::table('income')->get();
@@ -78,7 +82,15 @@ class HomeController extends Controller
             foreach ($one_date_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('one_date_results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'one_date_results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else if ($month_only_query) {
             $startDate = date("$year-$month-01");
             $endDate = date("Y-m-t", strtotime($startDate));
@@ -90,7 +102,15 @@ class HomeController extends Controller
             foreach ($month_only_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('month_only_results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'month_only_results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else if ($start_month_query && $end_month_query) {
             $startDate = date("$start_year-$start_month-01");
             $endDate = date("$end_year-$end_month-t", strtotime($end_month));
@@ -102,7 +122,15 @@ class HomeController extends Controller
             foreach ($range_month_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('range_month_results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'range_month_results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else if ($year_only_query) {
             $startDate = date("$year_only_query-01-01");
             $endDate = date("$year_only_query-12-31");
@@ -114,7 +142,15 @@ class HomeController extends Controller
             foreach ($year_only_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('year_only_results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'year_only_results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else if ($start_year_query && $end_year_query) {
             $startDate = date("$start_year_query-01-01");
             $endDate = date("$end_year_query-12-31");
@@ -126,7 +162,15 @@ class HomeController extends Controller
             foreach ($range_year_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            return view('home', compact('range_year_results', 'transactionTable', 'incomeTable', 'outcomeTable'));
+            return view(
+                'home',
+                compact(
+                    'range_year_results',
+                    'transactionTable',
+                    'incomeTable',
+                    'outcomeTable'
+                )
+            );
         } else {
             $sumBalance = DB::table('first_balance')->sum('first_balance_amount');
             $incomeTable = DB::table('income')->get();
@@ -142,12 +186,24 @@ class HomeController extends Controller
             $incomeTableJan = DB::table('income')->whereMonth('income_date', '03')->sum('income_amount');
             $manyBalance = DB::table('first_balance')->count();
             if ($manyBalance === 1) {
-                $totalBalance = $sumBalance + $incomeBalance - $outcomeBalance;
-            } else {
-                $totalBalance = 0;
+                $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
             }
             $firstBalances = DB::table('first_balance')->get();
-            return view('home', compact('firstBalances', 'sumBalance', 'totalBalance', 'manyBalance', 'incomeTable', 'incomeTableJan', 'outcomeTable', 'transactionTable'));
+            return view(
+                'home',
+                compact(
+                    'firstBalances',
+                    'sumBalance',
+                    'totalBalance',
+                    'manyBalance',
+                    'incomeTable',
+                    'incomeTableJan',
+                    'outcomeTable',
+                    'transactionTable',
+                    'incomeBalance',
+                    'outcomeBalance'
+                )
+            );
         }
     }
 }

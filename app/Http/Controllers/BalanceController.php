@@ -15,8 +15,8 @@ class BalanceController extends Controller
 {
     function postFirstBalance(Request $request)
     {
-        $validateManyBalance = DB::table('first_balance')->get();
-        if ($validateManyBalance !== null) {
+        $validateManyBalance = DB::table('first_balance')->count();
+        if ($validateManyBalance === 0) {
             $request->validate([
                 'first_balance_amount' => 'required',
             ]);

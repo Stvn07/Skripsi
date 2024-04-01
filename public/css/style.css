@@ -94,7 +94,7 @@ tr:hover {
 }
 
 .filter-label {
-    width: 200px; /* Atur lebar label sesuai kebutuhan Anda */
+    width: 200px;
 }
 
 .filter-inputs {
@@ -104,12 +104,10 @@ tr:hover {
 
 .filter-inputs input {
     margin-left: 10px;
-    margin-right: 10px; /* Atur jarak antara input sesuai kebutuhan Anda */
+    margin-right: 10px;
 }
 
 .modal-form {
-    display: none;
-    position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
@@ -139,7 +137,6 @@ tr:hover {
 }
 
 .form-group label {
-    display: block;
     font-weight: bold;
     margin-bottom: 5px;
 }

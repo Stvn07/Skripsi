@@ -1,5 +1,6 @@
 @extends('sidebar.dashboard')
 @section('content')
+    {{-- Bagian First Balance  --}}
     <div class="mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
             Tambah First Balance
@@ -7,9 +8,9 @@
 
         <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-form-content">
-                    <form action="{{ route('addIncome.post') }}" method="POST">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <form action="{{ route('openFirstBalance.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
                             <h2 style="text-align: center">Tambah First Balance</h2>
@@ -35,15 +36,15 @@
         </div>
     </div>
 
+    {{-- Bagian Tambah Income --}}
     <div class="mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
             Tambah Income
         </button>
 
-        <div class="modal fade modal-form" id="incomeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-form-content">
+                <div class="modal-content">
                     <form action="{{ route('addIncome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
@@ -60,12 +61,10 @@
                             </div>
 
                             <div class="form-group">
-                                <!-- Label untuk filter -->
                                 <div class="filter-label">
                                     <label for="income_date">Income Date</label>
                                 </div>
 
-                                <!-- Field tanggal awal dan akhir -->
                                 <div class="filter-inputs">
                                     <input type="date" id="income_date" name="income_date">
                                 </div>
@@ -83,7 +82,6 @@
 
                             <div class="buttons mt-4">
                                 <button type="submit" class="send">Tambah</button>
-
                                 <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
                             </div>
                         </div>
@@ -93,15 +91,16 @@
         </div>
     </div>
 
+    {{-- Bagian Tambah Outcome --}}
     <div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
             Tambah Outcome
         </button>
 
-        <div class="modal fade modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <div class="modal modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="outcomeModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-form-content">
+                <div class="modal-content">
                     <form action="{{ route('addOutcome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
@@ -118,12 +117,10 @@
                             </div>
 
                             <div class="form-group">
-                                <!-- Label untuk filter -->
                                 <div class="filter-label">
                                     <label for="outcome_date">Outcome Date</label>
                                 </div>
 
-                                <!-- Field tanggal awal dan akhir -->
                                 <div class="filter-inputs">
                                     <input type="date" id="outcome_date" name="outcome_date">
                                 </div>
@@ -141,8 +138,7 @@
 
                             <div class="buttons mt-4">
                                 <button type="submit" class="send">Tambah</button>
-
-                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                                <button type="button" class="cancel" data-bs-dismiss="modal">Batal</button>
                             </div>
                         </div>
                     </form>
@@ -151,8 +147,7 @@
         </div>
     </div>
 
-
-
+    {{-- Tabel Income --}}
     <div class="mt-3">
         <table style="border: 1px solid black">
             <thead style="text-align: center">
@@ -200,6 +195,7 @@
         </table>
     </div>
 
+    {{-- Tabel Outcome --}}
     <div class="mt-3">
         <table style="border: 1px solid black">
             <thead style="text-align: center">
@@ -247,6 +243,7 @@
         </table>
     </div>
 
+    {{-- Tabel Transaksi --}}
     <div class="mt-3">
         <div class="container-table">
             <form action="/">
@@ -262,12 +259,10 @@
                 </div>
             </form>
 
-            <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Filter
             </button>
 
-            <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -293,12 +288,10 @@
                                 </div>
 
                                 <div class="filter-container mt-4 mb-4">
-                                    <!-- Label untuk filter -->
                                     <div class="filter-label">
                                         <label for="start_date">Range Tanggal</label>
                                     </div>
 
-                                    <!-- Field tanggal awal dan akhir -->
                                     <div class="filter-inputs">
                                         <input type="date" class="form-control" id="start_date" name="start_date"
                                             placeholder="Pilih tanggal awal" value="{{ request('start_date') }}">
@@ -322,12 +315,10 @@
                                 </div>
 
                                 <div class="filter-container mt-4 mb-4">
-                                    <!-- Label untuk filter -->
                                     <div class="filter-label">
                                         <label for="start_month">Range Bulan</label>
                                     </div>
 
-                                    <!-- Field tanggal awal dan akhir -->
                                     <div class="filter-inputs">
                                         <input type="month" class="form-control" id="start_month" name="start_month"
                                             value="{{ request('start_only') }}">
@@ -352,12 +343,10 @@
                                 </div>
 
                                 <div class="filter-container mt-4 mb-4">
-                                    <!-- Label untuk filter -->
                                     <div class="filter-label">
                                         <label for="start_year">Range Tahun</label>
                                     </div>
 
-                                    <!-- Field tanggal awal dan akhir -->
                                     <div class="filter-inputs">
                                         <input type="number" min="1900" max="{{ date('Y') }}"
                                             class="form-control" id="start_year" name="start_year"
@@ -814,5 +803,11 @@
                 {{ $transactionTable->withQueryString()->links('pagination::bootstrap-4') }}
             </div>
         @endif
+    </div>
+
+    {{-- Mau Nunjukkin Total Balance --}}
+    <div>
+        Total Balance Anda =
+        <span>{{ 'Rp' . number_format($totalBalance, 0, ',', '.') }}</span>
     </div>
 @endsection
