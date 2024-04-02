@@ -89,4 +89,49 @@ class BalanceController extends Controller
         }
         return redirect(route('home'))->with("success", "Success Input The First Balance");
     }
+
+    function updatePostIncome(Request $request, $id)
+    {
+        $request->validate([
+            'income_name' => 'required',
+            'income_date' => 'required|date',
+            'income_amount' => 'required'
+        ]);
+        $newIncome = Income::find($id);
+        $newIncome->income_name = $request->income_name;
+        $newIncome->income_date = $request->income_date;
+        $newIncome->income_amount = $request->income_amount;
+        $newIncome->save();
+        $newTransactionIncome = Transaction::find($id);
+        $newTransactionIncome->income_id = $newIncome->id;
+        $newTransactionIncome->outcome_id = null;
+        $newTransactionIncome->transaction_date = $request->income_date;
+        $newTransactionIncome->transaction_amount = $request->income_amount;
+        $newTransactionIncome->transaction_type = 'income';
+        $newTransactionIncome->save();
+        return redirect(route('home'));
+
+    }
+
+    function updatePostOutcome(Request $request, $id)
+    {
+        $request->validate([
+            'outcome_name' => 'required',
+            'outcome_date' => 'required|date',
+            'outcome_amount' => 'required'
+        ]);
+        $newOutcome = Outcome::find($id);
+        $newOutcome->outcome_name = $request->outcome_name;
+        $newOutcome->outcome_date = $request->outcome_date;
+        $newOutcome->outcome_amount = $request->outcome_amount;
+        $newOutcome->save();
+        $newTransactionOutcome = Transaction::find($id);
+        $newTransactionOutcome->income_id = null;
+        $newTransactionOutcome->outcome_id = $newOutcome->id;
+        $newTransactionOutcome->transaction_date = $request->outcome_date;
+        $newTransactionOutcome->transaction_amount = $request->outcome_amount;
+        $newTransactionOutcome->transaction_type = 'outcome';
+        $newTransactionOutcome->save();
+        return redirect(route('home'));
+    }
 }
