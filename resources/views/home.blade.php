@@ -10,13 +10,14 @@
             aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
-                    <form action="{{ route('openFirstBalance.post') }}" method="POST">
+                    <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
                             <h2 style="text-align: center">Tambah First Balance</h2>
                             <div class="form-group">
                                 <div class="filter-label">
                                     <label for="first_balance_amount">First Balance Amount</label>
+                                    <span class="error-message" id="first_balance_amount_empty"></span>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -24,16 +25,42 @@
                                 </div>
                             </div>
 
-                            <div class="buttons mt-4">
+                            <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
 
-                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                                <button type="button" id="cancelBtn" data-bs-dismiss="modal" class="cancel">Batal</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById("firstBalanceForm").addEventListener("submit", function(event) {
+                var firstBalanceAmount = document.getElementById("first_balance_amount");
+                var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
+                var emptyCount = 0;
+
+                if (firstBalanceAmount.value.trim() === "") {
+                    firstBalanceAmountEmpty.textContent = "First Balance tidak boleh kosong";
+                    firstBalanceAmountEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    firstBalanceAmountEmpty.style.display = "none";
+                }
+
+                if (emptyCount > 0) {
+                    event.preventDefault();
+                }
+            });
+
+            document.getElementById("cancelBtn").addEventListener("click", function() {
+                document.getElementById("first_balance_amount").value = "";
+
+                document.getElementById("first_balance_amount_empty").innerText = "";
+            });
+        </script>
     </div>
 
     {{-- Bagian Tambah Income --}}
@@ -45,7 +72,7 @@
         <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form action="{{ route('addIncome.post') }}" method="POST">
+                    <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
                             <h2 style="text-align: center">Tambah Income</h2>
@@ -57,6 +84,7 @@
 
                                 <div class="filter-inputs">
                                     <input type="text" id="income_name" name="income_name">
+                                    <span class="error-message" id="income_name_empty"></span>
                                 </div>
                             </div>
 
@@ -67,6 +95,7 @@
 
                                 <div class="filter-inputs">
                                     <input type="date" id="income_date" name="income_date">
+                                    <span class="error-message" id="income_date_empty"></span>
                                 </div>
                             </div>
 
@@ -77,18 +106,69 @@
 
                                 <div class="filter-inputs">
                                     <input type="number" id="income_amount" name="income_amount">
+                                    <span class="error-message" id="income_amount_empty"></span>
                                 </div>
                             </div>
 
-                            <div class="buttons mt-4">
+                            <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
-                                <button type="button" data-bs-dismiss="modal" class="cancel">Batal</button>
+                                <button type="button" id="cancelBtn" data-bs-dismiss="modal" class="cancel">Batal</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById("incomeForm").addEventListener("submit", function(event) {
+                var incomeName = document.getElementById("income_name");
+                var incomeDate = document.getElementById("income_date");
+                var incomeAmount = document.getElementById("income_amount");
+                var incomeNameEmpty = document.getElementById("income_name_empty");
+                var incomeDateEmpty = document.getElementById("income_date_empty");
+                var incomeAmountEmpty = document.getElementById("income_amount_empty");
+                var emptyCount = 0;
+
+                if (incomeName.value.trim() === "") {
+                    incomeNameEmpty.textContent = "Income Name tidak boleh kosong";
+                    incomeNameEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeNameEmpty.style.display = "none";
+                }
+
+                if (incomeDate.value.trim() === "") {
+                    incomeDateEmpty.textContent = "Income Date tidak boleh kosong";
+                    incomeDateEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeDateEmpty.style.display = "none";
+                }
+
+                if (incomeAmount.value.trim() === "") {
+                    incomeAmountEmpty.textContent = "Income Amount tidak boleh kosong";
+                    incomeAmountEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeAmountEmpty.style.display = "none";
+                }
+
+                if (emptyCount > 0) {
+                    event.preventDefault();
+                }
+            });
+
+            document.getElementById("cancelBtn").addEventListener("click", function() {
+                document.getElementById("income_name").value = "";
+                document.getElementById("income_date").value = "";
+                document.getElementById("income_amount").value = "";
+
+                document.getElementById("income_name_empty").innerText = "";
+                document.getElementById("income_date_empty").innerText = "";
+                document.getElementById("income_amount_empty").innerText = "";
+            });
+        </script>
     </div>
 
     {{-- Bagian Tambah Outcome --}}
@@ -101,7 +181,7 @@
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form action="{{ route('addOutcome.post') }}" method="POST">
+                    <form id="outcomeForm" action="{{ route('addOutcome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
                             <h2 style="text-align: center">Tambah Outcome</h2>
@@ -113,6 +193,7 @@
 
                                 <div class="filter-inputs">
                                     <input type="text" id="outcome_name" name="outcome_name">
+                                    <span class="error-message" id="outcome_name_empty"></span>
                                 </div>
                             </div>
 
@@ -123,6 +204,7 @@
 
                                 <div class="filter-inputs">
                                     <input type="date" id="outcome_date" name="outcome_date">
+                                    <span class="error-message" id="outcome_date_empty"></span>
                                 </div>
                             </div>
 
@@ -133,18 +215,70 @@
 
                                 <div class="filter-inputs">
                                     <input type="number" id="outcome_amount" name="outcome_amount">
+                                    <span class="error-message" id="outcome_amount_empty"></span>
                                 </div>
                             </div>
 
-                            <div class="buttons mt-4">
+                            <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
-                                <button type="button" class="cancel" data-bs-dismiss="modal">Batal</button>
+                                <button type="button" id="cancelBtn" class="cancel"
+                                    data-bs-dismiss="modal">Batal</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById("outcomeForm").addEventListener("submit", function(event) {
+                var outcomeName = document.getElementById("outcome_name");
+                var outcomeDate = document.getElementById("outcome_date");
+                var outcomeAmount = document.getElementById("outcome_amount");
+                var outcomeNameEmpty = document.getElementById("outcome_name_empty");
+                var outcomeDateEmpty = document.getElementById("outcome_date_empty");
+                var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
+                var emptyCount = 0;
+
+                if (outcomeName.value.trim() === "") {
+                    outcomeNameEmpty.textContent = "Outcome Name tidak boleh kosong";
+                    outcomeNameEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    outcomeNameEmpty.style.display = "none";
+                }
+
+                if (outcomeDate.value.trim() === "") {
+                    outcomeDateEmpty.textContent = "Outcome Date tidak boleh kosong";
+                    outcomeDateEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    outcomeDateEmpty.style.display = "none";
+                }
+
+                if (outcomeAmount.value.trim() === "") {
+                    outcomeAmountEmpty.textContent = "Outcome Amount tidak boleh kosong";
+                    outcomeAmountEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    outcomeAmountEmpty.style.display = "none";
+                }
+
+                if (emptyCount > 0) {
+                    event.preventDefault();
+                }
+            });
+
+            document.getElementById("cancelBtn").addEventListener("click", function() {
+                document.getElementById("outcome_name").value = "";
+                document.getElementById("outcome_date").value = "";
+                document.getElementById("outcome_amount").value = "";
+
+                document.getElementById("outcome_name_empty").innerText = "";
+                document.getElementById("outcome_date_empty").innerText = "";
+                document.getElementById("outcome_amount_empty").innerText = "";
+            });
+        </script>
     </div>
 
     {{-- Tabel Income --}}
