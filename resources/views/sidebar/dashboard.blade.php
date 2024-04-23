@@ -32,7 +32,7 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="active nav-item ">
-                            <a href="#" class="nav-link align-middle px-0 active">
+                            <a href="/" class="nav-link align-middle px-0 active">
                                 <i class="fs-3 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
                             </a>
                         </li>
@@ -43,6 +43,11 @@
                         <li>
                             <a href="#" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('openReport') }}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Reports</span>
                             </a>
                         </li>
                     </ul>

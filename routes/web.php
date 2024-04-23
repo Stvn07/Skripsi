@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -32,9 +33,9 @@ Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 Route::post('/firstBalance', [BalanceController::class, 'postFirstBalance'])->name('openFirstBalance.post');
 
 Route::post('/income', [BalanceController::class, 'postIncome'])->name('addIncome.post');
-Route::post('/update/income/{income:id}', [BalanceController::class, 'updatePostIncome']);
 
 Route::post('/outcome', [BalanceController::class, 'postOutcome'])->name('addOutcome.post');
-Route::post('update/outcome/{outcome:id}', [BalanceController::class, 'updatePostOutcome']);
+
+Route::get('/report', [ReportController::class, 'showReportTable'])->name('openReport');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

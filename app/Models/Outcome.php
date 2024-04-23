@@ -15,7 +15,8 @@ class Outcome extends Model
         'outcome_amount',
     ];
 
-    public function transaction() {
-        return $this->belongsTo(Transaction::class);
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

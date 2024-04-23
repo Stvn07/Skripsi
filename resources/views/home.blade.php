@@ -298,9 +298,6 @@
                     <th>
                         Income Amount
                     </th>
-                    <th>
-                        Action
-                    </th>
                 </tr>
             </thead>
             <tbody style="text-align: center">
@@ -325,123 +322,11 @@
                             <td>
                                 {{ 'Rp' . number_format($income->income_amount, 0, ',', '.') }}
                             </td>
-
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#updateIncomeModal">
-                                    Update
-                                </button>
-                            </td>
                         </tr>
                     @endforeach
                 @endif
             </tbody>
         </table>
-        <div class="modal modal-form" id="updateIncomeModal" tabindex="-1" aria-labelledby="updateIncomeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="updateIncomeForm" action="/update/income/{{ $income->id }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <h2 style="text-align: center">Update Income</h2>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_name">Income Name</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="text" id="income_name" name="income_name"
-                                        value="{{ $income->income_name }}">
-                                    <span class="error-message" id="income_name_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_date">Income Date</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="date" id="income_date" name="income_date"
-                                        value="{{ $income->income_date }}">
-                                    <span class="error-message" id="income_date_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_amount">Income Amount</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="number" id="income_amount" name="income_amount"
-                                        value="{{ $income->income_amount }}">
-                                    <span class="error-message" id="income_amount_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">Update</button>
-                                <button type="button" id="cancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">Batal</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            document.getElementById("incomeForm").addEventListener("submit", function(event) {
-                var incomeName = document.getElementById("income_name");
-                var incomeDate = document.getElementById("income_date");
-                var incomeAmount = document.getElementById("income_amount");
-                var incomeNameEmpty = document.getElementById("income_name_empty");
-                var incomeDateEmpty = document.getElementById("income_date_empty");
-                var incomeAmountEmpty = document.getElementById("income_amount_empty");
-                var emptyCount = 0;
-
-                if (incomeName.value.trim() === "") {
-                    incomeNameEmpty.textContent = "Income Name tidak boleh kosong";
-                    incomeNameEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeNameEmpty.style.display = "none";
-                }
-
-                if (incomeDate.value.trim() === "") {
-                    incomeDateEmpty.textContent = "Income Date tidak boleh kosong";
-                    incomeDateEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeDateEmpty.style.display = "none";
-                }
-
-                if (incomeAmount.value.trim() === "") {
-                    incomeAmountEmpty.textContent = "Income Amount tidak boleh kosong";
-                    incomeAmountEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeAmountEmpty.style.display = "none";
-                }
-
-                if (emptyCount > 0) {
-                    event.preventDefault();
-                }
-            });
-
-            document.getElementById("cancelBtn").addEventListener("click", function() {
-                document.getElementById("income_name").value = "";
-                document.getElementById("income_date").value = "";
-                document.getElementById("income_amount").value = "";
-
-                document.getElementById("income_name_empty").innerText = "";
-                document.getElementById("income_date_empty").innerText = "";
-                document.getElementById("income_amount_empty").innerText = "";
-            });
-        </script>
     </div>
 
     {{-- Tabel Outcome --}}
@@ -460,9 +345,6 @@
                     </th>
                     <th>
                         Outcome Amount
-                    </th>
-                    <th>
-                        Action
                     </th>
                 </tr>
             </thead>
@@ -488,70 +370,7 @@
                             <td>
                                 {{ 'Rp' . number_format($outcome->outcome_amount, 0, ',', '.') }}
                             </td>
-
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-id="{{ $outcome->id }}" data-bs-target="#updateOutcomeModal">
-                                    Update
-                                </button>
-                            </td>
                         </tr>
-                        <div class="modal modal-form" id="updateOutcomeModal" tabindex="-1"
-                            aria-labelledby="updateOutcomeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <form id="updateOutcomeForm" action="/update/outcome/{{ $outcome->id }}"
-                                        method="POST">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <h2 style="text-align: center">Update Outcome</h2>
-
-                                            <div class="form-group">
-                                                <div class="filter-label">
-                                                    <label for="outcome_name">Outcome Name</label>
-                                                </div>
-
-                                                <div class="filter-inputs">
-                                                    <input type="text" id="outcome_name" name="outcome_name"
-                                                        value="{{ $outcome->outcome_name }}">
-                                                    <span class="error-message" id="outcome_name_empty"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="filter-label">
-                                                    <label for="outcome_date">Outcome Date</label>
-                                                </div>
-
-                                                <div class="filter-inputs">
-                                                    <input type="date" id="outcome_date" name="outcome_date"
-                                                        value="{{ $outcome->outcome_date }}">
-                                                    <span class="error-message" id="outcome_date_empty"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="filter-label">
-                                                    <label for="income_amount">Outcome Amount</label>
-                                                </div>
-
-                                                <div class="filter-inputs">
-                                                    <input type="number" id="outcome_amount" name="outcome_amount"
-                                                        value="{{ $outcome->outcome_amount }}">
-                                                    <span class="error-message" id="outcome_amount_empty"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="buttons" style="margin-top: 50px;">
-                                                <button type="submit" class="send">Update</button>
-                                                <button type="button" id="cancelBtn" data-bs-dismiss="modal"
-                                                    class="cancel">Batal</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     @endforeach
                 @endif
             </tbody>
@@ -1123,6 +942,8 @@
     {{-- Mau Nunjukkin Total Balance --}}
     <div>
         Total Balance Anda =
-        <span>{{ 'Rp' . number_format($totalBalance, 0, ',', '.') }}</span>
+        <div>
+            <span>{{ 'Rp' . number_format($totalBalanceTable, 0, ',', '.') }}</span>
+        </div>
     </div>
 @endsection

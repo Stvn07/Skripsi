@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
-use App\Models\Income;
-use App\Models\Outcome;
 
 class HomeController extends Controller
 {
@@ -48,13 +46,15 @@ class HomeController extends Controller
             $transactionTable = DB::table('transaction')->get();
             $incomeTable = $this->showIncomeTable();
             $outcomeTable = $this->showOutcomeTable();
+            $totalBalanceTable = $this->showTotalBalance();
             return view(
                 'home',
                 compact(
                     'searchResults',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($start_date_query && $end_date_query) {
@@ -64,6 +64,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $results = $date_range_query->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -73,7 +74,8 @@ class HomeController extends Controller
                     'results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($one_date_query) {
@@ -83,6 +85,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $one_date_results = $date_query->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($one_date_results->currentPage() - 1) * $one_date_results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($one_date_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -92,7 +95,8 @@ class HomeController extends Controller
                     'one_date_results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($month_only_query) {
@@ -103,6 +107,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $month_only_results = Transaction::whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($month_only_results->currentPage() - 1) * $month_only_results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($month_only_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -112,7 +117,8 @@ class HomeController extends Controller
                     'month_only_results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($start_month_query && $end_month_query) {
@@ -123,6 +129,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $range_month_results = Transaction::whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($range_month_results->currentPage() - 1) * $range_month_results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($range_month_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -132,7 +139,8 @@ class HomeController extends Controller
                     'range_month_results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($year_only_query) {
@@ -143,6 +151,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $year_only_results = Transaction::whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($year_only_results->currentPage() - 1) * $year_only_results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($year_only_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -152,7 +161,8 @@ class HomeController extends Controller
                     'year_only_results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else if ($start_year_query && $end_year_query) {
@@ -163,6 +173,7 @@ class HomeController extends Controller
             $outcomeTable = $this->showOutcomeTable();
             $range_year_results = Transaction::whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($range_year_results->currentPage() - 1) * $range_year_results->perPage() + 1;
+            $totalBalanceTable = $this->showTotalBalance();
             foreach ($range_year_results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
@@ -172,7 +183,8 @@ class HomeController extends Controller
                     'range_year_results',
                     'transactionTable',
                     'incomeTable',
-                    'outcomeTable'
+                    'outcomeTable',
+                    'totalBalanceTable'
                 )
             );
         } else {
@@ -188,18 +200,14 @@ class HomeController extends Controller
                 $result->nomor_urut = $nomorUrut++;
             }
             $incomeTableJan = DB::table('income')->whereMonth('income_date', '03')->sum('income_amount');
-            $manyBalance = DB::table('first_balance')->count();
-            if ($manyBalance === 1) {
-                $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
-            }
+            $totalBalanceTable = $this->showTotalBalance();
             $firstBalances = DB::table('first_balance')->get();
             return view(
                 'home',
                 compact(
                     'firstBalances',
                     'sumBalance',
-                    'totalBalance',
-                    'manyBalance',
+                    'totalBalanceTable',
                     'incomeTable',
                     'outcomeTable',
                     'incomeTableJan',
@@ -225,5 +233,18 @@ class HomeController extends Controller
         $outcomeTable = DB::table('outcome')->get();
 
         return $outcomeTable;
+    }
+
+    function showTotalBalance()
+    {
+        $sumBalance = DB::table('first_balance')->sum('first_balance_amount');
+        $incomeBalance = DB::table('income')->sum('income_amount');
+        $outcomeBalance = DB::table('outcome')->sum('outcome_amount');
+        $manyBalance = DB::table('first_balance')->count();
+        if ($manyBalance === 1) {
+            $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
+        }
+
+        return $totalBalance;
     }
 }

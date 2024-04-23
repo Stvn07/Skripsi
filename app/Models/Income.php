@@ -15,7 +15,8 @@ class Income extends Model
         'income_amount',
     ];
 
-    public function transaction() {
-        return $this->belongsTo(Transaction::class);
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
