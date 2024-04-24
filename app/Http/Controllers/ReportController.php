@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\TotalBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
@@ -21,7 +22,7 @@ class reportController extends Controller
         $startDate = date("$year-$month-01");
         $endDate = date("Y-m-t", strtotime($startDate));
         $hasil_bulan =
-            Transaction::with('Income', 'Outcome')
+            Transaction::with('Income', 'Outcome', 'TotalBalance')
                 ->whereBetween('transaction_date', [$startDate, $endDate])
                 ->orderBy('transaction_date')->get()
         ;
@@ -29,28 +30,25 @@ class reportController extends Controller
             ->sum('income_amount');
         $total_outcome_bulan = Outcome::whereBetween('outcome_date', [$startDate, $endDate])
             ->sum('outcome_amount');
-        // $total_balance_bulan = $total_balance + $total_income_bulan - $total_outcome_bulan;
+        $total_final_balance_bulan = TotalBalance::whereBetween('total_balance_date', [$startDate, $endDate])
+            ->latest()->first();
 
-        $total_balance = DB::table('total_balance')->sum('total_balance_amount');
         foreach ($hasil_bulan as $t) {
             $income_name = null;
             $outcome_name = null;
-            $income_amount = 0;
-            $outcome_amount = 0;
+            $total_balance_per_day = 0;
 
             if ($t->Income !== null) {
                 $income_name = $t->Income->income_name;
-                $income_amount += $t->Income->income_amount;
-                $total_balance += $t->Income->income_amount;
+                $total_balance_amount = $t->TotalBalance->total_balance_amount;
             }
 
             if ($t->Outcome !== null) {
                 $outcome_name = $t->Outcome->outcome_name;
-                $outcome_amount += $t->Outcome->outcome_amount;
-                $total_balance -= $t->Outcome->outcome_amount;
+                $total_balance_amount = $t->TotalBalance->total_balance_amount;
             }
         }
 
-        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_balance_bulan'));
+        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_final_balance_bulan'));
     }
 }

@@ -13,4 +13,9 @@ class FirstBalance extends Model
     protected $fillable = [
         'first_balance_amount',
     ];
+
+    public function totalBalance()
+    {
+        return $this->hasMany(TotalBalance::class);
+    }
 }

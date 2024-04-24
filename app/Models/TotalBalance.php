@@ -13,4 +13,25 @@ class TotalBalance extends Model
         'total_balance_date',
         'total_balance_amount',
     ];
+
+    public function firstBalance()
+    {
+        return $this->belongsTo(FirstBalance::class);
+    }
+
+    public function Income()
+    {
+        return $this->belongsTo(Income::class);
+    }
+
+    public function Outcome()
+    {
+        return $this->belongsTo(Outcome::class);
+    }
+
+    public function Transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
+
 }

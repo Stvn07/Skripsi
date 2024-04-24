@@ -23,12 +23,13 @@ class BalanceController extends Controller
             $firstBalance = new FirstBalance();
             $firstBalance->first_balance_amount = $request->first_balance_amount;
             $firstBalance->save();
+
             $totalBalance = new TotalBalance();
             $totalBalance->first_balance_id = $firstBalance->id;
             $totalBalance->income_id = null;
             $totalBalance->outcome_id = null;
             $totalBalance->total_balance_amount = $request->first_balance_amount;
-            $totalBalance->total_balance_date = new \DateTime();
+            $totalBalance->total_balance_date = now();
             $totalBalance->save();
             if (!$firstBalance) {
                 return redirect(route('openFirstBalance'))->with("error", "Please Input Data Correctly");
@@ -46,11 +47,13 @@ class BalanceController extends Controller
             'income_date' => 'required|date',
             'income_amount' => 'required'
         ]);
+
         $income = new Income();
         $income->income_name = $request->income_name;
         $income->income_date = $request->income_date;
         $income->income_amount = $request->income_amount;
         $income->save();
+
         $transactionIncome = new Transaction();
         $transactionIncome->income_id = $income->id;
         $transactionIncome->outcome_id = null;
@@ -58,6 +61,19 @@ class BalanceController extends Controller
         $transactionIncome->transaction_amount = $request->income_amount;
         $transactionIncome->transaction_type = 'income';
         $transactionIncome->save();
+
+        $previousBalance = TotalBalance::latest()->value('total_balance_amount');
+        $newBalance = $previousBalance + $request->income_amount;
+
+        $totalBalance = new TotalBalance();
+        $totalBalance->first_balance_id = null;
+        $totalBalance->income_id = $income->id;
+        $totalBalance->outcome_id = null;
+        $totalBalance->transaction_id = $transactionIncome->id;
+        $totalBalance->total_balance_amount = $newBalance;
+        $totalBalance->total_balance_date = $request->income_date;
+        $totalBalance->save();
+
         if (!$income) {
             return redirect(route('addIncome'))->with("error", "Please Input Data Correctly");
         }
@@ -77,6 +93,7 @@ class BalanceController extends Controller
         $outcome->outcome_date = $request->outcome_date;
         $outcome->outcome_amount = $request->outcome_amount;
         $outcome->save();
+
         $transactionOutcome = new Transaction();
         $transactionOutcome->income_id = null;
         $transactionOutcome->outcome_id = $outcome->id;
@@ -84,6 +101,19 @@ class BalanceController extends Controller
         $transactionOutcome->transaction_amount = $request->outcome_amount;
         $transactionOutcome->transaction_type = 'outcome';
         $transactionOutcome->save();
+
+        $previousBalance = TotalBalance::latest()->value('total_balance_amount');
+        $newBalance = $previousBalance - $request->outcome_amount;
+
+        $totalBalance = new TotalBalance();
+        $totalBalance->first_balance_id = null;
+        $totalBalance->income_id = null;
+        $totalBalance->outcome_id = $outcome->id;
+        $totalBalance->transaction_id = $transactionOutcome->id;
+        $totalBalance->total_balance_amount = $newBalance;
+        $totalBalance->total_balance_date = $request->outcome_date;
+        $totalBalance->save();
+
         if (!$outcome) {
             return redirect(route('addOutcome'))->with("error", "Please Input Data Correctly");
         }

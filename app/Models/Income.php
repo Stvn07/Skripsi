@@ -19,4 +19,9 @@ class Income extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function totalBalance()
+    {
+        return $this->hasMany(TotalBalance::class);
+    }
 }

@@ -121,6 +121,16 @@
         </div>
 
         <script>
+            document.getElementById("cancelBtn").addEventListener("click", function() {
+                document.getElementById("income_name").value = "";
+                document.getElementById("income_date").value = "";
+                document.getElementById("income_amount").value = "";
+
+                document.getElementById("income_name_empty").textContent = "";
+                document.getElementById("income_date_empty").textContent = "";
+                document.getElementById("income_amount_empty").textContent = "";
+            });
+
             document.getElementById("incomeForm").addEventListener("submit", function(event) {
                 var incomeName = document.getElementById("income_name");
                 var incomeDate = document.getElementById("income_date");
@@ -157,16 +167,6 @@
                 if (emptyCount > 0) {
                     event.preventDefault();
                 }
-            });
-
-            document.getElementById("cancelBtn").addEventListener("click", function() {
-                document.getElementById("income_name").value = "";
-                document.getElementById("income_date").value = "";
-                document.getElementById("income_amount").value = "";
-
-                document.getElementById("income_name_empty").innerText = "";
-                document.getElementById("income_date_empty").innerText = "";
-                document.getElementById("income_amount_empty").innerText = "";
             });
         </script>
     </div>

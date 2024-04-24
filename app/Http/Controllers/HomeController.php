@@ -199,8 +199,8 @@ class HomeController extends Controller
             foreach ($transactionTable as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            $incomeTableJan = DB::table('income')->whereMonth('income_date', '03')->sum('income_amount');
             $totalBalanceTable = $this->showTotalBalance();
+            $validateManyBalance = DB::table('first_balance')->count();
             $firstBalances = DB::table('first_balance')->get();
             return view(
                 'home',
@@ -210,10 +210,10 @@ class HomeController extends Controller
                     'totalBalanceTable',
                     'incomeTable',
                     'outcomeTable',
-                    'incomeTableJan',
                     'transactionTable',
                     'incomeBalance',
-                    'outcomeBalance'
+                    'outcomeBalance',
+                    'validateManyBalance'
                 )
             );
         }
@@ -241,6 +241,7 @@ class HomeController extends Controller
         $incomeBalance = DB::table('income')->sum('income_amount');
         $outcomeBalance = DB::table('outcome')->sum('outcome_amount');
         $manyBalance = DB::table('first_balance')->count();
+        $totalBalance = 0;
         if ($manyBalance === 1) {
             $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
         }

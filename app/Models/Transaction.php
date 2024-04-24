@@ -28,4 +28,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Outcome::class);
     }
+
+    public function TotalBalance()
+    {
+        return $this->hasOne(TotalBalance::class);
+    }
 }
