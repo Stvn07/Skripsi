@@ -11,34 +11,38 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    function login() {
+    function login()
+    {
         return view('loginPage');
     }
 
-    function loginPost(Request $request) {
+    function loginPost(Request $request)
+    {
         $request->validate([
-            'user_email'=> 'required|email',
-            'password'=> 'required|alpha_num',
+            'user_email' => 'required|email',
+            'password' => 'required|alpha_num',
         ]);
 
-        $credentials = $request->only('user_email','password');
+        $credentials = $request->only('user_email', 'password');
         if (Auth::attempt($credentials)) {
             return redirect()->intended(route('home'));
+        }
+
+        return redirect(route('login'))->with("error", "Please Input Data Correctly");
     }
 
-    return redirect(route('login'))->with("error", "Please Input Data Correctly");
-}
-
-    function register() {
+    function register()
+    {
         return view('registerPage');
     }
 
-    function registerPost(Request $request) {
+    function registerPost(Request $request)
+    {
         $request->validate([
             'user_full_name' => 'required',
-            'user_email'=> 'required|email|unique:users',
-            'password'=> 'required|alpha_num',
-            'user_address'=> 'required',
+            'user_email' => 'required|email|unique:users',
+            'password' => 'required|alpha_num',
+            'user_address' => 'required',
             'user_phone_number' => 'required'
         ]);
 
@@ -48,13 +52,14 @@ class AuthController extends Controller
         $data['user_address'] = $request->user_address;
         $data['user_phone_number'] = $request->user_phone_number;
         $user = User::create($data);
-        if(!$user){
+        if (!$user) {
             return redirect(route('register'))->with("error", "Please Input Data Correctly");
         }
         return redirect(route('login'))->with("success", "Register Process Success");
     }
 
-    function logout() {
+    function logout()
+    {
         Session::flush();
         Auth::logout();
         return redirect(route('login'));

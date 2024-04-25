@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TransactionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'showHome'])->name('home');
+Route::get('/', [HomeController::class, 'showHome'])->name('home')->middleware('checkLogin');
 
 Route::get('/home', function () {
     return view('sidebar\dashboard');
@@ -30,12 +31,11 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
-Route::post('/firstBalance', [BalanceController::class, 'postFirstBalance'])->name('openFirstBalance.post');
+Route::post('/firstBalance', [BalanceController::class, 'postFirstBalance'])->name('openFirstBalance.post')->middleware('checkLogin');
+Route::post('/income', [BalanceController::class, 'postIncome'])->name('addIncome.post')->middleware('checkLogin');
+Route::post('/outcome', [BalanceController::class, 'postOutcome'])->name('addOutcome.post')->middleware('checkLogin');
 
-Route::post('/income', [BalanceController::class, 'postIncome'])->name('addIncome.post');
-
-Route::post('/outcome', [BalanceController::class, 'postOutcome'])->name('addOutcome.post');
-
-Route::get('/report', [ReportController::class, 'showReportTable'])->name('openReport');
+Route::get('/transaction', [TransactionController::class, 'showTransaction'])->name('openTransaction')->middleware('checkLogin');
+Route::get('/report', [ReportController::class, 'showReportTable'])->name('openReport')->middleware('checkLogin');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
