@@ -20,7 +20,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'showHome'])->name('home')->middleware('checkLogin');
-
+Route::get('/profile/{userId}', [HomeController::class, 'showProfile'])->name('profile');
+Route::get('/profile/update/{userId}', [HomeController::class, 'showUpdateProfile'])->name('updateProfile');
+Route::post('/profile/update/{userId}', [HomeController::class, 'postUpdateProfile'])->name('updateProfile.post');
 Route::get('/home', function () {
     return view('sidebar\dashboard');
 });
@@ -30,6 +32,7 @@ Route::post('/register', [AuthController::class, 'registerPost'])->name('registe
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
+
 
 Route::post('/firstBalance', [BalanceController::class, 'postFirstBalance'])->name('openFirstBalance.post')->middleware('checkLogin');
 Route::post('/income', [BalanceController::class, 'postIncome'])->name('addIncome.post')->middleware('checkLogin');
