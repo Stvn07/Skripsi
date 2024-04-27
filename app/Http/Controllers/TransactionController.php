@@ -22,8 +22,6 @@ class TransactionController extends Controller
         $year_only_query = $request->input('year_only');
         $start_year_query = $request->input('start_year');
         $end_year_query = $request->input('end_year');
-
-        // $date_range_query = Transaction::query();
         $date_query = Transaction::query();
 
         // Untuk Filter Bagian Bulan Saja
@@ -48,114 +46,59 @@ class TransactionController extends Controller
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
-            // $transactionTable = DB::table('transaction')->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'searchResults',
-            //         'transactionTable',
-            //     )
-            // );
+            $hasil = $date_query->get();
         } else if ($start_date_query && $end_date_query) {
             $date_query->whereBetween('transaction_date', [$start_date_query, $end_date_query]);
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'results',
-            //         'transactionTable',
-            //     )
-            // );
         } else if ($one_date_query) {
             $date_query->whereDate('transaction_date', $one_date_query);
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'one_date_results',
-            //         'transactionTable',
-            //     )
-            // );
         } else if ($month_only_query) {
             $startDate = date("$year-$month-01");
             $endDate = date("Y-m-t", strtotime($startDate));
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'month_only_results',
-            //         'transactionTable',
-            //     )
-            // );
         } else if ($start_month_query && $end_month_query) {
             $startDate = date("$start_year-$start_month-01");
             $endDate = date("$end_year-$end_month-t", strtotime($end_month));
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'range_month_results',
-            //         'transactionTable',
-            //     )
-            // );
         } else if ($year_only_query) {
             $startDate = date("$year_only_query-01-01");
             $endDate = date("$year_only_query-12-31");
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'year_only_results',
-            //         'transactionTable',
-            //     )
-            // );
         } else if ($start_year_query && $end_year_query) {
             $startDate = date("$start_year_query-01-01");
             $endDate = date("$end_year_query-12-31");
-            // $transactionTable = DB::table('transaction')->get();
             $results = $date_query->whereBetween('transaction_date', [$startDate, $endDate])->orderBy('id')->paginate(5, ['*'], 'page', null);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
             }
             $hasil = $date_query->get();
-            // return view(
-            //     'transaction',
-            //     compact(
-            //         'range_year_results',
-            //         'transactionTable',
-            //     )
-            // );
         } else {
             $results = Transaction::paginate(5);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;

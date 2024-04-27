@@ -41,6 +41,11 @@
                                 <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span></a>
                         </li>
                         <li>
+                            <a href="" class="nav-link px-0 align-middle ">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Income</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('openTransaction') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Transaction</span>
                             </a>

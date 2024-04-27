@@ -164,4 +164,70 @@ class BalanceController extends Controller
         $newTransactionOutcome->save();
         return redirect(route('home'));
     }
+
+    function openUpdateIncome($incomeId)
+    {
+        $incomeData = Income::find($incomeId);
+
+        return view('update.updateIncome', compact('incomeData'));
+    }
+
+    function updateIncome(Request $request, $incomeId)
+    {
+        $request->validate([
+            'income_name' => 'nullable|string|max:255',
+            'income_date' => 'nullable|date',
+            'income_amount' => 'nullable|max_digits:12'
+        ]);
+
+        $incomeData = Income::find($incomeId);
+
+        if ($request->filled('income_name')) {
+            $incomeData->income_name = $request->income_name;
+        }
+
+        if ($request->filled('income_date')) {
+            $incomeData->income_date = $request->income_date;
+        }
+
+        if ($request->filled('income_amount')) {
+            $incomeData->income_amount = $request->income_amount;
+        }
+        $incomeData->save();
+        return redirect()->route('home');
+
+    }
+
+    function openUpdateOutcome($outcomeId)
+    {
+        $outcomeData = Outcome::find($outcomeId);
+
+        return view('update.updateOutcome', compact('outcomeData'));
+    }
+
+    function updateOutcome(Request $request, $outcomeId)
+    {
+        $request->validate([
+            'outcome_name' => 'nullable|string|max:255',
+            'outcome_date' => 'nullable|date',
+            'outcome_amount' => 'nullable|max_digits:12'
+        ]);
+
+        $outcomeData = Outcome::find($outcomeId);
+
+        if ($request->filled('outcome_name')) {
+            $outcomeData->outcome_name = $request->outcome_name;
+        }
+
+        if ($request->filled('outcome_date')) {
+            $outcomeData->outcome_date = $request->outcome_date;
+        }
+
+        if ($request->filled('outcome_amount')) {
+            $outcomeData->outcome_amount = $request->outcome_amount;
+        }
+        $outcomeData->save();
+        return redirect()->route('home');
+
+    }
 }

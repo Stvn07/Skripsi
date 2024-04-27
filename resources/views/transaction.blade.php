@@ -16,15 +16,15 @@
             });
 
             window.location.href = '/transaction?' + urlParams.toString();
-            return false; // Mencegah form untuk submit
+            return false;
         }
     </script>
 
     <div class="mt-3">
         <div class="container-table">
-            <form action="/">
+            <form action="/transaction">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search..." name="search"
+                    <input type="text" id="search" class="form-control" placeholder="Search..." name="search"
                         value="{{ request('search') }}">
                     <button class="btn btn-outline-dark" type="submit"><svg xmlns="http://www.w3.org/2000/svg"
                             width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -34,6 +34,24 @@
                     </button>
                 </div>
             </form>
+
+            <script>
+                var searchInput = document.getElementById('search');
+                searchInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        if (searchInput.value.trim() === '') {
+                            window.location.href = '/transaction';
+                        }
+                    }
+                });
+
+                document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
+                    if (searchInput.value.trim() === '') {
+                        window.location.href = '/transaction';
+                        event.preventDefault();
+                    }
+                });
+            </script>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Filter
@@ -178,7 +196,7 @@
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
-                    @if (count($searchResults) === 0)
+                    @if (count($results) === 0)
                         <tr>
                             <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
                         </tr>
