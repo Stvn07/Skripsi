@@ -23,7 +23,7 @@ class reportController extends Controller
         $hasil_bulan =
             Transaction::with('Income', 'Outcome', 'TotalBalance')
                 ->whereBetween('transaction_date', [$startDate, $endDate])
-                ->orderBy('transaction_date')->get()
+                ->orderBy('id')->get()
         ;
         $total_income_bulan = Income::whereBetween('income_date', [$startDate, $endDate])
             ->sum('income_amount');

@@ -55,7 +55,7 @@ class AuthController extends Controller
         if (!$user) {
             return redirect(route('register'))->with("error", "Please Input Data Correctly");
         }
-        return redirect(route('login'))->with("success", "Register Process Success");
+        return redirect(route('home'))->with("success", "Register Process Success");
     }
 
     function logout()
