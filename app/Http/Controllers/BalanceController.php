@@ -136,27 +136,25 @@ class BalanceController extends Controller
         ]);
 
         $incomeData = Income::findOrFail($incomeId);
-        $oldIncomeAmount = $incomeData->income_amount; // Simpan nilai income_amount sebelumnya
+        $oldIncomeAmount = $incomeData->income_amount;
+
+        //Update Data Income
         $incomeData->income_name = $request->input('income_name', $incomeData->income_name);
         $incomeData->income_date = $request->input('income_date', $incomeData->income_date);
         $incomeData->income_amount = $request->input('income_amount', $incomeData->income_amount);
         $incomeData->save();
 
+        //Update Data Transaksi
         $transactionData = Transaction::where('income_id', $incomeId)->first();
         if ($transactionData) {
-            // Simpan perubahan pada data transaksi jika diisi
             $transactionData->transaction_date = $request->input('income_date', $transactionData->transaction_date);
             $transactionData->transaction_amount = $request->input('income_amount', $transactionData->transaction_amount);
             $transactionData->save();
         }
 
-        // Hitung perubahan nilai total_balance_amount
+        //Update Data Total Balance
         $changeAmount = $request->income_amount - $oldIncomeAmount;
-
-        // Ambil total_balance_amount untuk total_balance yang akan diubah
         $totalBalanceToUpdate = TotalBalance::where('income_id', $incomeData->id)->first();
-
-        // Perbarui total_balance_amount dan total_balance_amount berikutnya jika ada
         $totalBalances = TotalBalance::where('id', '>=', $totalBalanceToUpdate->id)->orderBy('id')->get();
 
         foreach ($totalBalances as $totalBalance) {
@@ -182,42 +180,33 @@ class BalanceController extends Controller
             'outcome_amount' => 'nullable|max_digits:12'
         ]);
 
-        $outcomeData = Outcome::findorFail($outcomeId);
+        $outcomeData = Outcome::findOrFail($outcomeId);
         $oldOutcomeAmount = $outcomeData->outcome_amount;
 
-        if ($request->filled('outcome_name')) {
-            $outcomeData->outcome_name = $request->outcome_name;
-        }
-
-        if ($request->filled('outcome_date')) {
-            $outcomeData->outcome_date = $request->outcome_date;
-        }
-
-        if ($request->filled('outcome_amount')) {
-            $outcomeData->outcome_amount = $request->outcome_amount;
-        }
+        // Update Data Outcome
+        $outcomeData->outcome_name = $request->input('outcome_name', $outcomeData->outcome_name);
+        $outcomeData->outcome_date = $request->input('outcome_date', $outcomeData->outcome_date);
+        $outcomeData->outcome_amount = $request->input('outcome_amount', $outcomeData->outcome_amount);
         $outcomeData->save();
 
+        // Update Data Transaction
         $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
         if ($transactionData) {
-            if ($request->filled('outcome_date')) {
-                $transactionData->transaction_date = $request->outcome_date;
-            }
-
-            if ($request->filled('outcome_amount')) {
-                $transactionData->transaction_amount = $request->outcome_amount;
-
-            }
+            $transactionData->transaction_date = $request->input('outcome_date', $transactionData->transaction_date);
+            $transactionData->transaction_amount = $request->input('outcome_amount', $transactionData->transaction_amount);
             $transactionData->save();
         }
 
-        $outcomeAmountDifference = $request->outcome_amount - $oldOutcomeAmount;
-        $totalBalanceData = TotalBalance::where('outcome_id', $outcomeId)->first();
-        if ($totalBalanceData) {
-            $totalBalanceData->total_balance_amount += $outcomeAmountDifference;
-            $totalBalanceData->save();
-        }
-        return redirect()->route('home');
+        // Update Data Total Balance
+        $changeAmount = $oldOutcomeAmount - $request->outcome_amount;
+        $totalBalanceToUpdate = TotalBalance::where('outcome_id', $outcomeData->id)->first();
+        $totalBalances = TotalBalance::where('id', '>=', $totalBalanceToUpdate->id)->orderBy('id')->get();
 
+        foreach ($totalBalances as $totalBalance) {
+            $totalBalance->total_balance_amount += $changeAmount;
+            $totalBalance->save();
+        }
+
+        return redirect()->route('home');
     }
 }

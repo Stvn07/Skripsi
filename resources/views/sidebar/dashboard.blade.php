@@ -36,10 +36,17 @@
                                 <i class="fs-3 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
                             </a>
                         </li>
-                        <li class="active">
-                            <a href="{{ route('profile', Auth::id()) }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span></a>
-                        </li>
+                        @if (Auth::check())
+                            <li class="active">
+                                <a href="{{ route('profile', Auth::user()->id) }}" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        {{-- <a href="{{ route('profile', Auth::user()->id) }}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span></a> --}}
+
                         <li>
                             <a href="" class="nav-link px-0 align-middle ">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Income</span>

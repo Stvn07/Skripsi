@@ -3,7 +3,7 @@
     <div class="profile-container">
         <form id="updateOutcomeForm" action="/outcome/update/{{ $outcomeData->id }}" method="POST">
             @csrf
-            <h2 style="text-align: center">Tambah Outcome</h2>
+            <h2 style="text-align: center">Update Outcome</h2>
 
             <div class="form-group">
                 <div class="filter-label">
