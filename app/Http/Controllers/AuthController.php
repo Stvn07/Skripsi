@@ -24,11 +24,12 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('user_email', 'password');
+
         if (Auth::attempt($credentials)) {
             return redirect()->intended(route('home'));
+        } else {
+            return redirect()->route('login')->with('error', 'Akun tidak ditemukan. Silakan coba lagi.');
         }
-
-        return redirect(route('login'))->with("error", "Please Input Data Correctly");
     }
 
     function register()
@@ -53,10 +54,10 @@ class AuthController extends Controller
         $data['user_phone_number'] = $request->user_phone_number;
         $user = User::create($data);
         if (!$user) {
-            return redirect(route('register'))->with("error", "Please Input Data Correctly");
+            return redirect(route('register'));
         }
         Auth::login($user);
-        return redirect(route('home'))->with("success", "Register Process Success");
+        return redirect(route('home'));
     }
 
     function logout()
