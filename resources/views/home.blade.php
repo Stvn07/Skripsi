@@ -312,7 +312,7 @@
                     @foreach ($incomeTable as $income)
                         <tr>
                             <td>
-                                {{ $income->id }}
+                                {{ $income->number }}
                             </td>
                             <td>
                                 {{ $income->income_name }}
@@ -368,7 +368,7 @@
                     @foreach ($outcomeTable as $outcome)
                         <tr>
                             <td>
-                                {{ $outcome->id }}
+                                {{ $outcome->number }}
                             </td>
                             <td>
                                 {{ $outcome->outcome_name }}

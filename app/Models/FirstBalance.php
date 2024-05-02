@@ -18,4 +18,9 @@ class FirstBalance extends Model
     {
         return $this->hasMany(TotalBalance::class);
     }
+
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

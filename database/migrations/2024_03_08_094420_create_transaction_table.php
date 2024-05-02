@@ -12,6 +12,8 @@ return new class extends Migration {
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('income_id')->nullable();
             $table->foreign('income_id')->references('id')->on('income')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('outcome_id')->nullable();

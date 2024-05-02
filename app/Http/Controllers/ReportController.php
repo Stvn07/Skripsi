@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\TotalBalance;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
@@ -12,9 +13,9 @@ use App\Models\Outcome;
 
 class reportController extends Controller
 {
-    //
     function showReportTable(Request $request)
     {
+        $userId = Auth::id();
         $bulan = $request->input('bulan');
         $year = date('Y', strtotime($bulan));
         $month = date('m', strtotime($bulan));
@@ -22,14 +23,15 @@ class reportController extends Controller
         $endDate = date("Y-m-t", strtotime($startDate));
         $hasil_bulan =
             Transaction::with('Income', 'Outcome', 'TotalBalance')
+                ->where('user_id', $userId)
                 ->whereBetween('transaction_date', [$startDate, $endDate])
                 ->orderBy('id')->get()
         ;
-        $total_income_bulan = Income::whereBetween('income_date', [$startDate, $endDate])
+        $total_income_bulan = Income::where('user_id', $userId)->whereBetween('income_date', [$startDate, $endDate])
             ->sum('income_amount');
-        $total_outcome_bulan = Outcome::whereBetween('outcome_date', [$startDate, $endDate])
+        $total_outcome_bulan = Outcome::where('user_id', $userId)->whereBetween('outcome_date', [$startDate, $endDate])
             ->sum('outcome_amount');
-        $total_final_balance_bulan = TotalBalance::whereBetween('total_balance_date', [$startDate, $endDate])
+        $total_final_balance_bulan = TotalBalance::where('user_id', $userId)->whereBetween('total_balance_date', [$startDate, $endDate])
             ->latest()->first();
 
         foreach ($hasil_bulan as $t) {

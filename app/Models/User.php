@@ -46,11 +46,28 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function transaction() {
+    public function transaction()
+    {
         return $this->hasMany(Transaction::class);
     }
 
-    public function totalBalance() {
-        return $this->hasOne(TotalBalance::class);
+    public function totalBalance()
+    {
+        return $this->hasMany(TotalBalance::class);
+    }
+
+    public function firstBalance()
+    {
+        return $this->hasMany(FirstBalance::class);
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(Transaction::class, 'user_id')->where('transaction_type', 'income');
+    }
+
+    public function outcomes()
+    {
+        return $this->hasMany(Transaction::class, 'user_id')->where('transaction_type', 'outcome');
     }
 }

@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Income;
+use App\Models\Outcome;
+use App\Models\FirstBalance;
 
 class HomeController extends Controller
 {
     function showHome(Request $request)
     {
-        $sumBalance = DB::table('first_balance')->sum('first_balance_amount');
-        $incomeBalance = DB::table('income')->sum('income_amount');
-        $outcomeBalance = DB::table('outcome')->sum('outcome_amount');
-        $totalBalance = DB::table('total_balance')->sum('total_balance_amount');
         $transactionTable = Transaction::paginate(5);
         $incomeTable = $this->showIncomeTable();
         $outcomeTable = $this->showOutcomeTable();
@@ -24,46 +24,49 @@ class HomeController extends Controller
             $result->nomor_urut = $nomorUrut++;
         }
         $totalBalanceTable = $this->showTotalBalance();
-        $validateManyBalance = DB::table('first_balance')->count();
-        $firstBalances = DB::table('first_balance')->get();
         return view(
             'home',
             compact(
-                'firstBalances',
-                'sumBalance',
                 'totalBalanceTable',
                 'incomeTable',
                 'outcomeTable',
-                'transactionTable',
-                'incomeBalance',
-                'outcomeBalance',
-                'validateManyBalance'
+                'transactionTable'
             )
         );
     }
 
     function showIncomeTable()
     {
-        $incomeTable = DB::table('income')->get();
+        $userId = Auth::id();
+        $incomeTable = Income::where('user_id', $userId)->get();
+        $number = 1;
+
+        foreach ($incomeTable as $income) {
+            $income->number = $number++;
+        }
+
         return $incomeTable;
     }
 
     function showOutcomeTable()
     {
-        $outcomeTable = DB::table('outcome')->get();
+        $userId = Auth::id();
+        $outcomeTable = Outcome::where('user_id', $userId)->get();
+        $number = 1;
+
+        foreach ($outcomeTable as $outcome) {
+            $outcome->number = $number++;
+        }
         return $outcomeTable;
     }
 
     function showTotalBalance()
     {
-        $sumBalance = DB::table('first_balance')->sum('first_balance_amount');
-        $incomeBalance = DB::table('income')->sum('income_amount');
-        $outcomeBalance = DB::table('outcome')->sum('outcome_amount');
-        $manyBalance = DB::table('first_balance')->count();
-        $totalBalance = 0;
-        if ($manyBalance === 1) {
-            $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
-        }
+        $userId = Auth::id();
+        $sumBalance = FirstBalance::where('user_id', $userId)->sum('first_balance_amount');
+        $incomeBalance = Income::where('user_id', $userId)->sum('income_amount');
+        $outcomeBalance = Outcome::where('user_id', $userId)->sum('outcome_amount');
+        $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
 
         return $totalBalance;
     }
@@ -71,7 +74,8 @@ class HomeController extends Controller
     public function showProfile($userId)
     {
         $userData = User::find($userId);
-        $transactionData = Transaction::orderBy('created_at', 'desc')->take(3)->get();
+        $userAuth = Auth::id();
+        $transactionData = Transaction::where('user_id', $userAuth)->orderBy('created_at', 'desc')->take(3)->get();
         return view('user.profile', compact('userData', 'transactionData'));
     }
 

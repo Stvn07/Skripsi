@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
     //
     function showTransaction(Request $request)
     {
+        $userId = Auth::id();
         $search_query = $request->query('search');
         $start_date_query = $request->input('start_date');
         $end_date_query = $request->input('end_date');
@@ -23,6 +25,7 @@ class TransactionController extends Controller
         $start_year_query = $request->input('start_year');
         $end_year_query = $request->input('end_year');
         $date_query = Transaction::query();
+        $date_query->where('user_id', $userId);
 
         // Untuk Filter Bagian Bulan Saja
         $year = date('Y', strtotime($month_only_query));
@@ -36,9 +39,12 @@ class TransactionController extends Controller
 
         if ($search_query && $search_query != '') {
             $results = DB::table('transaction')
-                ->where('transaction_date', 'like', '%' . $search_query . '%')
-                ->orWhere('transaction_amount', $search_query)
-                ->orWhere('transaction_type', 'like', '%' . $search_query . '%')
+                ->where('user_id', $userId)
+                ->where(function ($query) use ($search_query) {
+                    $query->where('transaction_date', 'like', '%' . $search_query . '%')
+                        ->orWhere('transaction_amount', $search_query)
+                        ->orWhere('transaction_type', 'like', '%' . $search_query . '%');
+                })
                 ->orderBy('id')
                 ->paginate(5, ['*'], 'page', null)
                 ->appends(['search' => $search_query]);
@@ -100,7 +106,7 @@ class TransactionController extends Controller
             }
             $hasil = $date_query->get();
         } else {
-            $results = Transaction::paginate(5);
+            $results = Transaction::where('user_id', $userId)->paginate(5);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;

@@ -34,4 +34,9 @@ class TotalBalance extends Model
         return $this->belongsTo(Transaction::class);
     }
 
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

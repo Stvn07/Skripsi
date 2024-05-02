@@ -24,4 +24,9 @@ class Income extends Model
     {
         return $this->hasMany(TotalBalance::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
