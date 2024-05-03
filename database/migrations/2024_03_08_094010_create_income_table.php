@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('income', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            // $table->unsignedBigInteger('user_id')->nullable();
+            // $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('income_name');
             $table->date('income_date');
             $table->integer('income_amount');

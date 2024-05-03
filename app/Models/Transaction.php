@@ -29,8 +29,8 @@ class Transaction extends Model
         return $this->belongsTo(Outcome::class);
     }
 
-    public function TotalBalance()
+    public function totalBalance()
     {
-        return $this->hasOne(TotalBalance::class);
+        return $this->belongsTo(TotalBalance::class, 'user_id', 'user_id');
     }
 }

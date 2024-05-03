@@ -38,9 +38,11 @@ class HomeController extends Controller
     function showIncomeTable()
     {
         $userId = Auth::id();
-        $incomeTable = Income::where('user_id', $userId)->get();
+        $incomeTable = Transaction::where('user_id', $userId)
+            ->whereNull('outcome_id')
+            ->with('Income')
+            ->get();
         $number = 1;
-
         foreach ($incomeTable as $income) {
             $income->number = $number++;
         }
@@ -51,9 +53,11 @@ class HomeController extends Controller
     function showOutcomeTable()
     {
         $userId = Auth::id();
-        $outcomeTable = Outcome::where('user_id', $userId)->get();
+        $outcomeTable = Transaction::where('user_id', $userId)
+            ->whereNull('income_id')
+            ->with('Outcome')
+            ->get();
         $number = 1;
-
         foreach ($outcomeTable as $outcome) {
             $outcome->number = $number++;
         }
@@ -64,8 +68,8 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         $sumBalance = FirstBalance::where('user_id', $userId)->sum('first_balance_amount');
-        $incomeBalance = Income::where('user_id', $userId)->sum('income_amount');
-        $outcomeBalance = Outcome::where('user_id', $userId)->sum('outcome_amount');
+        $incomeBalance = Transaction::where('user_id', $userId)->where('transaction_type', 'income')->sum('transaction_amount');
+        $outcomeBalance = Transaction::where('user_id', $userId)->where('transaction_type', 'outcome')->sum('transaction_amount');
         $totalBalance = $sumBalance + ($incomeBalance - $outcomeBalance);
 
         return $totalBalance;

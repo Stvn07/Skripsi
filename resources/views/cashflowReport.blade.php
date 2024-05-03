@@ -62,9 +62,9 @@
                             </td>
                             <td>
                                 @if ($transaction->Income)
-                                    {{ 'Rp' . number_format($transaction->TotalBalance->total_balance_amount, 0, ',', '.') }}
+                                    {{ 'Rp' . number_format($transaction->total_balance_per_day, 0, ',', '.') }}
                                 @elseif ($transaction->Outcome)
-                                    {{ 'Rp' . number_format($transaction->TotalBalance->total_balance_amount, 0, ',', '.') }}
+                                    {{ 'Rp' . number_format($transaction->total_balance_per_day, 0, ',', '.') }}
                                 @endif
                             </td>
                         </tr>

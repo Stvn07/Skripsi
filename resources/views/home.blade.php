@@ -315,17 +315,17 @@
                                 {{ $income->number }}
                             </td>
                             <td>
-                                {{ $income->income_name }}
+                                {{ $income->Income->income_name }}
                             </td>
 
                             <td>
-                                {{ $income->income_date }}
+                                {{ $income->Income->income_date }}
                             </td>
                             <td>
-                                {{ 'Rp' . number_format($income->income_amount, 0, ',', '.') }}
+                                {{ 'Rp' . number_format($income->Income->income_amount, 0, ',', '.') }}
                             </td>
                             <td>
-                                <a href="{{ route('updateIncome', ['incomeId' => $income->id]) }}"
+                                <a href="{{ route('updateIncome', ['incomeId' => $income->income_id]) }}"
                                     class="btn btn-primary">
                                     Update
                                 </a>
@@ -371,17 +371,17 @@
                                 {{ $outcome->number }}
                             </td>
                             <td>
-                                {{ $outcome->outcome_name }}
+                                {{ $outcome->Outcome->outcome_name }}
                             </td>
 
                             <td>
-                                {{ $outcome->outcome_date }}
+                                {{ $outcome->Outcome->outcome_date }}
                             </td>
                             <td>
-                                {{ 'Rp' . number_format($outcome->outcome_amount, 0, ',', '.') }}
+                                {{ 'Rp' . number_format($outcome->Outcome->outcome_amount, 0, ',', '.') }}
                             </td>
                             <td>
-                                <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->id]) }}"
+                                <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->outcome_id]) }}"
                                     class="btn btn-primary">
                                     Update
                                 </a>

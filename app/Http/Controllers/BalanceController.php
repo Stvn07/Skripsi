@@ -9,8 +9,8 @@ use App\Models\Income;
 use App\Models\Outcome;
 use App\Models\Transaction;
 use App\Models\TotalBalance;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BalanceController extends Controller
 {
@@ -32,8 +32,7 @@ class BalanceController extends Controller
             $totalBalance = new TotalBalance();
             $totalBalance->user_id = $userId;
             $totalBalance->first_balance_id = $firstBalance->id;
-            $totalBalance->income_id = null;
-            $totalBalance->outcome_id = null;
+            $totalBalance->transaction_id = null;
             $totalBalance->total_balance_amount = $request->first_balance_amount;
             $totalBalance->total_balance_date = now();
             $totalBalance->save();
@@ -55,7 +54,6 @@ class BalanceController extends Controller
         $userId = Auth::id();
 
         $income = new Income();
-        $income->user_id = $userId;
         $income->income_name = $request->income_name;
         $income->income_date = $request->income_date;
         $income->income_amount = $request->income_amount;
@@ -75,10 +73,8 @@ class BalanceController extends Controller
 
         $totalBalance = new TotalBalance();
         $totalBalance->user_id = $userId;
-        $totalBalance->first_balance_id = null;
-        $totalBalance->income_id = $income->id;
-        $totalBalance->outcome_id = null;
         $totalBalance->transaction_id = $transactionIncome->id;
+        $totalBalance->first_balance_id = null;
         $totalBalance->total_balance_amount = $newBalance;
         $totalBalance->total_balance_date = $request->income_date;
         $totalBalance->save();
@@ -100,7 +96,6 @@ class BalanceController extends Controller
         $userId = Auth::id();
 
         $outcome = new Outcome();
-        $outcome->user_id = $userId;
         $outcome->outcome_name = $request->outcome_name;
         $outcome->outcome_date = $request->outcome_date;
         $outcome->outcome_amount = $request->outcome_amount;
@@ -120,10 +115,8 @@ class BalanceController extends Controller
 
         $totalBalance = new TotalBalance();
         $totalBalance->user_id = $userId;
-        $totalBalance->first_balance_id = null;
-        $totalBalance->income_id = null;
-        $totalBalance->outcome_id = $outcome->id;
         $totalBalance->transaction_id = $transactionOutcome->id;
+        $totalBalance->first_balance_id = null;
         $totalBalance->total_balance_amount = $newBalance;
         $totalBalance->total_balance_date = $request->outcome_date;
         $totalBalance->save();
@@ -151,23 +144,25 @@ class BalanceController extends Controller
 
         $userId = Auth::id();
 
+        // Ambil data pendapatan
         $incomeData = Income::findOrFail($incomeId);
 
-        if ($incomeData->user_id !== $userId) {
+        // Pastikan pengguna yang melakukan pembaruan adalah pemilik pendapatan
+        $transactionData = Transaction::where('income_id', $incomeId)->first();
+        if ($transactionData && $transactionData->user_id !== $userId) {
             abort(403, 'Unauthorized action.');
         }
 
         $oldIncomeAmount = $incomeData->income_amount;
 
-        // Update Data Income
+        // Update Data Pendapatan
         $incomeData->update([
             'income_name' => $request->input('income_name', $incomeData->income_name),
             'income_date' => $request->input('income_date', $incomeData->income_date),
             'income_amount' => $request->input('income_amount', $incomeData->income_amount)
         ]);
 
-        // Update Data Transaksi
-        $transactionData = Transaction::where('income_id', $incomeId)->first();
+        // Update Data Transaksi jika ada
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('income_date', $transactionData->transaction_date),
@@ -175,16 +170,18 @@ class BalanceController extends Controller
             ]);
         }
 
-        // Update Data Total Balance
+        // Hitung perubahan jumlah pendapatan
         $changeAmount = $request->income_amount - $oldIncomeAmount;
-        $totalBalancesToUpdate = TotalBalance::where('user_id', $userId)->latest()->get();
 
-        foreach ($totalBalancesToUpdate as $totalBalance) {
-            if (!$totalBalance->first_balance_id) {
-                $totalBalance->total_balance_amount += $changeAmount;
-                $totalBalance->save();
-            }
-        }
+        // Perbarui Total Balance
+        $transactionIdsToUpdate = Transaction::where('user_id', $userId)
+            ->where('id', '>=', $transactionData->id)
+            ->pluck('id');
+
+        TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
+            ->update([
+                'total_balance_amount' => DB::raw("total_balance_amount + $changeAmount")
+            ]);
 
         return redirect()->route('home');
     }
@@ -202,15 +199,20 @@ class BalanceController extends Controller
         $request->validate([
             'outcome_name' => 'nullable|string|max:255',
             'outcome_date' => 'nullable|date',
-            'outcome_amount' => 'nullable|max_digits:12'
+            'outcome_amount' => 'nullable|numeric|max:999999999999' // Sesuaikan batas maksimalnya
         ]);
 
         $userId = Auth::id();
 
+        // Ambil data outcome
         $outcomeData = Outcome::findOrFail($outcomeId);
-        if ($outcomeData->user_id !== $userId) {
-            abort(403, 'Unauthorized action.'); // Membuat pengecualian jika pengguna bukan pemilik pendapatan
+
+        // Pastikan pengguna yang melakukan pembaruan adalah pemilik outcome
+        $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
+        if ($transactionData && $transactionData->user_id !== $userId) {
+            abort(403, 'Unauthorized action.');
         }
+
         $oldOutcomeAmount = $outcomeData->outcome_amount;
 
         // Update Data Outcome
@@ -220,8 +222,7 @@ class BalanceController extends Controller
             'outcome_amount' => $request->input('outcome_amount', $outcomeData->outcome_amount)
         ]);
 
-        // Update Data Transaction
-        $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
+        // Update Data Transaksi jika ada
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('outcome_date', $transactionData->transaction_date),
@@ -229,16 +230,18 @@ class BalanceController extends Controller
             ]);
         }
 
-        // Update Data Total Balance
-        $changeAmount = $request->income_amount - $oldOutcomeAmount;
-        $totalBalancesToUpdate = TotalBalance::where('user_id', $userId)->latest()->get();
+        // Hitung perubahan jumlah pengeluaran
+        $changeAmount = $request->outcome_amount - $oldOutcomeAmount;
 
-        foreach ($totalBalancesToUpdate as $totalBalance) {
-            if (!$totalBalance->first_balance_id) {
-                $totalBalance->total_balance_amount += $changeAmount;
-                $totalBalance->save();
-            }
-        }
+        // Perbarui Total Balance
+        $transactionIdsToUpdate = Transaction::where('user_id', $userId)
+            ->where('id', '>=', $transactionData->id)
+            ->pluck('id');
+
+        TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
+            ->update([
+                'total_balance_amount' => DB::raw("total_balance_amount - $changeAmount")
+            ]);
 
         return redirect()->route('home');
     }
