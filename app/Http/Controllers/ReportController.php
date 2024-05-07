@@ -51,7 +51,7 @@ class reportController extends Controller
                 $income_name = $t->Income->income_name;
                 // Ambil total_balance_amount dari TotalBalance yang sesuai dengan income_id
                 $total_balance_amount = TotalBalance::where('user_id', $userId)
-                    ->where('transaction_id', $t->id)  // Sesuaikan dengan ID transaksi
+                    ->where('transaction_id', $t->id)
                     ->where('total_balance_date', $t->transaction_date)
                     ->value('total_balance_amount');
             }
@@ -60,12 +60,10 @@ class reportController extends Controller
                 $outcome_name = $t->Outcome->outcome_name;
                 // Ambil total_balance_amount dari TotalBalance yang sesuai dengan outcome_id
                 $total_balance_amount = TotalBalance::where('user_id', $userId)
-                    ->where('transaction_id', $t->id)  // Sesuaikan dengan ID transaksi
+                    ->where('transaction_id', $t->id)
                     ->where('total_balance_date', $t->transaction_date)
                     ->value('total_balance_amount');
             }
-
-            // Tambahkan nilai total_balance_amount ke dalam data transaksi
             $t->total_balance_per_day = $total_balance_amount;
         }
 

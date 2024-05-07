@@ -12,11 +12,10 @@ return new class extends Migration {
     {
         Schema::create('outcome', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('user_id')->nullable();
-            // $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('outcome_name');
             $table->date('outcome_date');
             $table->integer('outcome_amount');
+            $table->string('outcome_category');
             $table->timestamps();
         });
     }

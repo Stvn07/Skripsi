@@ -13,6 +13,7 @@ class Outcome extends Model
         'outcome_name',
         'outcome_date',
         'outcome_amount',
+        'outcome_category'
     ];
 
     public function transaction()

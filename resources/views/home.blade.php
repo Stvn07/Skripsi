@@ -219,6 +219,29 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="outcome_category">Outcome Category</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <select id="category" name="outcome_category" class="form-control">
+                                        <option value="" selected disabled>Pilih kategori</option>
+                                        <option value="Makanan dan Minuman">Makanan dan Minuman</option>
+                                        <option value="Transportasi">Transportasi</option>
+                                        <option value="Hiburan">Hiburan</option>
+                                        <option value="Kesehatan">Kesehatan</option>
+                                        <option value="Tempat Tinggal">Tempat Tinggal</option>
+                                        <option value="Pendidikan">Pendidikan</option>
+                                        <option value="Belanja Pribadi">Belanja Pribadi</option>
+                                        <option value="Tagihan dan Pembayaran Rutin">Tagihan dan Pembayaran Rutin</option>
+                                        <option value="Liburan dan Wisata">Liburan dan Wisata</option>
+                                        <option value="Tabungan dan Investasi">Tabungan dan Investasi</option>
+                                        <option value="Pajak dan Biaya Hukum">Pajak dan Biaya Hukum</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
                                 <button type="button" id="cancelBtn" class="cancel"
@@ -355,6 +378,9 @@
                         Outcome Amount
                     </th>
                     <th>
+                        Outcome Category
+                    </th>
+                    <th>
                         Action
                     </th>
                 </tr>
@@ -362,7 +388,7 @@
             <tbody style="text-align: center">
                 @if (count($outcomeTable) === 0)
                     <tr>
-                        <td colspan="4">Belum ada data outcome yang ditambahkan.</td>
+                        <td colspan="6">Belum ada data outcome yang ditambahkan.</td>
                     </tr>
                 @else
                     @foreach ($outcomeTable as $outcome)
@@ -379,6 +405,9 @@
                             </td>
                             <td>
                                 {{ 'Rp' . number_format($outcome->Outcome->outcome_amount, 0, ',', '.') }}
+                            </td>
+                            <td>
+                                {{ $outcome->Outcome->outcome_category }}
                             </td>
                             <td>
                                 <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->outcome_id]) }}"

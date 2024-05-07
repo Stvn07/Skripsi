@@ -90,7 +90,9 @@ class BalanceController extends Controller
         $request->validate([
             'outcome_name' => 'required',
             'outcome_date' => 'required|date',
-            'outcome_amount' => 'required'
+            'outcome_amount' => 'required',
+            'outcome_category' => 'nullable|string|max:255',
+            'custom_category' => 'nullable|string|max:255'
         ]);
 
         $userId = Auth::id();
@@ -99,6 +101,7 @@ class BalanceController extends Controller
         $outcome->outcome_name = $request->outcome_name;
         $outcome->outcome_date = $request->outcome_date;
         $outcome->outcome_amount = $request->outcome_amount;
+        $outcome->outcome_category = $request->outcome_category;
         $outcome->save();
 
         $transactionOutcome = new Transaction();
@@ -139,15 +142,13 @@ class BalanceController extends Controller
         $request->validate([
             'income_name' => 'nullable|string|max:255',
             'income_date' => 'nullable|date',
-            'income_amount' => 'nullable|numeric|max:999999999999' // Sesuaikan batas maksimalnya
+            'income_amount' => 'nullable|numeric|max:999999999999'
         ]);
 
         $userId = Auth::id();
 
-        // Ambil data pendapatan
         $incomeData = Income::findOrFail($incomeId);
 
-        // Pastikan pengguna yang melakukan pembaruan adalah pemilik pendapatan
         $transactionData = Transaction::where('income_id', $incomeId)->first();
         if ($transactionData && $transactionData->user_id !== $userId) {
             abort(403, 'Unauthorized action.');
@@ -162,7 +163,7 @@ class BalanceController extends Controller
             'income_amount' => $request->input('income_amount', $incomeData->income_amount)
         ]);
 
-        // Update Data Transaksi jika ada
+        // Update Data Transaksi
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('income_date', $transactionData->transaction_date),
@@ -207,7 +208,6 @@ class BalanceController extends Controller
         // Ambil data outcome
         $outcomeData = Outcome::findOrFail($outcomeId);
 
-        // Pastikan pengguna yang melakukan pembaruan adalah pemilik outcome
         $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
         if ($transactionData && $transactionData->user_id !== $userId) {
             abort(403, 'Unauthorized action.');
@@ -222,7 +222,7 @@ class BalanceController extends Controller
             'outcome_amount' => $request->input('outcome_amount', $outcomeData->outcome_amount)
         ]);
 
-        // Update Data Transaksi jika ada
+        // Update Data Transaksi
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('outcome_date', $transactionData->transaction_date),
