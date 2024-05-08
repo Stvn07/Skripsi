@@ -422,6 +422,155 @@
         </table>
     </div>
 
+    <div class="mt-3">
+        <h1>Diagram Pendapatan</h1>
+        <canvas id="incomeChart" width="400" height="200"></canvas>
+        <button id="prevIncomeChart">Previous Chart</button>
+        <button id="nextIncomeChart">Next Chart</button>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var ctxIncome = document.getElementById('incomeChart').getContext('2d');
+            var incomeChartsData = @json($incomeChart);
+            var currentIncomeChart = 0;
+            var myIncomeChart; // Deklarasi variabel myChart di luar fungsi
+
+            function updateIncomeChart() {
+                if (myIncomeChart) {
+                    myIncomeChart.destroy(); // Hapus chart yang ada sebelumnya
+                }
+
+                var currentIncomeChartData = incomeChartsData.charts[currentIncomeChart];
+                myIncomeChart = new Chart(ctxIncome, {
+                    type: 'bar',
+                    data: {
+                        labels: currentIncomeChartData.labels,
+                        datasets: [{
+                            label: 'Dana Yang Didapatkan',
+                            data: currentIncomeChartData.amount,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            // Memperbarui chart saat halaman dimuat
+            updateIncomeChart();
+
+            // Tombol "Previous Chart" untuk pendapatan
+            document.getElementById('prevIncomeChart').addEventListener('click', function() {
+                if (currentIncomeChart > 0) {
+                    currentIncomeChart--;
+                    updateIncomeChart();
+                    document.getElementById('nextIncomeChart').disabled = false;
+                }
+
+                if (currentIncomeChart == 0) {
+                    this.disabled = true;
+                }
+            });
+
+            // Tombol "Next Chart" untuk pendapatan
+            document.getElementById('nextIncomeChart').addEventListener('click', function() {
+                if (currentIncomeChart < incomeChartsData.charts.length - 1) {
+                    currentIncomeChart++;
+                    updateIncomeChart();
+                    document.getElementById('prevIncomeChart').disabled = false;
+                }
+
+                if (currentIncomeChart == incomeChartsData.charts.length - 1) {
+                    this.disabled = true;
+                }
+            });
+        </script>
+    </div>
+
+
+    <div class="mt-3">
+        <h1>Diagram Pengeluaran</h1>
+        <canvas id="outcomeChart" width="400" height="200"></canvas>
+        <button id="prevOutcomeChart">Previous Chart</button>
+        <button id="nextOutcomeChart">Next Chart</button>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');
+            var outcomeChartsData = @json($outcomeChart);
+            var currentOutcomeChart = 0;
+            var myOutcomeChart; // Deklarasi variabel myChart di luar fungsi
+
+            function updateOutcomeChart() {
+                if (myOutcomeChart) {
+                    myOutcomeChart.destroy(); // Hapus chart yang ada sebelumnya
+                }
+
+                var currentOutcomeChartData = outcomeChartsData.charts[currentOutcomeChart];
+                myOutcomeChart = new Chart(ctxOutcome, {
+                    type: 'bar',
+                    data: {
+                        labels: currentOutcomeChartData.labels,
+                        datasets: [{
+                            label: 'Dana Yang Dikeluarkan',
+                            data: currentOutcomeChartData.amount,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            // Memperbarui chart saat halaman dimuat
+            updateOutcomeChart();
+
+            // Tombol "Previous Chart" untuk pengeluaran
+            document.getElementById('prevOutcomeChart').addEventListener('click', function() {
+                if (currentOutcomeChart > 0) {
+                    currentOutcomeChart--;
+                    updateOutcomeChart();
+                    document.getElementById('nextOutcomeChart').disabled = false;
+                }
+
+                if (currentOutcomeChart == 0) {
+                    this.disabled = true;
+                }
+            });
+
+            // Tombol "Next Chart" untuk pengeluaran
+            document.getElementById('nextOutcomeChart').addEventListener('click', function() {
+                if (currentOutcomeChart < outcomeChartsData.charts.length - 1) {
+                    currentOutcomeChart++;
+                    updateOutcomeChart();
+                    document.getElementById('prevOutcomeChart').disabled = false;
+                }
+
+                if (currentOutcomeChart == outcomeChartsData.charts.length - 1) {
+                    this.disabled = true;
+                }
+            });
+        </script>
+    </div>
+
     {{-- Mau Nunjukkin Total Balance --}}
     <div>
         Total Balance Anda =
