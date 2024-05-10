@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\TotalBalance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,9 @@ class HomeController extends Controller
 {
     function showHome(Request $request)
     {
+        $userId = Auth::id();
+        $startDate = Carbon::now()->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
         $transactionTable = Transaction::paginate(5);
         $incomeTable = $this->showIncomeTable();
         $outcomeTable = $this->showOutcomeTable();
@@ -27,6 +31,15 @@ class HomeController extends Controller
             $result->nomor_urut = $nomorUrut++;
         }
         $totalBalanceTable = $this->showTotalBalance();
+        $total_income_per_month = Transaction::where('user_id', $userId)
+            ->where('transaction_type', 'income')
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->sum('transaction_amount');
+
+        $total_outcome_per_month = Transaction::where('user_id', $userId)
+            ->where('transaction_type', 'outcome')
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->sum('transaction_amount');
         return view(
             'home',
             compact(
@@ -35,7 +48,9 @@ class HomeController extends Controller
                 'outcomeTable',
                 'transactionTable',
                 'incomeChart',
-                'outcomeChart'
+                'outcomeChart',
+                'total_income_per_month',
+                'total_outcome_per_month'
             )
         );
     }
@@ -248,5 +263,31 @@ class HomeController extends Controller
         return !empty(array_diff_assoc($requestData, $userData));
     }
 
+    function countStatusOutcome()
+    {
+
+        $userId = Auth::id();
+        $totalBalanceAmount = TotalBalance::where('user_id', $userId)
+            ->latest('created_at')
+            ->first();
+
+        $outcomeExpenses = Transaction::where('user_id', $userId)
+            ->whereNull('income_id')
+            ->sum('transaction_amount');
+
+        $remainingAmount = $totalBalanceAmount->total_balance_amount;
+        $percentage = ($outcomeExpenses / $remainingAmount) * 100;
+
+        $lowExpenses = 25;
+        $middleExpenses = 50;
+
+        if ($percentage < $lowExpenses) {
+            return "Pengeluaran Rendah";
+        } else if ($percentage <= $middleExpenses) {
+            return "Pengeluaran Sedang";
+        } else {
+            return "Pengeluaran Tinggi";
+        }
+    }
 
 }

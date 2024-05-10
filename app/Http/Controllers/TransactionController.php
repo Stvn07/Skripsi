@@ -106,7 +106,7 @@ class TransactionController extends Controller
             }
             $hasil = $date_query->get();
         } else {
-            $results = Transaction::where('user_id', $userId)->paginate(5);
+            $results = Transaction::where('user_id', $userId)->orderBy('transaction_date', 'desc')->paginate(5);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;

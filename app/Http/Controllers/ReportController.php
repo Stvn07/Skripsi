@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TotalBalance;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use App\Models\Income;
-use App\Models\Outcome;
 
 
 class reportController extends Controller
