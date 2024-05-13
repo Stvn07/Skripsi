@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\User;
-use App\Models\Income;
-use App\Models\Outcome;
 use App\Models\FirstBalance;
 
 class HomeController extends Controller
@@ -26,6 +24,9 @@ class HomeController extends Controller
         $outcomeTable = $this->showOutcomeTable();
         $incomeChart = $this->showIncomeChart();
         $outcomeChart = $this->showOutcomeChart();
+        $statusName = $this->countStatusOutcome();
+        $transactionData = Transaction::where('user_id', $userId)->orderBy('created_at', 'desc')->take(3)->get();
+        $hasFirstBalance = FirstBalance::where('user_id', $userId)->exists();
         $nomorUrut = ($transactionTable->currentPage() - 1) * $transactionTable->perPage() + 1;
         foreach ($transactionTable as $result) {
             $result->nomor_urut = $nomorUrut++;
@@ -50,7 +51,10 @@ class HomeController extends Controller
                 'incomeChart',
                 'outcomeChart',
                 'total_income_per_month',
-                'total_outcome_per_month'
+                'total_outcome_per_month',
+                'statusName',
+                'transactionData',
+                'hasFirstBalance'
             )
         );
     }
@@ -265,8 +269,8 @@ class HomeController extends Controller
 
     function countStatusOutcome()
     {
-
         $userId = Auth::id();
+        $statusOutcome = '';
         $totalBalanceAmount = TotalBalance::where('user_id', $userId)
             ->latest('created_at')
             ->first();
@@ -282,12 +286,14 @@ class HomeController extends Controller
         $middleExpenses = 50;
 
         if ($percentage < $lowExpenses) {
-            return "Pengeluaran Rendah";
+            $statusOutcome = 'Pengeluaran Rendah';
         } else if ($percentage <= $middleExpenses) {
-            return "Pengeluaran Sedang";
+            $statusOutcome = 'Pengeluaran Sedang';
         } else {
-            return "Pengeluaran Tinggi";
+            $statusOutcome = 'Pengeluaran Tinggi';
         }
+
+        return $statusOutcome;
     }
 
 }

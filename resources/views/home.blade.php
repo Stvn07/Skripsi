@@ -1,67 +1,70 @@
 @extends('sidebar.dashboard')
 @section('content')
     {{-- Bagian First Balance  --}}
-    <div class="mb-2">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
-            Tambah First Balance
-        </button>
+    @if (!$hasFirstBalance)
+        <div class="mb-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
+                Tambah First Balance
+            </button>
 
-        <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <h2 style="text-align: center">Tambah First Balance</h2>
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="first_balance_amount">First Balance Amount</label>
-                                    <span class="error-message" id="first_balance_amount_empty"></span>
+            <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <h2 style="text-align: center">Tambah First Balance</h2>
+                                <div class="form-group">
+                                    <div class="filter-label">
+                                        <label for="first_balance_amount">First Balance Amount</label>
+                                        <span class="error-message" id="first_balance_amount_empty"></span>
+                                    </div>
+
+                                    <div class="filter-inputs">
+                                        <input type="number" id="first_balance_amount" name="first_balance_amount">
+                                    </div>
                                 </div>
 
-                                <div class="filter-inputs">
-                                    <input type="number" id="first_balance_amount" name="first_balance_amount">
+                                <div class="buttons" style="margin-top: 50px;">
+                                    <button type="submit" class="send">Tambah</button>
+
+                                    <button type="button" id="cancelBtn" data-bs-dismiss="modal"
+                                        class="cancel">Batal</button>
                                 </div>
                             </div>
-
-                            <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">Tambah</button>
-
-                                <button type="button" id="cancelBtn" data-bs-dismiss="modal" class="cancel">Batal</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
+
+            <script>
+                document.getElementById("firstBalanceForm").addEventListener("submit", function(event) {
+                    var firstBalanceAmount = document.getElementById("first_balance_amount");
+                    var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
+                    var emptyCount = 0;
+
+                    if (firstBalanceAmount.value.trim() === "") {
+                        firstBalanceAmountEmpty.textContent = "First Balance tidak boleh kosong";
+                        firstBalanceAmountEmpty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        firstBalanceAmountEmpty.style.display = "none";
+                    }
+
+                    if (emptyCount > 0) {
+                        event.preventDefault();
+                    }
+                });
+
+                document.getElementById("cancelBtn").addEventListener("click", function() {
+                    document.getElementById("first_balance_amount").value = "";
+
+                    document.getElementById("first_balance_amount_empty").innerText = "";
+                });
+            </script>
         </div>
-
-        <script>
-            document.getElementById("firstBalanceForm").addEventListener("submit", function(event) {
-                var firstBalanceAmount = document.getElementById("first_balance_amount");
-                var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
-                var emptyCount = 0;
-
-                if (firstBalanceAmount.value.trim() === "") {
-                    firstBalanceAmountEmpty.textContent = "First Balance tidak boleh kosong";
-                    firstBalanceAmountEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    firstBalanceAmountEmpty.style.display = "none";
-                }
-
-                if (emptyCount > 0) {
-                    event.preventDefault();
-                }
-            });
-
-            document.getElementById("cancelBtn").addEventListener("click", function() {
-                document.getElementById("first_balance_amount").value = "";
-
-                document.getElementById("first_balance_amount_empty").innerText = "";
-            });
-        </script>
-    </div>
+    @endif
 
     {{-- Bagian Tambah Income --}}
     <div class="mb-2">
@@ -302,6 +305,42 @@
                 document.getElementById("outcome_amount_empty").innerText = "";
             });
         </script>
+    </div>
+
+    <div>
+        Status Pengeluaran Anda: {{ $statusName }}
+    </div>
+
+    <div>
+        Total Pendapatan di bulan Ini: {{ $total_income_per_month }}
+    </div>
+
+    <div>
+        Total Pengeluaran di bulan ini: {{ $total_outcome_per_month }}
+    </div>
+
+    {{-- Mau Nunjukkin Total Balance --}}
+    <div>
+        Total Balance Anda =
+        <div>
+            <span>{{ 'Rp' . number_format($totalBalanceTable, 0, ',', '.') }}</span>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h4>Riwayat Transaksi</h4>
+        <ul>
+            @foreach ($transactionData as $key => $transaction)
+                <li>
+                    Transaksi {{ $key + 1 }} -
+                    {{ $transaction->transaction_date }} -
+                    Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
+                    <span class="{{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
+                        {{ ucfirst($transaction->transaction_type) }}
+                    </span>
+                </li>
+            @endforeach
+        </ul>
     </div>
 
     {{-- Tabel Income --}}
@@ -571,11 +610,4 @@
         </script>
     </div>
 
-    {{-- Mau Nunjukkin Total Balance --}}
-    <div>
-        Total Balance Anda =
-        <div>
-            <span>{{ 'Rp' . number_format($totalBalanceTable, 0, ',', '.') }}</span>
-        </div>
-    </div>
 @endsection

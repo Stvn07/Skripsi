@@ -6,9 +6,69 @@
         <button type="submit">Tampilkan</button>
     </form>
 
+    <div class="mt-2 mb-2">
+        <canvas id="expensesChart" width="400" height="400"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var ctx = document.getElementById('expensesChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        @foreach ($expensesByCategory as $expense)
+                            '{{ $expense->outcome_category }}',
+                        @endforeach
+                    ],
+                    datasets: [{
+                        label: 'Total Pengeluaran',
+                        data: [
+                            @foreach ($expensesByCategory as $expense)
+                                {{ $expense->total_amount }},
+                            @endforeach
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(255, 199, 150, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 199, 150, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Total Pengeluaran berdasarkan Kategori'
+                    }
+                }
+            });
+        </script>
+    </div>
+
+
     @if (request('bulan'))
 
-        <table style="border: 1px solid black">
+        <table class="mt-3 mb-3" style="border: 1px solid black">
             <thead style="text-align: center">
                 <tr>
                     <th>

@@ -17,21 +17,6 @@
             </div>
         </div>
         <hr>
-        <div class="mb-4">
-            <h4>Riwayat Transaksi</h4>
-            <ul>
-                @foreach ($transactionData as $key => $transaction)
-                    <li>
-                        Transaksi {{ $key + 1 }} -
-                        {{ $transaction->transaction_date }} -
-                        Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
-                        <span class="{{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
-                            {{ ucfirst($transaction->transaction_type) }}
-                        </span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
         <!-- Tombol untuk mengupdate profil -->
         <div class="text-center mt-4">
             <a href="{{ route('updateProfile', Auth::id()) }}" class="btn btn-primary">Update Profil</a>
