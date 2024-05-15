@@ -275,24 +275,25 @@ class HomeController extends Controller
             ->latest('created_at')
             ->first();
 
-        $outcomeExpenses = Transaction::where('user_id', $userId)
-            ->whereNull('income_id')
-            ->sum('transaction_amount');
-
-        $remainingAmount = $totalBalanceAmount->total_balance_amount;
-        $percentage = ($outcomeExpenses / $remainingAmount) * 100;
-
-        $lowExpenses = 25;
-        $middleExpenses = 50;
-
-        if ($percentage < $lowExpenses) {
-            $statusOutcome = 'Pengeluaran Rendah';
-        } else if ($percentage <= $middleExpenses) {
-            $statusOutcome = 'Pengeluaran Sedang';
+        if ($totalBalanceAmount === null) {
+            $statusOutcome = 'Belum Ada Pengeluaran';
         } else {
-            $statusOutcome = 'Pengeluaran Tinggi';
-        }
+            $outcomeExpenses = Transaction::where('user_id', $userId)
+                ->whereNull('income_id')
+                ->sum('transaction_amount');
+            $remainingAmount = $totalBalanceAmount->total_balance_amount;
+            $percentage = ($outcomeExpenses / $remainingAmount) * 100;
+            $lowExpenses = 25;
+            $middleExpenses = 50;
 
+            if ($percentage < $lowExpenses) {
+                $statusOutcome = 'Pengeluaran Rendah';
+            } else if ($percentage <= $middleExpenses) {
+                $statusOutcome = 'Pengeluaran Sedang';
+            } else {
+                $statusOutcome = 'Pengeluaran Tinggi';
+            }
+        }
         return $statusOutcome;
     }
 

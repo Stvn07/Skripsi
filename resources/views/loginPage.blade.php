@@ -16,21 +16,17 @@
             </div>
             <form id="loginForm" action="{{ route('login.post') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Email</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Email</label>
                     <input style="max-width: 270px; border: 2px solid black" type="email" class="form-control"
-                        name="user_email" required>
-                    <div class="error-message" id="emailError"></div>
+                        id="user_email" name="user_email">
+                    <div class="error-message-2" id="user_email_empty"></div>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Password</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Password</label>
                     <input style="max-width: 270px; border: 2px solid black" type="password" class="form-control"
-                        name="password" required>
-                    <div class="error-message" id="passwordError"></div>
+                        id="password" name="password">
+                    <div class="error-message-2" id="password_empty"></div>
                 </div>
                 <div style="justify-content: center; align-items: center; margin: 50px 50px 20px;">
                     <button style="width: 170px; border: 2px solid black" type="submit" class="btn">Submit</button>
@@ -47,28 +43,49 @@
 
         <script>
             document.getElementById("loginForm").addEventListener("submit", function(event) {
-                var email = document.getElementsByName("user_email")[0].value.trim();
-                var password = document.getElementsByName("password")[0].value.trim();
-                var valid = true;
+                var user_email = document.getElementById("user_email");
+                var password = document.getElementById("password");
+                var user_email_empty = document.getElementById("user_email_empty");
+                var password_empty = document.getElementById("password_empty");
+                var emptyCount = 0;
 
-                var emailError = document.getElementById("emailError");
-                var passwordError = document.getElementById("passwordError");
-
-                if (email === "") {
-                    emailError.textContent = "Please enter your email";
-                    valid = false;
+                if (user_email.value.trim() === "") {
+                    user_email_empty.textContent = "Email tidak boleh kosong";
+                    user_email_empty.style.display = "block";
+                    emptyCount++;
                 } else {
-                    emailError.textContent = "";
+                    user_email_empty.textContent = "";
                 }
 
-                if (password === "") {
-                    passwordError.textContent = "Please enter your password";
-                    valid = false;
+                if (password.value.trim() === "") {
+                    password_empty.textContent = "Password tidak boleh kosong";
+                    password_empty.style.display = "block";
+                    emptyCount++;
+                } else if (password.value.length < 8 || password.value.length > 25) {
+                    password_empty.textContent = "Password harus terdiri dari 8 sampai 25 karakter";
+                    password_empty.style.display = "block";
+                    emptyCount++;
+                } else if (!/[a-z]/.test(password.value)) {
+                    password_empty.textContent = "Password harus mengandung setidaknya satu huruf kecil";
+                    password_empty.style.display = "block";
+                    emptyCount++;
+                } else if (!/[A-Z]/.test(password.value)) {
+                    password_empty.textContent = "Password harus mengandung setidaknya satu huruf besar";
+                    password_empty.style.display = "block";
+                    emptyCount++;
+                } else if (!/[0-9]/.test(password.value)) {
+                    password_empty.textContent = "Password harus mengandung setidaknya satu angka";
+                    password_empty.style.display = "block";
+                    emptyCount++;
+                } else if (!/[@$!%*?&#]/.test(password)) {
+                    password_empty.textContent = "Password harus mengandung setidaknya satu karakter khusus";
+                    password_empty.style.display = "block";
+                    emptyCount++;
                 } else {
-                    passwordError.textContent = "";
+                    password_empty.textContent = "";
                 }
 
-                if (!valid) {
+                if (emptyCount > 0) {
                     event.preventDefault();
                 }
             });

@@ -199,6 +199,13 @@ select {
     bottom: -20px;
 }
 
+.error-message-2 {
+    color: red;
+    font-size: 12px;
+    display: none;
+    position: absolute;
+}
+
 .profile-container {
     max-width: 600px;
     margin: 0 auto;

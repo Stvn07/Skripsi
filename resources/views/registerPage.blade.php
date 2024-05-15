@@ -10,45 +10,36 @@
 
             <form id="signupForm" action="{{ route('register.post') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Full Name</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Full Name</label>
                     <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        name="user_full_name" required>
-                    <span class="error-message" id="nameError"></span>
+                        id="user_full_name" name="user_full_name">
+                    <span class="error-message-2" id="user_full_name_empty"></span>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Email</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Email</label>
                     <input style="max-width: 270px; border: 2px solid black" type="email" class="form-control"
-                        name="user_email" required>
-                    <div class="error-message" id="emailError"></div>
+                        id="user_email" name="user_email">
+                    <span class="error-message-2" id="user_email_empty"></span>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Password</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Password</label>
                     <input style="max-width: 270px; border: 2px solid black" type="password" class="form-control"
-                        name="password" required>
-                    <div class="error-message" id="passwordError"></div>
+                        id="password" name="password">
+                    <span class="error-message-2" id="password_empty"></span>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Address</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Address</label>
                     <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        name="user_address" required>
-                    <div class="error-message" id="addressError"></div>
+                        id="user_address" name="user_address">
+                    <span class="error-message-2" id="user_address_empty"></span>
                 </div>
-                <div class="mb-3">
-                    <div class="mb-2">
-                        <label class="form-label">Phone Number</label>
-                    </div>
+                <div class="mt-4 mb-4">
+                    <label class="form-label">Phone Number</label>
                     <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        name="user_phone_number" required>
-                    <div class="error-message" id="phoneError"></div>
+                        id="user_phone_number" name="user_phone_number"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                    <span class="error-message-2" id="user_phone_number_empty"></span>
                 </div>
                 <div style="justify-content: center; align-items: center; margin: 50px 50px 20px;">
                     <button style="width: 170px; border: 2px solid black" type="submit" class="btn">Submit</button>
@@ -57,66 +48,101 @@
             <div style="margin: 0 25px">
                 <p>Already have account ? <a href="/login"> sign in</a></p>
             </div>
-        </div>
 
+            <script>
+                document.getElementById("signupForm").addEventListener("submit", function(event) {
+                    var user_name = document.getElementById("user_full_name");
+                    var user_email = document.getElementById("user_email");
+                    var password = document.getElementById("password");
+                    var user_address = document.getElementById("user_address");
+                    var user_phone_number = document.getElementById("user_phone_number");
+                    var user_name_empty = document.getElementById("user_full_name_empty");
+                    var user_email_empty = document.getElementById("user_email_empty");
+                    var password_empty = document.getElementById("password_empty");
+                    var user_address_empty = document.getElementById("user_address_empty");
+                    var user_phone_number_empty = document.getElementById("user_phone_number_empty");
+                    var emptyCount = 0;
+
+                    if (user_name.value.trim() === "") {
+                        user_name_empty.textContent = "Full Name tidak boleh kosong";
+                        user_name_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (user_name.value.length < 3 || user_name.value.length > 25) {
+                        user_name_empty.textContent = "Full Name hanya bisa terdiri dari 3 sampai 25 kata";
+                        user_name_empty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        user_name_empty.textContent = "";
+                    }
+
+                    if (user_email.value.trim() === "") {
+                        user_email_empty.textContent = "Email tidak boleh kosong";
+                        user_email_empty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        user_email_empty.textContent = "";
+                    }
+
+                    if (password.value.trim() === "") {
+                        password_empty.textContent = "Password tidak boleh kosong";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (password.value.length < 8 || password.value.length > 25) {
+                        password_empty.textContent = "Password harus terdiri dari 8 sampai 25 karakter";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (!/[a-z]/.test(password.value)) {
+                        password_empty.textContent = "Password harus mengandung setidaknya satu huruf kecil";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (!/[A-Z]/.test(password.value)) {
+                        password_empty.textContent = "Password harus mengandung setidaknya satu huruf besar";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (!/[0-9]/.test(password.value)) {
+                        password_empty.textContent = "Password harus mengandung setidaknya satu angka";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (!/[@$!%*?&#]/.test(password)) {
+                        password_empty.textContent = "Password harus mengandung setidaknya satu karakter khusus";
+                        password_empty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        password_empty.textContent = "";
+                    }
+
+                    if (user_address.value.trim() === "") {
+                        user_address_empty.textContent = "Alamat tidak boleh kosong";
+                        user_address_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (user_address.value.length < 10) {
+                        user_address_empty.textContent = "Alamat setidaknya harus terdiri dari 10 karakter";
+                        user_address_empty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        user_address_empty.textContent = "";
+                    }
+
+                    if (user_phone_number.value.trim() === "") {
+                        user_phone_number_empty.textContent = "Nomor Handphone tidak boleh kosong";
+                        user_phone_number_empty.style.display = "block";
+                        emptyCount++;
+                    } else if (user_phone_number.value.length < 12 || user_phone_number.value.length > 12) {
+                        user_phone_number_empty.textContent = "Nomor Handphone harus terdiri dari 12 nomor";
+                        user_phone_number_empty.style.display = "block";
+                        emptyCount++;
+                    } else {
+                        user_phone_number_empty.textContent = "";
+                    }
+
+                    if (emptyCount > 0) {
+                        event.preventDefault();
+                    }
+                });
+            </script>
+        </div>
         <div class="banner">
             <img src="/image/6333213.jpg" alt="Banner">
         </div>
-
-        <script>
-            document.getElementById("signupForm").addEventListener("submit", function(event) {
-                var name = document.getElementsByName("user_full_name")[0].value.trim();
-                var email = document.getElementsByName("user_email")[0].value.trim();
-                var password = document.getElementsByName("password")[0].value.trim();
-                var address = document.getElementsByName("user_address")[0].value.trim();
-                var phone = document.getElementsByName("user_phone_number")[0].value.trim();
-                var valid = true;
-
-                var nameError = document.getElementById("nameError");
-                var emailError = document.getElementById("emailError");
-                var passwordError = document.getElementById("passwordError");
-                var addressError = document.getElementById("addressError");
-                var phoneError = document.getElementById("phoneError");
-
-                if (name === "") {
-                    nameError.textContent = "Please enter your full name";
-                    valid = false;
-                } else {
-                    nameError.textContent = "";
-                }
-
-                if (email === "") {
-                    emailError.textContent = "Please enter your email";
-                    valid = false;
-                } else {
-                    emailError.textContent = "";
-                }
-
-                if (password === "") {
-                    passwordError.textContent = "Please enter your password";
-                    valid = false;
-                } else {
-                    passwordError.textContent = "";
-                }
-
-                if (address === "") {
-                    addressError.textContent = "Please enter your address";
-                    valid = false;
-                } else {
-                    addressError.textContent = "";
-                }
-
-                if (phone === "") {
-                    phoneError.textContent = "Please enter your phone number";
-                    valid = false;
-                } else {
-                    phoneError.textContent = "";
-                }
-
-                if (!valid) {
-                    event.preventDefault();
-                }
-            });
-        </script>
     </div>
 @endsection
