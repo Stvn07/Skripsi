@@ -1,0 +1,216 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.form-container {
+    flex: 1;
+    padding: 10px; /* Sesuaikan dengan kebutuhan */
+    border: 1px solid black;
+}
+
+.banner {
+    flex: 1;
+    padding: 30px; /* Sesuaikan dengan kebutuhan */
+    text-align: center; /* Untuk memusatkan gambar secara horizontal */
+}
+
+/* Opsional: styling untuk gambar banner */
+.banner img {
+    width: 100%;
+    height: auto;
+}
+
+h6 {
+    font-size: small;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn {
+    background-color: rgb(33, 246, 136);
+}
+
+.btn :hover {
+    background-color: aliceblue;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Style untuk header kolom */
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Style untuk baris ganjil */
+tr:nth-child(odd) {
+    background-color: #dddddd;
+}
+
+/* Style untuk sel data */
+td {
+    padding: 8px;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* Style untuk hover pada baris */
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.red-text {
+    color: red;
+}
+
+.green-text {
+    color: green;
+}
+
+.container-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-bar {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+}
+
+.filter-label {
+    width: 400px;
+}
+
+.filter-inputs {
+    display: flex;
+    align-items: center;
+}
+
+.filter-inputs input,
+select {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.modal-form {
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-form-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.modal-form-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 45%;
+}
+
+.buttons button.cancel {
+    background-color: #ff3333;
+    color: #fff;
+}
+
+.buttons button.send {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+    .modal-form-content {
+        margin: 10% auto;
+        padding: 10px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .buttons button {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none;
+    position: absolute;
+    bottom: -20px;
+}
+
+.error-message-2 {
+    color: red;
+    font-size: 12px;
+    display: none;
+    position: absolute;
+}
+
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 50px;
+}
