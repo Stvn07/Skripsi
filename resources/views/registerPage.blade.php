@@ -103,7 +103,7 @@
                         password_empty.textContent = "Password harus mengandung setidaknya satu angka";
                         password_empty.style.display = "block";
                         emptyCount++;
-                    } else if (!/[@$!%*?&#]/.test(password)) {
+                    } else if (!/[@$!%*?&#]/.test(password.value)) {
                         password_empty.textContent = "Password harus mengandung setidaknya satu karakter khusus";
                         password_empty.style.display = "block";
                         emptyCount++;

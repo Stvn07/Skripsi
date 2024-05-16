@@ -113,6 +113,24 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="outcome_category">Income Category</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <select id="category" name="income_category" class="form-control">
+                                        <option value="" selected disabled>Pilih kategori</option>
+                                        <option value="Gaji Tetap">Gaji Tetap</option>
+                                        <option value="Pendapatan Pasif">Pendapatan Pasif</option>
+                                        <option value="Pendapatan Penjualan">Pendapatan Penjualan</option>
+                                        <option value="Pendapatan Bisnis">Pendapatan Bisnis</option>
+                                        <option value="Freelance">Freelance</option>
+                                        <option value="Bonus">Bonus</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
                                 <button type="button" id="cancelBtn" data-bs-dismiss="modal" class="cancel">Batal</button>
@@ -463,7 +481,9 @@
 
     <div class="mt-3">
         <h1>Diagram Pendapatan</h1>
-        <canvas id="incomeChart" width="400" height="200"></canvas>
+        <div class="max-width: 600px; margin:auto;">
+            <canvas id="incomeChart"></canvas>
+        </div>
         <button id="prevIncomeChart">Previous Chart</button>
         <button id="nextIncomeChart">Next Chart</button>
 
@@ -494,11 +514,9 @@
                     },
                     options: {
                         scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
@@ -531,6 +549,9 @@
                 if (currentIncomeChart == incomeChartsData.charts.length - 1) {
                     this.disabled = true;
                 }
+            });
+            window.addEventListener('resize', function() {
+                updateIncomeChart();
             });
         </script>
     </div>

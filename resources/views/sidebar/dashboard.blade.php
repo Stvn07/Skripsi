@@ -16,6 +16,8 @@
 
     {{-- Icon Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <title>@yield('title')</title>
 </head>
@@ -69,6 +71,7 @@
 
             {{-- Content --}}
             <div class="col py-3">
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                 @yield('content')
             </div>
         </div>

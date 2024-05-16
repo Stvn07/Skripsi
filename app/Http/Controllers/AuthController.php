@@ -20,17 +20,16 @@ class AuthController extends Controller
     {
         $request->validate([
             'user_email' => 'required|email',
-            'password' => 'required|alpha_num|min:8|max:20',
-            // 'password' => [
-            //     'required',
-            //     'string',
-            //     'min:8',              // Minimal 8 karakter
-            //     'max:20',             // Maksimal 20 karakter
-            //     'regex:/[a-z]/',      // Setidaknya satu huruf kecil
-            //     'regex:/[A-Z]/',      // Setidaknya satu huruf besar
-            //     'regex:/[0-9]/',      // Setidaknya satu angka
-            //     'regex:/[@$!%*?&#]/', // Setidaknya satu karakter khusus
-            // ]
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:20',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*?&#]/',
+            ]
         ]);
 
         $credentials = $request->only('user_email', 'password');

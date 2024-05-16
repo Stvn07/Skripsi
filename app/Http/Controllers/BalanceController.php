@@ -57,6 +57,7 @@ class BalanceController extends Controller
         $income->income_name = $request->income_name;
         $income->income_date = $request->income_date;
         $income->income_amount = $request->income_amount;
+        $income->income_category = $request->income_category;
         $income->save();
 
         $transactionIncome = new Transaction();
