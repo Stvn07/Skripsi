@@ -2,18 +2,19 @@
 @section('title', 'Login Page')
 @section('content')
 
-    @if (session('error'))
-        <div class="alert alert-danger" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="container">
         <div class="form-container">
             <div class="mb-4">
                 <h1>SIGN IN</h1>
                 <h6>To Get Back In Touch, Kindly Sign In Here</h6>
             </div>
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <form id="loginForm" action="{{ route('login.post') }}" method="POST">
                 @csrf
                 <div class="mt-4 mb-4">

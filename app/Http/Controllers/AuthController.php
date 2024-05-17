@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -32,6 +33,11 @@ class AuthController extends Controller
             ]
         ]);
 
+        $haveAccount = User::where('user_email', $request->input('user_email'))->exists();
+        if (!$haveAccount) {
+            return redirect()->route('login')->with('error', 'Akun Belum Terdaftar. Silakan Sign Up terlebih dahulu.');
+        }
+
         $credentials = $request->only('user_email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -48,9 +54,15 @@ class AuthController extends Controller
 
     function registerPost(Request $request)
     {
-        $request->validate([
+
+        $messages = [
+            'user_email.unique' => 'Email pengguna sudah terdaftar, silakan lakukan sign up.',
+            // 'password.regex' => 'Password harus mengandung setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu karakter khusus.'
+        ];
+
+        $validator = Validator::make($request->all(), [
             'user_full_name' => 'required|string|min:3|max:25',
-            'user_email' => 'required|email|unique:users',
+            'user_email' => 'required|email|unique:users,user_email',
             'password' => [
                 'required',
                 'string',
@@ -62,20 +74,23 @@ class AuthController extends Controller
                 'regex:/[@$!%*?&#]/',
             ],
             'user_address' => 'required|string|min:10|max:100',
-            'user_phone_number' => 'required|min:12'
-        ]);
+            'user_phone_number' => 'required|string|min:12|max:12',
+        ], $messages);
 
-        $data['user_full_name'] = $request->user_full_name;
-        $data['user_email'] = $request->user_email;
-        $data['password'] = Hash::make($request->password);
-        $data['user_address'] = $request->user_address;
-        $data['user_phone_number'] = $request->user_phone_number;
-        $user = User::create($data);
-        if (!$user) {
-            return redirect(route('register'));
+        if ($validator->fails()) {
+            return redirect()->route('register')->withErrors($validator)->withInput();
         }
-        Auth::login($user);
-        return redirect(route('home'));
+
+        $data = $request->only('user_full_name', 'user_email', 'password', 'user_address', 'user_phone_number');
+        $data['password'] = Hash::make($data['password']);
+
+        $user = User::create($data);
+
+        if (!$user) {
+            return redirect()->route('register')->with('error', 'Registration failed. Please try again.');
+        }
+
+        return redirect()->route('home');
     }
 
     function logout()

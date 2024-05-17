@@ -140,6 +140,14 @@
                     }
                 });
             </script>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }}
+                    @endforeach
+                </div>
+            @endif
         </div>
         <div class="banner">
             <img src="/image/6333213.jpg" alt="Banner">
