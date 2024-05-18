@@ -272,6 +272,7 @@ class HomeController extends Controller
         $userId = Auth::id();
         $statusOutcome = '';
         $totalBalanceAmount = TotalBalance::where('user_id', $userId)
+            ->whereNull('first_balance_id')
             ->latest('created_at')
             ->first();
 

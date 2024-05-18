@@ -115,7 +115,7 @@
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="outcome_category">Income Category</label>
+                                    <label for="income_category">Income Category</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -133,7 +133,8 @@
 
                             <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
-                                <button type="button" id="cancelBtn" data-bs-dismiss="modal" class="cancel">Batal</button>
+                                <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
+                                    class="cancel">Batal</button>
                             </div>
                         </div>
                     </form>
@@ -142,7 +143,7 @@
         </div>
 
         <script>
-            document.getElementById("cancelBtn").addEventListener("click", function() {
+            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
                 document.getElementById("income_name").value = "";
                 document.getElementById("income_date").value = "";
                 document.getElementById("income_amount").value = "";
@@ -193,7 +194,7 @@
     </div>
 
     {{-- Bagian Tambah Outcome --}}
-    <div>
+    <div class="mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
             Tambah Outcome
         </button>
@@ -258,15 +259,14 @@
                                         <option value="Tagihan dan Pembayaran Rutin">Tagihan dan Pembayaran Rutin</option>
                                         <option value="Liburan dan Wisata">Liburan dan Wisata</option>
                                         <option value="Tabungan dan Investasi">Tabungan dan Investasi</option>
-                                        <option value="Pajak dan Biaya Hukum">Pajak dan Biaya Hukum</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="buttons" style="margin-top: 50px;">
                                 <button type="submit" class="send">Tambah</button>
-                                <button type="button" id="cancelBtn" class="cancel"
-                                    data-bs-dismiss="modal">Batal</button>
+                                <button type="button" id="outcomeCancelBtn" data-bs-dismiss="modal"
+                                    class="cancel">Batal</button>
                             </div>
                         </div>
                     </form>
@@ -275,6 +275,16 @@
         </div>
 
         <script>
+            document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
+                document.getElementById("outcome_name").value = "";
+                document.getElementById("outcome_date").value = "";
+                document.getElementById("outcome_amount").value = "";
+
+                document.getElementById("outcome_name_empty").textContent = "";
+                document.getElementById("outcome_date_empty").textContent = "";
+                document.getElementById("outcome_amount_empty").textContent = "";
+            });
+
             document.getElementById("outcomeForm").addEventListener("submit", function(event) {
                 var outcomeName = document.getElementById("outcome_name");
                 var outcomeDate = document.getElementById("outcome_date");
@@ -312,27 +322,20 @@
                     event.preventDefault();
                 }
             });
-
-            document.getElementById("cancelBtn").addEventListener("click", function() {
-                document.getElementById("outcome_name").value = "";
-                document.getElementById("outcome_date").value = "";
-                document.getElementById("outcome_amount").value = "";
-
-                document.getElementById("outcome_name_empty").innerText = "";
-                document.getElementById("outcome_date_empty").innerText = "";
-                document.getElementById("outcome_amount_empty").innerText = "";
-            });
         </script>
     </div>
 
+    {{-- Mau Nunjukkin Status Pengeluaran --}}
     <div>
         Status Pengeluaran Anda: {{ $statusName }}
     </div>
 
+    {{-- Mau Nunjukkin Total Pendapatan --}}
     <div>
         Total Pendapatan di bulan Ini: {{ $total_income_per_month }}
     </div>
 
+    {{-- Mau Nunjukkin Total Pengeluaran --}}
     <div>
         Total Pengeluaran di bulan ini: {{ $total_outcome_per_month }}
     </div>
@@ -345,6 +348,7 @@
         </div>
     </div>
 
+    {{-- Mau Nunjukkin Recent Transaksi --}}
     <div class="mb-4">
         <h4>Riwayat Transaksi</h4>
         <ul>
@@ -379,6 +383,9 @@
                         Income Amount
                     </th>
                     <th>
+                        Income Category
+                    </th>
+                    <th>
                         Action
                     </th>
                 </tr>
@@ -386,7 +393,7 @@
             <tbody style="text-align: center">
                 @if (count($incomeTable) === 0)
                     <tr>
-                        <td colspan="4">Belum ada data income yang ditambahkan.</td>
+                        <td colspan="6">Belum ada data income yang ditambahkan.</td>
                     </tr>
                 @else
                     @foreach ($incomeTable as $income)
@@ -397,12 +404,14 @@
                             <td>
                                 {{ $income->Income->income_name }}
                             </td>
-
                             <td>
                                 {{ $income->Income->income_date }}
                             </td>
                             <td>
                                 {{ 'Rp' . number_format($income->Income->income_amount, 0, ',', '.') }}
+                            </td>
+                            <td>
+                                {{ $income->Income->income_category }}
                             </td>
                             <td>
                                 <a href="{{ route('updateIncome', ['incomeId' => $income->income_id]) }}"
@@ -456,7 +465,6 @@
                             <td>
                                 {{ $outcome->Outcome->outcome_name }}
                             </td>
-
                             <td>
                                 {{ $outcome->Outcome->outcome_date }}
                             </td>
@@ -479,6 +487,7 @@
         </table>
     </div>
 
+    {{-- Mau Nunjukkin Diagram Pendapatan --}}
     <div class="mt-3">
         <h1>Diagram Pendapatan</h1>
         <div class="max-width: 600px; margin:auto;">
@@ -556,7 +565,7 @@
         </script>
     </div>
 
-
+    {{-- Mau Nunjukkin Diagram Pengeluaran --}}
     <div class="mt-3">
         <h1>Diagram Pengeluaran</h1>
         <canvas id="outcomeChart" width="400" height="200"></canvas>
