@@ -325,6 +325,22 @@
         </script>
     </div>
 
+    {{-- Bagian Mau Ganti Bahasa --}}
+    <div class="mb-2">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{ session()->get('locale', config('app.locale')) }}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url('locale/id') }}">id</a></li>
+                <li><a class="dropdown-item" href="{{ url('locale/en') }}">en</a></li>
+            </ul>
+        </div>
+    </div>
+    {{ __('test') }} </br>
+    {{ __('welcome') }} </br>
+    {{ __('goodbye') }}
     {{-- Mau Nunjukkin Status Pengeluaran --}}
     <div>
         Status Pengeluaran Anda: {{ $statusName }}
@@ -364,6 +380,7 @@
             @endforeach
         </ul>
     </div>
+    <hr />
 
     {{-- Tabel Income --}}
     <div class="mt-3">

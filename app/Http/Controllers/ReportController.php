@@ -27,10 +27,22 @@ class reportController extends Controller
             ->groupBy('outcome.outcome_category')
             ->get();
 
+        $incomesByCategory = Transaction::select('income_category', DB::raw('SUM(transaction_amount) as total_amount'))
+            ->join('income', 'transaction.income_id', '=', 'outcome.id')
+            ->where('transaction.user_id', $userId)
+            ->whereBetween('transaction.transaction_date', [$startDate, $endDate])
+            ->groupBy('income.income_category')
+            ->get();
+
         // Menghitung total pengeluaran untuk setiap kategori
         $totalExpensesByCategory = [];
         foreach ($expensesByCategory as $expense) {
             $totalExpensesByCategory[$expense->outcome_category] = $expense->total_amount;
+        }
+
+        $totalIncomeByCategory = [];
+        foreach ($incomesByCategory as $income) {
+            $totalIncomeByCategory[$income->income_category] = $income->total_amount;
         }
 
         // Query untuk data transaksi
@@ -65,6 +77,6 @@ class reportController extends Controller
 
             $t->total_balance_per_day = $total_balance_per_day;
         }
-        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_final_balance_bulan', 'expensesByCategory', 'totalExpensesByCategory'));
+        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_final_balance_bulan', 'expensesByCategory', 'totalExpensesByCategory', 'incomesByCategory', 'totalIncomeByCategory'));
     }
 }

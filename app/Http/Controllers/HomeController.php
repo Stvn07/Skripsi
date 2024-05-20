@@ -8,12 +8,25 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\FirstBalance;
 
 class HomeController extends Controller
 {
+
+    public function changeLanguage($locale)
+    {
+        App::setLocale($locale);
+        Session::put('locale', $locale);
+        Cookie::queue('locale', $locale, 60 * 24 * 30);
+
+        return redirect()->back();
+    }
+
     function showHome(Request $request)
     {
         $userId = Auth::id();

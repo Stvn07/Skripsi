@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('locale/{lang}', [HomeController::class, 'changeLanguage']);
+
 Route::get('/', [HomeController::class, 'showHome'])->name('home')->middleware('checkLogin');
 Route::get('/profile/{userId}', [HomeController::class, 'showProfile'])->name('profile')->middleware('checkLogin');
 Route::get('/profile/update/{userId}', [HomeController::class, 'showUpdateProfile'])->name('updateProfile')->middleware('checkLogin');
@@ -29,7 +31,6 @@ Route::get('/home', function () {
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
-
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 

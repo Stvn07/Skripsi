@@ -1,0 +1,22 @@
+{
+    "test": "Test Pake Bahasa Indonesia",
+    "welcome": "Selamat datang di aplikasi kami",
+    "goodbye": "Selamat tinggal!",
+
+    "errorNameEmpty": "Nama Tidak Boleh Kosong",
+    "errorEmailEmpty": "Email Tidak Boleh Kosong",
+    "errorPasswordEmpty": "Kata Sandi Tidak Boleh Kosong",
+    "errorPasswordLength": "Kata Sandi harus terdiri dari 8 sampai 25 karakter",
+    "errorPasswordNoSmallChar": "Kata Sandi harus mengandung setidaknya satu huruf kecil",
+    "errorPasswordNoBigChar": "Kata Sandi harus mengandung setidaknya satu huruf besar",
+    "errorPasswordNoNumber": "Kata Sandi harus mengandung setidaknya satu angka",
+    "errorPasswordNoSpecialChar": "Kata Sandi harus mengandung setidaknya satu karakter khusus",
+
+    "signInTitle": "Masuk",
+    "signInDesc": "Untuk Kembali Terkoneksi, Silakan Masuk",
+    "signInEmail": "Email",
+    "signInPassword": "Kata Sandi",
+    "signInSubmit": "Kirim",
+    "signInNoAcc": "Belum memiliki akun? ",
+    "signInNoAcc2": "Daftar"
+}

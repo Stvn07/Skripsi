@@ -1,0 +1,22 @@
+{
+    "test": "Test Use English Language",
+    "welcome": "Welcome to our application",
+    "goodbye": "Goodbye!",
+
+    "errorNameEmpty": "Name Cannot Be Empty",
+    "errorEmailEmpty": "Email Cannot Be Empty",
+    "errorPasswordEmpty": "Password Cannot Be Empty",
+    "errorPasswordLength": "Password must be between 8 and 25 characters",
+    "errorPasswordNoSmallChar": "Password must contain at least one lowercase letter",
+    "errorPasswordNoBigChar": "Password must contain at least one uppercase letter",
+    "errorPasswordNoNumber": "Password must contain at least one number",
+    "errorPasswordNoSpecialChar": "Password must contain at least one special character",
+
+    "signInTitle": "Sign In",
+    "signInDesc": "To Get Back In Touch, Kindly Sign In Here",
+    "signInEmail": "Email",
+    "signInPassword": "Password",
+    "signInSubmit": "Submit",
+    "signInNoAcc": "Don't have an account? ",
+    "signInNoAcc2": "Sign Up"
+}

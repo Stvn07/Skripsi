@@ -22,7 +22,7 @@
             <a href="{{ route('updateProfile', Auth::id()) }}" class="btn btn-primary">Update Profil</a>
         </div>
         <div class="text-center mt-2">
-            <a href="/" class="btn btn-primary">Back</a>
+            <a href="{{ route('home') }}" class="btn btn-primary">Back</a>
         </div>
         <div class="text-center mt-2">
             <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
