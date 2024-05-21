@@ -19,7 +19,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <form id="loginForm" action="{{ route('login.post') }}" method="POST">
+            <form id="loginForm" action="{{ route('login.post') }}" method="POST" novalidate>
                 @csrf
                 <div class="mt-4 mb-4">
                     <label class="form-label" for="user_email">{{ __('signInEmail') }}</label>
@@ -61,11 +61,16 @@
                     noSmallChar: @json(__('errorPasswordNoSmallChar')),
                     noBigChar: @json(__('errorPasswordNoBigChar')),
                     noNumber: @json(__('errorPasswordNoNumber')),
-                    noSpecialChar: @json(__('errorPasswordNoSpecialChar'))
+                    noSpecialChar: @json(__('errorPasswordNoSpecialChar')),
+                    emailInvalid: @json(__('errorEmailInvalid'))
                 };
 
                 if (user_email.value.trim() === "") {
                     user_email_empty.textContent = translations.emptyEmail;
+                    user_email_empty.style.display = "block";
+                    emptyCount++;
+                } else if (!/\S+@\S+\.\S+/.test(user_email.value)) {
+                    user_email_empty.textContent = translations.emailInvalid;
                     user_email_empty.style.display = "block";
                     emptyCount++;
                 } else {

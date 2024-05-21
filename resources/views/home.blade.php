@@ -4,7 +4,7 @@
     @if (!$hasFirstBalance)
         <div class="mb-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
-                Tambah First Balance
+                {{ __('addFirstBalance') }}
             </button>
 
             <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -14,10 +14,10 @@
                         <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}" method="POST">
                             @csrf
                             <div class="modal-body">
-                                <h2 style="text-align: center">Tambah First Balance</h2>
+                                <h2 style="text-align: center">{{ __('addFirstBalance') }}</h2>
                                 <div class="form-group">
                                     <div class="filter-label">
-                                        <label for="first_balance_amount">First Balance Amount</label>
+                                        <label for="first_balance_amount">{{ __('firstBalanceAmount') }}</label>
                                         <span class="error-message" id="first_balance_amount_empty"></span>
                                     </div>
 
@@ -27,10 +27,10 @@
                                 </div>
 
                                 <div class="buttons" style="margin-top: 50px;">
-                                    <button type="submit" class="send">Tambah</button>
+                                    <button type="submit" class="send">{{ __('addButton') }}</button>
 
                                     <button type="button" id="cancelBtn" data-bs-dismiss="modal"
-                                        class="cancel">Batal</button>
+                                        class="cancel">{{ __('backButton') }}</button>
                                 </div>
                             </div>
                         </form>
@@ -43,9 +43,10 @@
                     var firstBalanceAmount = document.getElementById("first_balance_amount");
                     var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
                     var emptyCount = 0;
+                    var firstBalanceEmpty = @json(__('errorFirstBalanceEmpty'))
 
                     if (firstBalanceAmount.value.trim() === "") {
-                        firstBalanceAmountEmpty.textContent = "First Balance tidak boleh kosong";
+                        firstBalanceAmountEmpty.textContent = firstBalanceEmpty;
                         firstBalanceAmountEmpty.style.display = "block";
                         emptyCount++;
                     } else {
@@ -69,7 +70,7 @@
     {{-- Bagian Tambah Income --}}
     <div class="mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
-            Tambah Income
+            {{ __('addIncome') }}
         </button>
 
         <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel" aria-hidden="true">
@@ -78,11 +79,11 @@
                     <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
-                            <h2 style="text-align: center">Tambah Income</h2>
+                            <h2 style="text-align: center">{{ __('addIncome') }}</h2>
 
-                            <div class="form-group">
+                            <div class="form-group mt-4 mb-4">
                                 <div class="filter-label">
-                                    <label for="income_name">Income Name</label>
+                                    <label for="income_name">{{ __('incomeName') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -91,9 +92,9 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mt-4 mb-4">
                                 <div class="filter-label">
-                                    <label for="income_date">Income Date</label>
+                                    <label for="income_date">{{ __('incomeDate') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -102,9 +103,9 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mt-4 mb-4">
                                 <div class="filter-label">
-                                    <label for="income_amount">Income Amount</label>
+                                    <label for="income_amount">{{ __('incomeAmount') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -115,26 +116,27 @@
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="income_category">Income Category</label>
+                                    <label for="income_category">{{ __('incomeCategory') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
-                                    <select id="category" name="income_category" class="form-control">
-                                        <option value="" selected disabled>Pilih kategori</option>
-                                        <option value="Gaji Tetap">Gaji Tetap</option>
-                                        <option value="Pendapatan Pasif">Pendapatan Pasif</option>
-                                        <option value="Pendapatan Penjualan">Pendapatan Penjualan</option>
-                                        <option value="Pendapatan Bisnis">Pendapatan Bisnis</option>
-                                        <option value="Freelance">Freelance</option>
-                                        <option value="Bonus">Bonus</option>
+                                    <select id="category" name="income_category" class="form-control"
+                                        aria-label="{{ __('selectCategory') }}">
+                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
+                                        <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
+                                        <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
+                                        <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}</option>
+                                        <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
+                                        <option value="Freelance">{{ __('incomeCategory5') }}</option>
+                                        <option value="Bonus">{{ __('incomeCategory6') }}</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">Tambah</button>
+                                <button type="submit" class="send">{{ __('addButton') }}</button>
                                 <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">Batal</button>
+                                    class="cancel">{{ __('backButton') }}</button>
                             </div>
                         </div>
                     </form>
@@ -161,9 +163,14 @@
                 var incomeDateEmpty = document.getElementById("income_date_empty");
                 var incomeAmountEmpty = document.getElementById("income_amount_empty");
                 var emptyCount = 0;
+                var translations = {
+                    nameEmpty: @json(__('errorIncomeNameEmpty')),
+                    dateEmpty: @json(__('errorIncomeDateEmpty')),
+                    amountEmpty: @json(__('errorIncomeAmountEmpty'))
+                }
 
                 if (incomeName.value.trim() === "") {
-                    incomeNameEmpty.textContent = "Income Name tidak boleh kosong";
+                    incomeNameEmpty.textContent = translations.nameEmpty;
                     incomeNameEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -171,7 +178,7 @@
                 }
 
                 if (incomeDate.value.trim() === "") {
-                    incomeDateEmpty.textContent = "Income Date tidak boleh kosong";
+                    incomeDateEmpty.textContent = translations.dateEmpty;
                     incomeDateEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -179,7 +186,7 @@
                 }
 
                 if (incomeAmount.value.trim() === "") {
-                    incomeAmountEmpty.textContent = "Income Amount tidak boleh kosong";
+                    incomeAmountEmpty.textContent = translations.amountEmpty;
                     incomeAmountEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -196,7 +203,7 @@
     {{-- Bagian Tambah Outcome --}}
     <div class="mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
-            Tambah Outcome
+            {{ __('addOutcome') }}
         </button>
 
         <div class="modal modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="outcomeModalLabel"
@@ -206,11 +213,11 @@
                     <form id="outcomeForm" action="{{ route('addOutcome.post') }}" method="POST">
                         @csrf
                         <div class="modal-body">
-                            <h2 style="text-align: center">Tambah Outcome</h2>
+                            <h2 style="text-align: center">{{ __('addOutcome') }}</h2>
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="outcome_name">Outcome Name</label>
+                                    <label for="outcome_name">{{ __('outcomeName') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -221,7 +228,7 @@
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="outcome_date">Outcome Date</label>
+                                    <label for="outcome_date">{{ __('outcomeDate') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -232,7 +239,7 @@
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="outcome_amount">Outcome Amount</label>
+                                    <label for="outcome_amount">{{ __('outcomeAmount') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
@@ -243,30 +250,31 @@
 
                             <div class="form-group">
                                 <div class="filter-label">
-                                    <label for="outcome_category">Outcome Category</label>
+                                    <label for="outcome_category">{{ __('outcomeCategory') }}</label>
                                 </div>
 
                                 <div class="filter-inputs">
-                                    <select id="category" name="outcome_category" class="form-control">
-                                        <option value="" selected disabled>Pilih kategori</option>
-                                        <option value="Makanan dan Minuman">Makanan dan Minuman</option>
-                                        <option value="Transportasi">Transportasi</option>
-                                        <option value="Hiburan">Hiburan</option>
-                                        <option value="Kesehatan">Kesehatan</option>
-                                        <option value="Tempat Tinggal">Tempat Tinggal</option>
-                                        <option value="Pendidikan">Pendidikan</option>
-                                        <option value="Belanja Pribadi">Belanja Pribadi</option>
-                                        <option value="Tagihan dan Pembayaran Rutin">Tagihan dan Pembayaran Rutin</option>
-                                        <option value="Liburan dan Wisata">Liburan dan Wisata</option>
-                                        <option value="Tabungan dan Investasi">Tabungan dan Investasi</option>
+                                    <select id="category" name="outcome_category" class="form-control"
+                                        aria-label="{{ __('selectCategory') }}">
+                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
+                                        <option value="Makanan dan Minuman">{{ __('outcomeCategory1') }}</option>
+                                        <option value="Transportasi">{{ __('outcomeCategory2') }}</option>
+                                        <option value="Hiburan">{{ __('outcomeCategory3') }}</option>
+                                        <option value="Kesehatan">{{ __('outcomeCategory4') }}</option>
+                                        <option value="Tempat Tinggal">{{ __('outcomeCategory5') }}</option>
+                                        <option value="Pendidikan">{{ __('outcomeCategory6') }}</option>
+                                        <option value="Belanja Pribadi">{{ __('outcomeCategory7') }}</option>
+                                        <option value="Tagihan dan Pembayaran Rutin">{{ __('outcomeCategory8') }}</option>
+                                        <option value="Liburan dan Wisata">{{ __('outcomeCategory9') }}</option>
+                                        <option value="Tabungan dan Investasi">{{ __('outcomeCategory10') }}</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">Tambah</button>
+                                <button type="submit" class="send">{{ __('addButton') }}</button>
                                 <button type="button" id="outcomeCancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">Batal</button>
+                                    class="cancel">{{ __('backButton') }}</button>
                             </div>
                         </div>
                     </form>
@@ -293,9 +301,14 @@
                 var outcomeDateEmpty = document.getElementById("outcome_date_empty");
                 var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
                 var emptyCount = 0;
+                var translations = {
+                    nameEmpty: @json(__('errorOutcomeNameEmpty')),
+                    dateEmpty: @json(__('errorOutcomeDateEmpty')),
+                    amountEmpty: @json(__('errorOutcomeAmountEmpty'))
+                }
 
                 if (outcomeName.value.trim() === "") {
-                    outcomeNameEmpty.textContent = "Outcome Name tidak boleh kosong";
+                    outcomeNameEmpty.textContent = translations.nameEmpty;
                     outcomeNameEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -303,7 +316,7 @@
                 }
 
                 if (outcomeDate.value.trim() === "") {
-                    outcomeDateEmpty.textContent = "Outcome Date tidak boleh kosong";
+                    outcomeDateEmpty.textContent = translations.dateEmpty;
                     outcomeDateEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -311,7 +324,7 @@
                 }
 
                 if (outcomeAmount.value.trim() === "") {
-                    outcomeAmountEmpty.textContent = "Outcome Amount tidak boleh kosong";
+                    outcomeAmountEmpty.textContent = translations.amountEmpty;
                     outcomeAmountEmpty.style.display = "block";
                     emptyCount++;
                 } else {
@@ -338,27 +351,24 @@
             </ul>
         </div>
     </div>
-    {{ __('test') }} </br>
-    {{ __('welcome') }} </br>
-    {{ __('goodbye') }}
     {{-- Mau Nunjukkin Status Pengeluaran --}}
     <div>
-        Status Pengeluaran Anda: {{ $statusName }}
+        {{ __('statusOutcome') }} {{ $statusName }}
     </div>
 
     {{-- Mau Nunjukkin Total Pendapatan --}}
     <div>
-        Total Pendapatan di bulan Ini: {{ $total_income_per_month }}
+        {{ __('totalIncomeMonth') }} {{ $total_income_per_month }}
     </div>
 
     {{-- Mau Nunjukkin Total Pengeluaran --}}
     <div>
-        Total Pengeluaran di bulan ini: {{ $total_outcome_per_month }}
+        {{ __('totalOutcomeMonth') }} {{ $total_outcome_per_month }}
     </div>
 
     {{-- Mau Nunjukkin Total Balance --}}
     <div>
-        Total Balance Anda =
+        {{ __('totalBalance') }}
         <div>
             <span>{{ 'Rp' . number_format($totalBalanceTable, 0, ',', '.') }}</span>
         </div>
@@ -366,7 +376,7 @@
 
     {{-- Mau Nunjukkin Recent Transaksi --}}
     <div class="mb-4">
-        <h4>Riwayat Transaksi</h4>
+        <h4>{{ __('recentTransaction') }}</h4>
         <ul>
             @foreach ($transactionData as $key => $transaction)
                 <li>

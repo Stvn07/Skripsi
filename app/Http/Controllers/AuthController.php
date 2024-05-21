@@ -54,13 +54,12 @@ class AuthController extends Controller
 
     function registerPost(Request $request)
     {
-
         $messages = [
             'user_email.unique' => 'Email pengguna sudah terdaftar, silakan lakukan sign up.',
             // 'password.regex' => 'Password harus mengandung setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu karakter khusus.'
         ];
 
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'user_full_name' => 'required|string|min:3|max:25',
             'user_email' => 'required|email|unique:users,user_email',
             'password' => [
@@ -76,10 +75,6 @@ class AuthController extends Controller
             'user_address' => 'required|string|min:10|max:100',
             'user_phone_number' => 'required|string|min:12|max:12',
         ], $messages);
-
-        if ($validator->fails()) {
-            return redirect()->route('register')->withErrors($validator)->withInput();
-        }
 
         $data = $request->only('user_full_name', 'user_email', 'password', 'user_address', 'user_phone_number');
         $data['password'] = Hash::make($data['password']);
