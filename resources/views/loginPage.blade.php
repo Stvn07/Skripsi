@@ -7,10 +7,6 @@
             <div class="mb-4">
                 <h1>{{ __('signInTitle') }}</h1>
                 <h6>{{ __('signInDesc') }}</h6>
-                {{ __('test') }} </br>
-                {{ __('welcome') }} </br>
-                {{ __('goodbye') }} </br>
-
             </div>
 
             @if (session('error'))

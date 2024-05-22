@@ -7,7 +7,7 @@
 
             <div class="form-group">
                 <div class="filter-label">
-                    <label for="outcome_name">Outcome Name</label>
+                    <label for="outcome_name">{{ __('outcomeName') }}</label>
                 </div>
 
                 <div class="filter-inputs">
@@ -19,7 +19,7 @@
 
             <div class="form-group">
                 <div class="filter-label">
-                    <label for="outcome_date">Outcome Date</label>
+                    <label for="outcome_date">{{ __('outcomeDate') }}</label>
                 </div>
 
                 <div class="filter-inputs">
@@ -30,7 +30,7 @@
 
             <div class="form-group">
                 <div class="filter-label">
-                    <label for="outcome_amount">Outcome Amount</label>
+                    <label for="outcome_amount">{{ __('outcomeAmount') }}</label>
                 </div>
 
                 <div class="filter-inputs">
@@ -41,9 +41,9 @@
             </div>
 
             <div class="buttons" style="margin-top: 50px;">
-                <button type="submit" class="send">Update</button>
+                <button type="submit" class="send">{{ __('updateButton') }}</button>
                 <a href="{{ route('home') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
-                    class="btn btn-danger">Batal</a>
+                    class="btn btn-danger">{{ __('backButton') }}</a>
             </div>
         </form>
     </div>

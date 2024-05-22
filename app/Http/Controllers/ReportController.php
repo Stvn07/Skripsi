@@ -28,7 +28,7 @@ class reportController extends Controller
             ->get();
 
         $incomesByCategory = Transaction::select('income_category', DB::raw('SUM(transaction_amount) as total_amount'))
-            ->join('income', 'transaction.income_id', '=', 'outcome.id')
+            ->join('income', 'transaction.income_id', '=', 'income.id')
             ->where('transaction.user_id', $userId)
             ->whereBetween('transaction.transaction_date', [$startDate, $endDate])
             ->groupBy('income.income_category')

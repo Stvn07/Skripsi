@@ -1,4 +1,16 @@
 {
+    "days": {
+        "Monday": "Monday",
+        "Tuesday": "Tuesday",
+        "Wednesday": "Wednesday",
+        "Thursday": "Thursday",
+        "Friday": "Friday",
+        "Saturday": "Saturday"
+    },
+
+    "finalBalance": "Final Balance",
+    "income": "Income",
+    "outcome": "Outflow",
     "number": "No",
     "transaction": "Transaction",
     "report": "Report",
@@ -9,6 +21,9 @@
     "nextChart": "Next Chart",
     "incomeFund": "Fund Received",
     "outcomeFund": "Fund Disbursed",
+    "noIncomeData": "No Income Data Has Been Added Yet",
+    "noOutcomeData": "No Outflow Data Has Been Added Yet",
+    "noDataFound": "Data Not Found",
 
     "errorNameEmpty": "Full Name Cannot Be Empty",
     "errorNameLength": "Full Name must consist of 3 to 2 words",
@@ -91,5 +106,45 @@
     "outcomeCategory7": "Personal Shopping",
     "outcomeCategory8": "Bills and Routine Payment",
     "outcomeCategory9": "Vacation and Travel",
-    "outcomeCategory10": "Savings and Invesment"
+    "outcomeCategory10": "Savings and Invesment",
+
+    "transactionDate": "Transaction Date",
+    "transactionAmount": "Transaction Amount",
+    "transactionType": "Transaction Type",
+    "selectMonth": "Select Month",
+    "show": "Show",
+
+    "incomeCategories": {
+        "Gaji Tetap": "Fixed Salary",
+        "Pendapatan Pasif": "Pasive Income",
+        "Pendapatan Penjualan": "Sales Income",
+        "Pendapatan Bisnis": "Business Income",
+        "Freelance": "Freelance",
+        "Bonus": "Bonus"
+    },
+    "totalIncome": "Total Income",
+
+    "outcomeCategories": {
+        "Makanan dan Minuman": "Food and Beverages",
+        "Transportasi": "Transportation",
+        "Hiburan": "Entertainment",
+        "Kesehatan": "Health",
+        "Tempat Tinggal": "Living Place",
+        "Pendidikan": "Education",
+        "Belanja Pribadi": "Personal Shopping",
+        "Tagihan dan Pembayaran Rutin": "Bills and Routine Payment",
+        "Liburan dan Wisata": "Vacation and Travel",
+        "Tabungan dan Investasi": "Savings and Invesment"
+    },
+    "totalOutcome": "Total Outflow",
+
+    "transactionTable": "Transaction Table",
+    "filterDataBy": "Filter Data By",
+    "day": "Day",
+    "rangeDay": "range Day",
+    "until": "Until",
+    "month": "Month",
+    "rangeMonth": "Range Month",
+    "year": "Year",
+    "rangeYear": "Range Year"
 }

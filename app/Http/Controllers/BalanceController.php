@@ -48,7 +48,8 @@ class BalanceController extends Controller
         $request->validate([
             'income_name' => 'required',
             'income_date' => 'required|date',
-            'income_amount' => 'required'
+            'income_amount' => 'required',
+            'income_category' => 'nullable|string|max:255'
         ]);
 
         $userId = Auth::id();
@@ -92,8 +93,7 @@ class BalanceController extends Controller
             'outcome_name' => 'required',
             'outcome_date' => 'required|date',
             'outcome_amount' => 'required',
-            'outcome_category' => 'nullable|string|max:255',
-            'custom_category' => 'nullable|string|max:255'
+            'outcome_category' => 'nullable|string|max:255'
         ]);
 
         $userId = Auth::id();
@@ -188,7 +188,6 @@ class BalanceController extends Controller
         return redirect()->route('home');
     }
 
-
     function openUpdateOutcome($outcomeId)
     {
         $outcomeData = Outcome::find($outcomeId);
@@ -201,7 +200,7 @@ class BalanceController extends Controller
         $request->validate([
             'outcome_name' => 'nullable|string|max:255',
             'outcome_date' => 'nullable|date',
-            'outcome_amount' => 'nullable|numeric|max:999999999999' // Sesuaikan batas maksimalnya
+            'outcome_amount' => 'nullable|numeric|max:999999999999'
         ]);
 
         $userId = Auth::id();

@@ -283,6 +283,7 @@ class HomeController extends Controller
     function countStatusOutcome()
     {
         $userId = Auth::id();
+        $locale = App::getLocale();
         $statusOutcome = '';
         $totalBalanceAmount = TotalBalance::where('user_id', $userId)
             ->whereNull('first_balance_id')
@@ -301,11 +302,23 @@ class HomeController extends Controller
             $middleExpenses = 50;
 
             if ($percentage < $lowExpenses) {
-                $statusOutcome = 'Pengeluaran Rendah';
+                if ($locale === 'id') {
+                    $statusOutcome = 'Pengeluaran Rendah';
+                } else {
+                    $statusOutcome = 'Low Spending';
+                }
             } else if ($percentage <= $middleExpenses) {
-                $statusOutcome = 'Pengeluaran Sedang';
+                if ($locale === 'id') {
+                    $statusOutcome = 'Pengeluaran Sedang';
+                } else {
+                    $statusOutcome = 'Medium Spending';
+                }
             } else {
-                $statusOutcome = 'Pengeluaran Tinggi';
+                if ($locale === 'id') {
+                    $statusOutcome = 'Pengeluaran Tinggi';
+                } else {
+                    $statusOutcome = 'High Spending';
+                }
             }
         }
         return $statusOutcome;

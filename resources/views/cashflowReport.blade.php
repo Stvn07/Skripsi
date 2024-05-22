@@ -1,26 +1,36 @@
 @extends('sidebar.dashboard')
 @section('content')
     <form action="/report">
-        <label for="bulan">Pilih Bulan:</label>
+        <label for="bulan">{{ __('selectMonth') }}</label>
         <input type="month" id="bulan" name="bulan" value="{{ request('bulan') }}">
-        <button type="submit">Tampilkan</button>
+        <button type="submit">{{ __('show') }}</button>
     </form>
+
+    <script>
+        function translateCategories(categories) {
+            return categories.map(category => {
+                var translatedCategory = translatedCategories[category] || category;
+                return translatedCategory;
+            });
+        }
+    </script>
 
     <div class="mt-2 mb-2">
         <canvas id="expensesChart" width="400" height="400"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            var currentChart = 0;
+            var chartData = @json($expensesByCategory);
+            var translatedCategories = @json(__('outcomeCategories'));
+            var outcomeComment = @json(__('totalOutcome'));
+            var newCategories = translateCategories(chartData.map(expense => expense.outcome_category), translatedCategories);
             var ctx = document.getElementById('expensesChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: [
-                        @foreach ($expensesByCategory as $expense)
-                            '{{ $expense->outcome_category }}',
-                        @endforeach
-                    ],
+                    labels: newCategories,
                     datasets: [{
-                        label: 'Total Pengeluaran',
+                        label: outcomeComment,
                         data: [
                             @foreach ($expensesByCategory as $expense)
                                 {{ $expense->total_amount }},
@@ -69,17 +79,18 @@
         <canvas id="incomesChart" width="400" height="400"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+            var currentChart = 0;
+            var chartData = @json($incomesByCategory);
+            var translatedCategories = @json(__('incomeCategories'));
+            var incomeComment = @json(__('totalIncome'));
+            var newCategories = translateCategories(chartData.map(income => income.income_category), translatedCategories);
             var ctx = document.getElementById('incomesChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: [
-                        @foreach ($incomesByCategory as $income)
-                            '{{ $income->income_category }}',
-                        @endforeach
-                    ],
+                    labels: newCategories,
                     datasets: [{
-                        label: 'Total Pendapatan',
+                        label: incomeComment,
                         data: [
                             @foreach ($incomesByCategory as $income)
                                 {{ $income->total_amount }},
@@ -123,29 +134,29 @@
             <thead style="text-align: center">
                 <tr>
                     <th>
-                        Transaction Date
+                        {{ __('transactionDate') }}
                     </th>
                     <th>
-                        Transaction Amount
+                        {{ __('transactionDate') }}
                     </th>
                     <th>
-                        Transaction Type
+                        {{ __('transactionAmount') }}
                     </th>
                     <th>
-                        Income
+                        {{ __('income') }}
                     </th>
                     <th>
-                        Outcome
+                        {{ __('outcome') }}
                     </th>
                     <th>
-                        Saldo Akhir
+                        {{ __('finalBalance') }}
                     </th>
                 </tr>
             </thead>
             <tbody style="text-align: center">
                 @if (count($hasil_bulan) === 0)
                     <tr>
-                        <td style="height: 250px; background-color: white" colspan="6">Data tidak ditemukan.</td>
+                        <td style="height: 250px; background-color: white" colspan="6">{{ __('noDataFound') }}</td>
                     </tr>
                 @else
                     @foreach ($hasil_bulan as $transaction)
@@ -160,9 +171,9 @@
 
                             <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                 @if ($transaction->income_id)
-                                    INCOME
+                                    {{ __('income') }}
                                 @else
-                                    OUTCOME
+                                    {{ __('outcome') }}
                                 @endif
                             </td>
                             <td>

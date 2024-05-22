@@ -1,6 +1,6 @@
 @extends('sidebar.dashboard')
 @section('content')
-    <h1>Tabel Transaksi</h1>
+    <h1>{{ __('transactionTable') }}</h1>
     <script>
         function cleanURL() {
             var form = document.getElementById('filterForm');
@@ -66,11 +66,11 @@
                         </div>
                         <form action="/transaction" method="GET" id="filterForm" onsubmit="return cleanURL()">
                             <div class="modal-body">
-                                <h3>Filter Data Berdasarkan</h3>
+                                <h3>{{ __('filterDataBy') }}</h3>
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="one_date">Hari</label>
+                                        <label for="one_date">{{ __('day') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
@@ -81,14 +81,14 @@
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="start_date">Range Tanggal</label>
+                                        <label for="start_date">{{ __('rangeDay') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
                                         <input type="date" class="form-control" id="start_date" name="start_date"
                                             placeholder="Pilih tanggal awal" value="{{ request('start_date') }}">
                                     </div>
-                                    <span class=>sampai</span>
+                                    <span class=>{{ __('until') }}</span>
                                     <div class="filter-inputs">
                                         <input type="date" class="form-control" id="end_date" name="end_date"
                                             placeholder="Pilih tanggal akhir" value="{{ request('end_date') }}">
@@ -97,7 +97,7 @@
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="month_only">Bulan</label>
+                                        <label for="month_only">{{ __('month') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
@@ -108,14 +108,14 @@
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="start_month">Range Bulan</label>
+                                        <label for="start_month">{{ __('rangeMonth') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
                                         <input type="month" class="form-control" id="start_month" name="start_month"
                                             value="{{ request('start_only') }}">
                                     </div>
-                                    <span class=>sampai</span>
+                                    <span class=>{{ __('until') }}</span>
                                     <div class="filter-inputs">
                                         <input type="month" class="form-control" id="end_month" name="end_month"
                                             value="{{ request('end_only') }}">
@@ -124,7 +124,7 @@
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="year_only">Tahun</label>
+                                        <label for="year_only">{{ __('year') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
@@ -135,7 +135,7 @@
 
                                 <div class="filter-container mt-4 mb-4">
                                     <div class="filter-label">
-                                        <label for="start_year">Range Tahun</label>
+                                        <label for="start_year">{{ __('rangeYear') }}</label>
                                     </div>
 
                                     <div class="filter-inputs">
@@ -143,7 +143,7 @@
                                             class="form-control" id="start_year" name="start_year"
                                             value="{{ request('start_year') }}">
                                     </div>
-                                    <span class=>sampai</span>
+                                    <span class=>{{ __('until') }}</span>
                                     <div class="filter-inputs">
                                         <input type="number" min="1900" max="{{ date('Y') }}"
                                             class="form-control" id="end_year" name="end_year"
@@ -152,7 +152,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="reset" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">{{ __('backButton') }}</button>
                                 <button type="button" class="btn btn-danger" value="Reset"
                                     onclick="resetData()">Reset</button>
                                 <button type="submit" class="btn btn-primary">Filter</button>
@@ -182,23 +183,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -216,9 +218,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -234,23 +236,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -268,9 +271,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -286,23 +289,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -320,9 +324,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -338,23 +342,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -372,9 +377,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -390,23 +395,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -424,9 +430,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -442,23 +448,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -476,9 +483,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -494,23 +501,24 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
                 <tbody style="text-align: center">
                     @if (count($results) === 0)
                         <tr>
-                            <td style="height: 250px; background-color: white" colspan="4">Data tidak ditemukan.</td>
+                            <td style="height: 250px; background-color: white" colspan="4">{{ __('noDataFound') }}
+                            </td>
                         </tr>
                     @else
                         @foreach ($results as $transaction)
@@ -528,9 +536,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>
@@ -546,16 +554,16 @@
                 <thead style="text-align: center">
                     <tr>
                         <th>
-                            No
+                            {{ __('number') }}
                         </th>
                         <th>
-                            Transaction Date
+                            {{ __('transactionDate') }}
                         </th>
                         <th>
-                            Transaction Amount
+                            {{ __('transactionAmount') }}
                         </th>
                         <th>
-                            Transaction Type
+                            {{ __('transactionType') }}
                         </th>
                     </tr>
                 </thead>
@@ -580,9 +588,9 @@
 
                                 <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                     @if ($transaction->income_id)
-                                        INCOME
+                                        {{ __('income') }}
                                     @else
-                                        OUTCOME
+                                        {{ __('outcome') }}
                                     @endif
                                 </td>
                             </tr>

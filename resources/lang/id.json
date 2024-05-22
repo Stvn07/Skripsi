@@ -1,4 +1,16 @@
 {
+    "days": {
+        "Monday": "Senin",
+        "Tuesday": "Selasa",
+        "Wednesday": "Rabu",
+        "Thursday": "Kamis",
+        "Friday": "Jumat",
+        "Saturday": "Sabtu"
+    },
+
+    "finalBalance": "Saldo Akhir",
+    "income": "Pendapatan",
+    "outcome": "Pengeluaran",
     "number": "Nomor",
     "transaction": "Transaksi",
     "report": "Laporan",
@@ -9,6 +21,9 @@
     "nextChart": "Diagram Selanjutnya",
     "incomeFund": "Dana yang didapatkan",
     "outcomeFund": "Dana yang dikeluarkan",
+    "noIncomeData": "Belum Ada Data Pendapatan Yang Ditambahkan",
+    "noOutcomeData": "Belum Ada Data Pengeluaran Yang Ditambahkan",
+    "noDataFound": "Data Tidak Ditemukan",
 
     "errorNameEmpty": "Nama Lengkap tidak boleh kosong",
     "errorNameLength": "Nama Lengkap harus terdiri dari 3 sampai 25 kata",
@@ -91,5 +106,45 @@
     "outcomeCategory7": "Belanja Pribadi",
     "outcomeCategory8": "Tagihan dan Pembayaran Rutin",
     "outcomeCategory9": "Liburan dan Wisata",
-    "outcomeCategory10": "Tabungan dan Investasi"
+    "outcomeCategory10": "Tabungan dan Investasi",
+
+    "transactionDate": "Tanggal Transaksi",
+    "transactionAmount": "Nominal Transaksi",
+    "transactionType": "Jenis Transaksi",
+    "selectMonth": "Pilih Bulan",
+    "show": "Tampilkan",
+
+    "incomeCategories": {
+        "Gaji Tetap": "Gaji Tetap",
+        "Pendapatan Pasif": "Pendapatan Pasif",
+        "Pendapatan Penjualan": "Pendapatan Penjualan",
+        "Pendapatan Bisnis": "Pendapatan Bisnis",
+        "Freelance": "Freelance",
+        "Bonus": "Bonus"
+    },
+    "totalIncome": "Total Pendapatan",
+
+    "outcomeCategories": {
+        "Makanan dan Minuman": "Makanan dan Minuman",
+        "Transportasi": "Transportasi",
+        "Hiburan": "Hiburan",
+        "Kesehatan": "Kesehatan",
+        "Tempat Tinggal": "Tempat Tinggal",
+        "Pendidikan": "Pendidikan",
+        "Belanja Pribadi": "Belanja Pribadi",
+        "Tagihan dan Pembayaran Rutin": "Tagihan dan Pembayaran Rutin",
+        "Liburan dan Wisata": "Liburan dan Wisata",
+        "Tabungan dan Investasi": "Tabungan dan Investasi"
+    },
+    "totalOutcome": "Total Pengeluaran",
+
+    "transactionTable": "Tabel Transaksi",
+    "filterDataBy": "Filter Data Berdasarkan",
+    "day": "Hari",
+    "rangeDay": "Rentang Hari",
+    "until": "Sampai",
+    "month": "Bulan",
+    "rangeMonth": "Rentang Bulan",
+    "year": "Tahun",
+    "rangeYear": "Rentang Tahun"
 }

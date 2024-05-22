@@ -358,12 +358,18 @@
 
     {{-- Mau Nunjukkin Total Pendapatan --}}
     <div>
-        {{ __('totalIncomeMonth') }} {{ $total_income_per_month }}
+        {{ __('totalIncomeMonth') }}
+        <div>
+            <span>{{ 'Rp' . number_format($total_income_per_month, 0, ',', '.') }}</span>
+        </div>
     </div>
 
     {{-- Mau Nunjukkin Total Pengeluaran --}}
     <div>
-        {{ __('totalOutcomeMonth') }} {{ $total_outcome_per_month }}
+        {{ __('totalOutcomeMonth') }}
+        <div>
+            <span>{{ 'Rp' . number_format($total_outcome_per_month, 0, ',', '.') }}</span>
+        </div>
     </div>
 
     {{-- Mau Nunjukkin Total Balance --}}
@@ -383,12 +389,28 @@
                     Transaksi {{ $key + 1 }} -
                     {{ $transaction->transaction_date }} -
                     Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
-                    <span class="{{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
+                    <span
+                        class="transaction-type {{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
                         {{ ucfirst($transaction->transaction_type) }}
                     </span>
                 </li>
             @endforeach
         </ul>
+
+        <script>
+            // Fungsi untuk menerjemahkan tipe transaksi
+            function translateTransactionTypes() {
+                var transactionElements = document.querySelectorAll('.transaction-type');
+
+                transactionElements.forEach(function(element) {
+                    var originalType = element.innerText.trim().toLowerCase();
+                    element.innerText = originalType === 'income' ? '{{ __('income') }}' : '{{ __('outcome') }}';
+                });
+            }
+
+            // Panggil fungsi untuk menerjemahkan tipe transaksi
+            translateTransactionTypes();
+        </script>
     </div>
     <hr />
 
@@ -398,29 +420,29 @@
             <thead style="text-align: center">
                 <tr>
                     <th>
-                        No
+                        {{ __('number') }}
                     </th>
                     <th>
-                        Income Name
+                        {{ __('incomeName') }}
                     </th>
                     <th>
-                        Income Date
+                        {{ __('incomeDate') }}
                     </th>
                     <th>
-                        Income Amount
+                        {{ __('incomeAmount') }}
                     </th>
                     <th>
-                        Income Category
+                        {{ __('incomeCategory') }}
                     </th>
                     <th>
-                        Action
+                        {{ __('action') }}
                     </th>
                 </tr>
             </thead>
             <tbody style="text-align: center">
                 @if (count($incomeTable) === 0)
                     <tr>
-                        <td colspan="6">Belum ada data income yang ditambahkan.</td>
+                        <td colspan="6">{{ __('noIncomeData') }}</td>
                     </tr>
                 @else
                     @foreach ($incomeTable as $income)
@@ -437,13 +459,13 @@
                             <td>
                                 {{ 'Rp' . number_format($income->Income->income_amount, 0, ',', '.') }}
                             </td>
-                            <td>
+                            <td class="income-category">
                                 {{ $income->Income->income_category }}
                             </td>
                             <td>
                                 <a href="{{ route('updateIncome', ['incomeId' => $income->income_id]) }}"
                                     class="btn btn-primary">
-                                    Update
+                                    {{ __('updateButton') }}
                                 </a>
                             </td>
                         </tr>
@@ -451,6 +473,21 @@
                 @endif
             </tbody>
         </table>
+
+        <script>
+            var currentLang = '{{ app()->getLocale() }}';
+            var translations = @json(__('incomeCategories'));
+
+            function translateCategories(categories) {
+                return categories.map(category => translations[category] || category);
+            }
+            var categoryElements = document.querySelectorAll('.income-category');
+
+            categoryElements.forEach(function(element) {
+                var originalCategory = element.innerText;
+                element.innerText = translations[originalCategory] || originalCategory;
+            });
+        </script>
     </div>
 
     {{-- Tabel Outcome --}}
@@ -459,29 +496,29 @@
             <thead style="text-align: center">
                 <tr>
                     <th>
-                        No
+                        {{ __('number') }}
                     </th>
                     <th>
-                        Outcome Name
+                        {{ __('outcomeName') }}
                     </th>
                     <th>
-                        Outcome Date
+                        {{ __('outcomeDate') }}
                     </th>
                     <th>
-                        Outcome Amount
+                        {{ __('outcomeAmount') }}
                     </th>
                     <th>
-                        Outcome Category
+                        {{ __('outcomeDate') }}
                     </th>
                     <th>
-                        Action
+                        {{ __('action') }}
                     </th>
                 </tr>
             </thead>
             <tbody style="text-align: center">
                 @if (count($outcomeTable) === 0)
                     <tr>
-                        <td colspan="6">Belum ada data outcome yang ditambahkan.</td>
+                        <td colspan="6">{{ __('noOutcomeData') }}</td>
                     </tr>
                 @else
                     @foreach ($outcomeTable as $outcome)
@@ -498,13 +535,13 @@
                             <td>
                                 {{ 'Rp' . number_format($outcome->Outcome->outcome_amount, 0, ',', '.') }}
                             </td>
-                            <td>
+                            <td class="outcome-category">
                                 {{ $outcome->Outcome->outcome_category }}
                             </td>
                             <td>
                                 <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->outcome_id]) }}"
                                     class="btn btn-primary">
-                                    Update
+                                    {{ __('updateButton') }}
                                 </a>
                             </td>
                         </tr>
@@ -512,36 +549,65 @@
                 @endif
             </tbody>
         </table>
+
+        <script>
+            var currentLang = '{{ app()->getLocale() }}';
+            var translations = @json(__('outcomeCategories'));
+
+            function translateCategories(categories) {
+                return categories.map(category => translations[category] || category);
+            }
+
+            var categoryElements = document.querySelectorAll('.outcome-category');
+            categoryElements.forEach(function(element) {
+                var originalCategory = element.innerText;
+                element.innerText = translations[originalCategory] || originalCategory;
+            });
+        </script>
     </div>
+
+    <script>
+        function translateDays(labels) {
+            return labels.map(label => {
+                var [day, date] = label.split(', ');
+                var translatedDay = translationDayLabel[day] || day;
+                return `${translatedDay}, ${date}`;
+            });
+        }
+    </script>
 
     {{-- Mau Nunjukkin Diagram Pendapatan --}}
     <div class="mt-3">
-        <h1>Diagram Pendapatan</h1>
+        <h1>{{ __('incomeChart') }}</h1>
         <div class="max-width: 600px; margin:auto;">
             <canvas id="incomeChart"></canvas>
         </div>
-        <button id="prevIncomeChart">Previous Chart</button>
-        <button id="nextIncomeChart">Next Chart</button>
+        <button id="prevIncomeChart">{{ __('prevChart') }}</button>
+        <button id="nextIncomeChart">{{ __('nextChart') }}</button>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             var ctxIncome = document.getElementById('incomeChart').getContext('2d');
             var incomeChartsData = @json($incomeChart);
             var currentIncomeChart = 0;
-            var myIncomeChart; // Deklarasi variabel myChart di luar fungsi
+            var incomeFundLabel = @json(__('incomeFund'));
+            var myIncomeChart;
+            var translationDayLabel = @json(__('days'));
 
             function updateIncomeChart() {
                 if (myIncomeChart) {
-                    myIncomeChart.destroy(); // Hapus chart yang ada sebelumnya
+                    myIncomeChart.destroy();
                 }
 
                 var currentIncomeChartData = incomeChartsData.charts[currentIncomeChart];
+                var translatedLabels = translateDays(currentIncomeChartData.labels);
+
                 myIncomeChart = new Chart(ctxIncome, {
                     type: 'bar',
                     data: {
-                        labels: currentIncomeChartData.labels,
+                        labels: translatedLabels,
                         datasets: [{
-                            label: 'Dana Yang Didapatkan',
+                            label: incomeFundLabel,
                             data: currentIncomeChartData.amount,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 1)',
@@ -558,10 +624,8 @@
                 });
             }
 
-            // Memperbarui chart saat halaman dimuat
             updateIncomeChart();
 
-            // Tombol "Previous Chart" untuk pendapatan
             document.getElementById('prevIncomeChart').addEventListener('click', function() {
                 if (currentIncomeChart > 0) {
                     currentIncomeChart--;
@@ -574,7 +638,6 @@
                 }
             });
 
-            // Tombol "Next Chart" untuk pendapatan
             document.getElementById('nextIncomeChart').addEventListener('click', function() {
                 if (currentIncomeChart < incomeChartsData.charts.length - 1) {
                     currentIncomeChart++;
@@ -594,30 +657,34 @@
 
     {{-- Mau Nunjukkin Diagram Pengeluaran --}}
     <div class="mt-3">
-        <h1>Diagram Pengeluaran</h1>
+        <h1>{{ __('outcomeChart') }}</h1>
         <canvas id="outcomeChart" width="400" height="200"></canvas>
-        <button id="prevOutcomeChart">Previous Chart</button>
-        <button id="nextOutcomeChart">Next Chart</button>
+        <button id="prevOutcomeChart">{{ __('prevChart') }}</button>
+        <button id="nextOutcomeChart">{{ __('nextChart') }}</button>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');
             var outcomeChartsData = @json($outcomeChart);
             var currentOutcomeChart = 0;
-            var myOutcomeChart; // Deklarasi variabel myChart di luar fungsi
+            var outcomeFundLabel = @json(__('outcomeFund'));
+            var myOutcomeChart;
+            var translationDayLabel = @json(__('days'));
 
             function updateOutcomeChart() {
                 if (myOutcomeChart) {
-                    myOutcomeChart.destroy(); // Hapus chart yang ada sebelumnya
+                    myOutcomeChart.destroy();
                 }
 
                 var currentOutcomeChartData = outcomeChartsData.charts[currentOutcomeChart];
+                var translatedLabels = translateDays(currentOutcomeChartData.labels);
+
                 myOutcomeChart = new Chart(ctxOutcome, {
                     type: 'bar',
                     data: {
-                        labels: currentOutcomeChartData.labels,
+                        labels: translatedLabels,
                         datasets: [{
-                            label: 'Dana Yang Dikeluarkan',
+                            label: outcomeFundLabel,
                             data: currentOutcomeChartData.amount,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 1)',
@@ -626,20 +693,16 @@
                     },
                     options: {
                         scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
             }
 
-            // Memperbarui chart saat halaman dimuat
             updateOutcomeChart();
 
-            // Tombol "Previous Chart" untuk pengeluaran
             document.getElementById('prevOutcomeChart').addEventListener('click', function() {
                 if (currentOutcomeChart > 0) {
                     currentOutcomeChart--;
@@ -652,7 +715,6 @@
                 }
             });
 
-            // Tombol "Next Chart" untuk pengeluaran
             document.getElementById('nextOutcomeChart').addEventListener('click', function() {
                 if (currentOutcomeChart < outcomeChartsData.charts.length - 1) {
                     currentOutcomeChart++;
