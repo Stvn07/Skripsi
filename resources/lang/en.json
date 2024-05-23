@@ -24,6 +24,8 @@
     "noIncomeData": "No Income Data Has Been Added Yet",
     "noOutcomeData": "No Outflow Data Has Been Added Yet",
     "noDataFound": "Data Not Found",
+    "updateIncome": "Update Income",
+    "updateOutcome": "Update Outflow",
 
     "errorNameEmpty": "Full Name Cannot Be Empty",
     "errorNameLength": "Full Name must consist of 3 to 2 words",
@@ -67,7 +69,8 @@
     "signUpHaveAcc2": "sign in",
 
     "addButton": "Add",
-    "backButton": "Cancel",
+    "backButton": "Back",
+    "cancelButton": "Cancel",
     "action": "Action",
     "updateButton": "Update",
     "statusOutcome": "Your Outflow Status: ",
@@ -146,5 +149,13 @@
     "month": "Month",
     "rangeMonth": "Range Month",
     "year": "Year",
-    "rangeYear": "Range Year"
+    "rangeYear": "Range Year",
+
+    "userProfile": "User Profile",
+    "informationProfile": "Information Profile",
+    "updateProfile": "Update Profile",
+    "nameProfile": "Full Name:",
+    "emailProfile": "Email:",
+    "addressProfile": "Address:",
+    "phoneNumberProfile": "Phone Number:"
 }

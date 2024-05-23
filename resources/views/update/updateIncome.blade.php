@@ -3,7 +3,7 @@
     <div class="profile-container">
         <form id="updateIncomeForm" action="/income/update/{{ $incomeData->id }}" method="POST">
             @csrf
-            <h2 style="text-align: center">Update Income</h2>
+            <h2 style="text-align: center">{{ __('updateIncome') }}</h2>
 
             <div class="form-group">
                 <div class="filter-label">

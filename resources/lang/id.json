@@ -24,6 +24,8 @@
     "noIncomeData": "Belum Ada Data Pendapatan Yang Ditambahkan",
     "noOutcomeData": "Belum Ada Data Pengeluaran Yang Ditambahkan",
     "noDataFound": "Data Tidak Ditemukan",
+    "updateIncome": "Ubah Pendapatan",
+    "updateOutcome": "Ubah Pengeluaran",
 
     "errorNameEmpty": "Nama Lengkap tidak boleh kosong",
     "errorNameLength": "Nama Lengkap harus terdiri dari 3 sampai 25 kata",
@@ -67,7 +69,8 @@
     "signUpHaveAcc2": "sign in",
 
     "addButton": "Tambah",
-    "backButton": "Batal",
+    "backButton": "Kembali",
+    "cancelButton": "Batal",
     "action": "Aksi",
     "updateButton": "Ubah",
     "statusOutcome": "Status Pengeluaran Anda: ",
@@ -146,5 +149,13 @@
     "month": "Bulan",
     "rangeMonth": "Rentang Bulan",
     "year": "Tahun",
-    "rangeYear": "Rentang Tahun"
+    "rangeYear": "Rentang Tahun",
+
+    "userProfile": "Profil Pengguna",
+    "informationProfile": "Informasi Profil",
+    "updateProfile": "Ubah Profil",
+    "nameProfile": "Nama Lengkap:",
+    "emailProfile": "Email:",
+    "addressProfile": "Alamat:",
+    "phoneNumberProfile": "Nomor Telfon:"
 }

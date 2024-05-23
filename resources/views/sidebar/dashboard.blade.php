@@ -41,19 +41,22 @@
                         @if (Auth::check())
                             <li class="active">
                                 <a href="{{ route('profile', Auth::user()->id) }}" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span>
+                                    <i class="fs-4 bi-table"></i> <span
+                                        class="ms-1 d-none d-sm-inline">{{ __('profile') }}</span>
                                 </a>
                             </li>
                         @endif
 
                         <li>
                             <a href="{{ route('openTransaction') }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Transaction</span>
+                                <i class="fs-4 bi-people"></i> <span
+                                    class="ms-1 d-none d-sm-inline">{{ __('transaction') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('openReport') }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Reports</span>
+                                <i class="fs-4 bi-people"></i> <span
+                                    class="ms-1 d-none d-sm-inline">{{ __('report') }}</span>
                             </a>
                         </li>
                     </ul>
