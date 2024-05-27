@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('locale/{lang}', [HomeController::class, 'changeLanguage']);
 
+Route::get('/layout', function () {
+    return view('sidebar.layout');
+});
+
 Route::get('/', [HomeController::class, 'showHome'])->name('home')->middleware('checkLogin');
 Route::get('/profile/{userId}', [HomeController::class, 'showProfile'])->name('profile')->middleware('checkLogin');
 Route::get('/profile/update/{userId}', [HomeController::class, 'showUpdateProfile'])->name('updateProfile')->middleware('checkLogin');
