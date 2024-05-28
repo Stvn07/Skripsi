@@ -14,6 +14,19 @@ class TransactionController extends Controller
     function showTransaction(Request $request)
     {
         $userId = Auth::id();
+
+        $transaction = Transaction::with(['Income', 'Outcome'])->get();
+        $transactionName = [];
+
+        $transaction->each(
+            function ($transaction) use (&$transactionName) {
+                if ($transaction->Income) {
+                    $transactionName[] = $transaction->Income->income_name;
+                } elseif ($transaction->Outcome) {
+                    $transactionName[] = $transaction->Outcome->outcome_name;
+                }
+            }
+        );
         $search_query = $request->query('search');
         $start_date_query = $request->input('start_date');
         $end_date_query = $request->input('end_date');
@@ -110,6 +123,13 @@ class TransactionController extends Controller
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
+                if ($result->Income) {
+                    $result->transaction_name = $result->Income->income_name;
+                } elseif ($result->Outcome) {
+                    $result->transaction_name = $result->Outcome->outcome_name;
+                } else {
+                    $result->transaction_name = null;
+                }
             }
             $hasil = $date_query->get();
         }

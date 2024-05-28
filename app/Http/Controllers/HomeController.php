@@ -291,7 +291,11 @@ class HomeController extends Controller
             ->first();
 
         if ($totalBalanceAmount === null) {
-            $statusOutcome = 'Belum Ada Pengeluaran';
+            if ($locale === 'id') {
+                $statusOutcome = 'Belum Ada Pengeluaran';
+            } else {
+                $statusOutcome = 'No Spending yet';
+            }
         } else {
             $outcomeExpenses = Transaction::where('user_id', $userId)
                 ->whereNull('income_id')

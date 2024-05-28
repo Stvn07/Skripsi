@@ -1,5 +1,91 @@
-@extends('sidebar.dashboard')
+@extends('sidebar.layout')
 @section('content')
+    <style>
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            flex-grow: 1;
+        }
+
+        .search-bar button {
+            background: #007bff;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar button img {
+            margin-right: 5px;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .transaction-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+    <div class="content">
+        <div class="header">
+            <h2>Transaction History</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><img src="filter-icon.png" alt="Filter"> Filter</button>
+            </div>
+        </div>
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th>Transaction</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transaction rows will go here -->
+            </tbody>
+        </table>
+    </div>
     <h1>{{ __('transactionTable') }}</h1>
     <script>
         function cleanURL() {
@@ -128,8 +214,9 @@
                                     </div>
 
                                     <div class="filter-inputs">
-                                        <input type="number" min="1900" max="{{ date('Y') }}" class="form-control"
-                                            id="year_only" name="year_only" value="{{ request('year_only') }}">
+                                        <input type="number" min="1900" max="{{ date('Y') }}"
+                                            class="form-control" id="year_only" name="year_only"
+                                            value="{{ request('year_only') }}">
                                     </div>
                                 </div>
 
@@ -557,6 +644,9 @@
                             {{ __('number') }}
                         </th>
                         <th>
+                            Nama Transaksi
+                        </th>
+                        <th>
                             {{ __('transactionDate') }}
                         </th>
                         <th>
@@ -577,6 +667,9 @@
                             <tr>
                                 <td>
                                     {{ $transaction->nomor_urut }}
+                                </td>
+                                <td>
+                                    {{ $transaction->transaction_name }}
                                 </td>
                                 <td>
                                     {{ $transaction->transaction_date }}

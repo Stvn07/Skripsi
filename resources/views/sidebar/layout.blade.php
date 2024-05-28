@@ -92,9 +92,9 @@
             <span class="icon">🏠</span>
             Home
         </a>
-        <a href="/trans" class="sidebar-link">
+        <a href="{{ route('openTransaction') }}" class="sidebar-link">
             <span class="icon">💲</span>
-            Transactions
+            {{ __('transaction') }}Transactions
         </a>
         <a href="#" class="sidebar-link">
             <span class="icon">🪙</span>

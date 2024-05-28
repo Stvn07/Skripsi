@@ -7,34 +7,9 @@
             display: flex;
         }
 
-        /* .sidebar {
-                                                                                                                                                    width: 250px;
-                                                                                                                                                    background-color: #dfffcf;
-                                                                                                                                                }
-
-                                                                                                                                                .sidebar ul {
-                                                                                                                                                    list-style-type: none;
-                                                                                                                                                    padding: 0;
-                                                                                                                                                }
-
-                                                                                                                                                .sidebar ul li {
-                                                                                                                                                    margin: 10px 0;
-                                                                                                                                                }
-
-                                                                                                                                                .sidebar ul li a {
-                                                                                                                                                    text-decoration: none;
-                                                                                                                                                    color: black;
-                                                                                                                                                    display: flex;
-                                                                                                                                                    align-items: center;
-                                                                                                                                                }
-
-                                                                                                                                                .sidebar ul li a img {
-                                                                                                                                                    margin-right: 10px;
-                                                                                                                                                } */
-
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 10px;
             background-color: #f6f8ef;
         }
 
@@ -66,7 +41,7 @@
 
         .main-content .left,
         .main-content .right {
-            width: 48%;
+            width: 49%;
         }
 
         .box {
@@ -167,7 +142,7 @@
             align-items: center;
             background-color: #f0f0f0;
             border: 1px solid #ccc;
-            max-width: 500px;
+            max-width: 550px;
             margin: auto;
         }
 
@@ -251,7 +226,7 @@
     <!-- Home UI Deric -->
     <div class="content">
         <div class="header">
-            <div class="greeting">Hello, Steven!</div>
+            <div class="greeting">{{ __('hello') }} {{ Auth::user()->user_full_name }}!</div>
             <div class="user-info">
                 <span>Steven</span>
                 <img src="profile-picture.png" alt="Profile Picture" style="width: 40px;">
@@ -307,12 +282,12 @@
                 </div>
                 <div class="box">
                     <div class="chart">
-                        <!-- <h1>{{ __('incomeChart') }}</h1> -->
-                        <div class="max-width: 600px; margin:auto;">
+                        <h6>{{ __('incomeChart') }}</h6>
+                        <div class="max-width: 700px; margin:auto;">
                             <canvas id="incomeChart"></canvas>
                         </div>
-                        <!-- <button id="prevIncomeChart">{{ __('prevChart') }}</button> -->
-                        <!-- <button id="nextIncomeChart">{{ __('nextChart') }}</button> -->
+                        <button id="prevIncomeChart" class="small-button">{{ __('prevChart') }}</button>
+                        <button id="nextIncomeChart" class="small-button">{{ __('nextChart') }}</button>
 
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         <script>
@@ -383,6 +358,14 @@
                             });
                         </script>
                     </div>
+
+                    <style>
+                        .small-button {
+                            font-size: 10px;
+                            padding: 5px 10px;
+                            margin: 5px;
+                        }
+                    </style>
                 </div>
             </div>
             <div class="right">
@@ -413,10 +396,10 @@
 
                 <div class="box">
                     <div class="chart">
-                        <!-- <h1>{{ __('outcomeChart') }}</h1> -->
-                        <canvas id="outcomeChart" width="400" height="200"></canvas>
-                        <!-- <button id="prevOutcomeChart">{{ __('prevChart') }}</button>
-                            <button id="nextOutcomeChart">{{ __('nextChart') }}</button> -->
+                        <h6>{{ __('outcomeChart') }}</h6>
+                        <canvas id="outcomeChart" width="600" height="200"></canvas>
+                        <button id="prevOutcomeChart">{{ __('prevChart') }}</button>
+                        <button id="nextOutcomeChart">{{ __('nextChart') }}</button>
 
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         <script>
@@ -521,7 +504,8 @@
                                     </div>
 
                                     <div class="filter-inputs">
-                                        <input type="date" id="income_date" name="income_date">
+                                        <input type="date" id="income_date" min="{{ date('Y-m-d') }}"
+                                            name="income_date">
                                         <span class="error-message" id="income_date_empty"></span>
                                     </div>
                                 </div>
@@ -655,7 +639,8 @@
                                     </div>
 
                                     <div class="filter-inputs">
-                                        <input type="date" id="outcome_date" name="outcome_date">
+                                        <input type="date" id="outcome_date" name="outcome_date"
+                                            min="{{ date('Y-m-d') }}">
                                         <span class="error-message" id="outcome_date_empty"></span>
                                     </div>
                                 </div>
