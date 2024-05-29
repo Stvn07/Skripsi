@@ -28,10 +28,18 @@
             margin: 0;
             font-family: Arial, sans-serif;
             height: 100vh;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
         }
 
         .sidebar {
+            position: fixed;
+            /* Make sidebar fixed */
+            top: 0;
+            left: 0;
             width: 250px;
+            height: 100%;
+            /* Make sidebar take the full height */
             padding-top: 20px;
             background-color: #dfffcf;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -77,8 +85,11 @@
         }
 
         .content {
-            flex-grow: 1;
+            margin-left: 150px;
             padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -88,21 +99,25 @@
         <div class="logo">
             <img src="storage/images/LogoNabungKuy.png" alt="Nabung Kuy Logo">
         </div>
-        <a href="#" class="sidebar-link active">
+        <a href="{{ route('home') }}" class="sidebar-link active">
             <span class="icon">🏠</span>
             Home
         </a>
+        <a href="{{ route('openIncomePage') }}" class="sidebar-link">
+            <span class="icon"></span>
+            {{ __('income') }}
+        </a>
         <a href="{{ route('openTransaction') }}" class="sidebar-link">
             <span class="icon">💲</span>
-            {{ __('transaction') }}Transactions
+            {{ __('transaction') }}
         </a>
         <a href="#" class="sidebar-link">
             <span class="icon">🪙</span>
             Budgets
         </a>
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('openReport') }}" class="sidebar-link">
             <span class="icon">📈</span>
-            Reports
+            {{ __('report') }}
         </a>
     </div>
     <div class="content">

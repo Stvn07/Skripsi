@@ -32,7 +32,7 @@ class HomeController extends Controller
         $userId = Auth::id();
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
-        $transactionTable = Transaction::paginate(5);
+        $transactionTable = Transaction::paginate(10);
         $incomeTable = $this->showIncomeTable();
         $outcomeTable = $this->showOutcomeTable();
         $incomeChart = $this->showIncomeChart();
@@ -87,6 +87,23 @@ class HomeController extends Controller
         return $incomeTable;
     }
 
+    function showIncomePage()
+    {
+        $userId = Auth::id();
+        $incomeTable = Transaction::where('user_id', $userId)
+            ->whereNull('outcome_id')
+            ->with('Income')
+            ->orderBy('transaction_date')
+            ->paginate(10);
+        $number = 1;
+        $nomorUrut = ($incomeTable->currentPage() - 1) * $incomeTable->perPage() + 1;
+        foreach ($incomeTable as $income) {
+            $income->nomor_urut = $nomorUrut++;
+            $income->number = $number++;
+        }
+        return view('income', compact('incomeTable'));
+    }
+
     function showIncomeChart()
     {
         $userId = Auth::id();
@@ -99,38 +116,37 @@ class HomeController extends Controller
             'charts' => []
         ];
 
-        // Hitung jumlah minggu dalam bulan ini
-        $totalWeeks = $endOfMonth->diffInWeeks($startOfMonth);
+        // Loop untuk setiap hari dalam bulan ini dengan langkah 3 hari
+        for ($day = $startOfMonth->copy(); $day->lte($endOfMonth); $day->addDays(3)) {
+            // Hitung rentang waktu untuk 3 hari ini
+            $endOfPeriod = $day->copy()->addDays(2);
+            if ($endOfPeriod->gt($endOfMonth)) {
+                $endOfPeriod = $endOfMonth;
+            }
 
-        // Loop untuk setiap minggu dalam bulan ini
-        for ($week = 0; $week < $totalWeeks; $week++) {
-            // Hitung rentang waktu untuk minggu ini
-            $startOfWeek = $startOfMonth->copy()->addWeeks($week)->startOfWeek();
-            $endOfWeek = $startOfWeek->copy()->endOfWeek();
-
-            // Ambil data untuk minggu ini
+            // Ambil data untuk periode ini
             $outcomeTable = Transaction::select(DB::raw('DATE(transaction_date) as transaction_date'), DB::raw('SUM(transaction_amount) as total_amount'))
                 ->where('user_id', $userId)
                 ->whereNull('outcome_id')
-                ->whereBetween('transaction_date', [$startOfWeek, $endOfWeek])
+                ->whereBetween('transaction_date', [$day, $endOfPeriod])
                 ->groupBy('transaction_date')
                 ->get();
 
-            // Inisialisasi label dan jumlah untuk minggu ini
+            // Inisialisasi label dan jumlah untuk periode ini
             $labels = [];
             $amount = [];
 
-            // Loop untuk setiap hari dalam minggu ini
-            for ($day = $startOfWeek->copy(); $day->lte($endOfWeek); $day->addDay()) {
+            // Loop untuk setiap hari dalam periode ini
+            for ($periodDay = $day->copy(); $periodDay->lte($endOfPeriod); $periodDay->addDay()) {
                 // Format label untuk hari
-                $labels[] = $day->format('l, d F Y');
+                $labels[] = $periodDay->format('l, d F Y');
 
                 // Cari total pengeluaran untuk hari ini
-                $totalAmountForDay = $outcomeTable->where('transaction_date', $day->toDateString())->sum('total_amount');
+                $totalAmountForDay = $outcomeTable->where('transaction_date', $periodDay->toDateString())->sum('total_amount');
                 $amount[] = $totalAmountForDay;
             }
 
-            // Simpan data minggu ini ke dalam array charts
+            // Simpan data periode ini ke dalam array charts
             $data['charts'][] = [
                 'labels' => $labels,
                 'amount' => $amount
@@ -153,37 +169,36 @@ class HomeController extends Controller
         ];
 
         // Hitung jumlah minggu dalam bulan ini
-        $totalWeeks = $endOfMonth->diffInWeeks($startOfMonth);
+        for ($day = $startOfMonth->copy(); $day->lte($endOfMonth); $day->addDays(3)) {
+            // Hitung rentang waktu untuk 3 hari ini
+            $endOfPeriod = $day->copy()->addDays(2);
+            if ($endOfPeriod->gt($endOfMonth)) {
+                $endOfPeriod = $endOfMonth;
+            }
 
-        // Loop untuk setiap minggu dalam bulan ini
-        for ($week = 0; $week < $totalWeeks; $week++) {
-            // Hitung rentang waktu untuk minggu ini
-            $startOfWeek = $startOfMonth->copy()->addWeeks($week)->startOfWeek();
-            $endOfWeek = $startOfWeek->copy()->endOfWeek();
-
-            // Ambil data untuk minggu ini
+            // Ambil data untuk periode ini
             $outcomeTable = Transaction::select(DB::raw('DATE(transaction_date) as transaction_date'), DB::raw('SUM(transaction_amount) as total_amount'))
                 ->where('user_id', $userId)
                 ->whereNull('income_id')
-                ->whereBetween('transaction_date', [$startOfWeek, $endOfWeek])
+                ->whereBetween('transaction_date', [$day, $endOfPeriod])
                 ->groupBy('transaction_date')
                 ->get();
 
-            // Inisialisasi label dan jumlah untuk minggu ini
+            // Inisialisasi label dan jumlah untuk periode ini
             $labels = [];
             $amount = [];
 
-            // Loop untuk setiap hari dalam minggu ini
-            for ($day = $startOfWeek->copy(); $day->lte($endOfWeek); $day->addDay()) {
+            // Loop untuk setiap hari dalam periode ini
+            for ($periodDay = $day->copy(); $periodDay->lte($endOfPeriod); $periodDay->addDay()) {
                 // Format label untuk hari
-                $labels[] = $day->format('l, d F Y');
+                $labels[] = $periodDay->format('l, d F Y');
 
                 // Cari total pengeluaran untuk hari ini
-                $totalAmountForDay = $outcomeTable->where('transaction_date', $day->toDateString())->sum('total_amount');
+                $totalAmountForDay = $outcomeTable->where('transaction_date', $periodDay->toDateString())->sum('total_amount');
                 $amount[] = $totalAmountForDay;
             }
 
-            // Simpan data minggu ini ke dalam array charts
+            // Simpan data periode ini ke dalam array charts
             $data['charts'][] = [
                 'labels' => $labels,
                 'amount' => $amount

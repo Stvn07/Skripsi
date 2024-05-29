@@ -5,7 +5,8 @@
         "Wednesday": "Wednesday",
         "Thursday": "Thursday",
         "Friday": "Friday",
-        "Saturday": "Saturday"
+        "Saturday": "Saturday",
+        "Sunday": "Sunday"
     },
 
     "hello": "Hello,",
@@ -112,6 +113,7 @@
     "outcomeCategory9": "Vacation and Travel",
     "outcomeCategory10": "Savings and Invesment",
 
+    "transactionName": "Transaction Name",
     "transactionDate": "Transaction Date",
     "transactionAmount": "Transaction Amount",
     "transactionType": "Transaction Type",

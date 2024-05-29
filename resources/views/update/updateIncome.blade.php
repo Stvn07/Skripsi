@@ -40,7 +40,7 @@
 
             <div class="buttons" style="margin-top: 50px;">
                 <button type="submit" class="send">{{ __('updateButton') }}</button>
-                <a href="{{ route('home') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
+                <a href="{{ route('openIncomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
                     class="btn btn-danger">{{ __('backButton') }}</a>
             </div>
         </form>

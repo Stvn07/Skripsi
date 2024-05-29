@@ -185,7 +185,7 @@ class BalanceController extends Controller
                 'total_balance_amount' => DB::raw("total_balance_amount + $changeAmount")
             ]);
 
-        return redirect()->route('home');
+        return redirect()->route('openIncomePage');
     }
 
     function openUpdateOutcome($outcomeId)

@@ -5,7 +5,8 @@
         "Wednesday": "Rabu",
         "Thursday": "Kamis",
         "Friday": "Jumat",
-        "Saturday": "Sabtu"
+        "Saturday": "Sabtu",
+        "Sunday": "Minggu"
     },
 
     "hello": "Halo,",
@@ -112,6 +113,7 @@
     "outcomeCategory9": "Liburan dan Wisata",
     "outcomeCategory10": "Tabungan dan Investasi",
 
+    "transactionName": "Nama Transaksi",
     "transactionDate": "Tanggal Transaksi",
     "transactionAmount": "Nominal Transaksi",
     "transactionType": "Jenis Transaksi",
