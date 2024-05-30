@@ -1,4 +1,4 @@
-@extends('sidebar.dashboard')
+@extends('sidebar.layout')
 @section('content')
     <div class="profile-container">
         <form id="updateOutcomeForm" action="/outcome/update/{{ $outcomeData->id }}" method="POST">

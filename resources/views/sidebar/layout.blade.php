@@ -107,6 +107,10 @@
             <span class="icon"></span>
             {{ __('income') }}
         </a>
+        <a href="{{ route('openOutcomePage') }}" class="sidebar-link">
+            <span class="icon"></span>
+            {{ __('outcome') }}
+        </a>
         <a href="{{ route('openTransaction') }}" class="sidebar-link">
             <span class="icon">💲</span>
             {{ __('transaction') }}

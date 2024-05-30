@@ -33,8 +33,6 @@ class HomeController extends Controller
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $transactionTable = Transaction::paginate(10);
-        $incomeTable = $this->showIncomeTable();
-        $outcomeTable = $this->showOutcomeTable();
         $incomeChart = $this->showIncomeChart();
         $outcomeChart = $this->showOutcomeChart();
         $statusName = $this->countStatusOutcome();
@@ -58,8 +56,6 @@ class HomeController extends Controller
             'home',
             compact(
                 'totalBalanceTable',
-                'incomeTable',
-                'outcomeTable',
                 'transactionTable',
                 'incomeChart',
                 'outcomeChart',
@@ -95,13 +91,28 @@ class HomeController extends Controller
             ->with('Income')
             ->orderBy('transaction_date')
             ->paginate(10);
-        $number = 1;
         $nomorUrut = ($incomeTable->currentPage() - 1) * $incomeTable->perPage() + 1;
         foreach ($incomeTable as $income) {
             $income->nomor_urut = $nomorUrut++;
-            $income->number = $number++;
         }
         return view('income', compact('incomeTable'));
+    }
+
+    function showOutcomePage()
+    {
+        $userId = Auth::id();
+        $outcomeTable = Transaction::where('user_id', $userId)
+            ->whereNull('income_id')
+            ->with('Outcome')
+            ->orderBy('transaction_date')
+            ->paginate(10);
+        $number = 1;
+        $nomorUrut = ($outcomeTable->currentPage() - 1) * $outcomeTable->perPage() + 1;
+        foreach ($outcomeTable as $outcome) {
+            $outcome->number = $number++;
+            $outcome->nomor_urut = $nomorUrut++;
+        }
+        return view('outcome', compact('outcomeTable'));
     }
 
     function showIncomeChart()

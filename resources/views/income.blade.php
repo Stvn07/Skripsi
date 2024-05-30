@@ -1,5 +1,12 @@
 @extends('sidebar.layout')
 @section('content')
+    <style>
+        .content {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: #f6f8ef;
+        }
+    </style>
     <div class="content">
         <h1>{{ __('income') }}</h1>
         <table style="border: 1px solid black">

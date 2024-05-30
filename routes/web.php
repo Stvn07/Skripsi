@@ -30,6 +30,7 @@ Route::get('/profile/{userId}', [HomeController::class, 'showProfile'])->name('p
 Route::get('/profile/update/{userId}', [HomeController::class, 'showUpdateProfile'])->name('updateProfile')->middleware('checkLogin');
 Route::post('/profile/update/{userId}', [HomeController::class, 'postUpdateProfile'])->name('updateProfile.post')->middleware('checkLogin');
 Route::get('/income-table', [HomeController::class, 'showIncomePage'])->name('openIncomePage')->middleware('checkLogin');
+Route::get('/outflow-table', [HomeController::class, 'showOutcomePage'])->name('openOutcomePage')->middleware('checkLogin');
 Route::get('/home', function () {
     return view('sidebar\dashboard');
 })->middleware('checkLogin');

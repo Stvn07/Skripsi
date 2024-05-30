@@ -111,6 +111,7 @@
             justify-content: center;
             text-align: center;
             margin-bottom: 20px;
+            margin-right: 10px;
         }
 
         .buttons .button-boxleft {
@@ -262,7 +263,9 @@
             </div>
             <div class="user-info">
                 <span>{{ Auth::user()->user_full_name }}</span>
-                <img src="profile-picture.png" alt="Profile Picture" style="width: 40px;">
+                <a href="{{ route('profile', Auth::user()->id) }}">
+                    <img src="profile-picture.png" alt="Profile Picture" style="width: 40px;">
+                </a>
             </div>
         </div>
         <div class="main-content">
@@ -540,10 +543,10 @@
 
 
     {{-- Bagian Tambah Income --}}
-    {{-- <div class="mb-2">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
+    <div class="mb-2">
+        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
             {{ __('addIncome') }}
-        </button>
+        </button> --}}
 
         <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -671,13 +674,13 @@
                 }
             });
         </script>
-    </div> --}}
+    </div>
 
     {{-- Bagian Tambah Outcome --}}
-    {{-- <div class="mb-2">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
+    <div class="mb-2">
+        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
             {{ __('addOutcome') }}
-        </button>
+        </button> --}}
 
         <div class="modal modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="outcomeModalLabel"
             aria-hidden="true">
@@ -811,7 +814,7 @@
                 }
             });
         </script>
-    </div> --}}
+    </div>
 
     {{-- Bagian Mau Ganti Bahasa --}}
     {{-- <div class="mb-2">
@@ -826,227 +829,15 @@
             </ul>
         </div>
     </div> --}}
-    {{-- Mau Nunjukkin Status Pengeluaran --}}
-    {{-- <div>
-        {{ __('statusOutcome') }} {{ $statusName }}
-    </div> --}}
-
-    {{-- Mau Nunjukkin Total Pendapatan --}}
-    {{-- <div>
-        {{ __('totalIncomeMonth') }}
-        <div>
-            <span>{{ 'Rp' . number_format($total_income_per_month, 0, ',', '.') }}</span>
-        </div>
-    </div> --}}
-
-    {{-- Mau Nunjukkin Total Pengeluaran --}}
-    {{-- <div>
-        {{ __('totalOutcomeMonth') }}
-        <div>
-            <span>{{ 'Rp' . number_format($total_outcome_per_month, 0, ',', '.') }}</span>
-        </div>
-    </div> --}}
-
-    {{-- Mau Nunjukkin Total Balance --}}
-    {{-- <div>
-        {{ __('totalBalance') }}
-        <div>
-            <span>{{ 'Rp' . number_format($totalBalanceTable, 0, ',', '.') }}</span>
-        </div>
-    </div> --}}
-
-    {{-- Mau Nunjukkin Recent Transaksi --}}
-    {{-- <div class="mb-4">
-        <h4>{{ __('recentTransaction') }}</h4>
-        <ul>
-            @foreach ($transactionData as $key => $transaction)
-                <li>
-                    Transaksi {{ $key + 1 }} -
-                    {{ $transaction->transaction_date }} -
-                    Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
-                    <span
-                        class="transaction-type {{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
-                        {{ ucfirst($transaction->transaction_type) }}
-                    </span>
-                </li>
-            @endforeach
-        </ul>
-
-        <script>
-            // Fungsi untuk menerjemahkan tipe transaksi
-            function translateTransactionTypes() {
-                var transactionElements = document.querySelectorAll('.transaction-type');
-
-                transactionElements.forEach(function(element) {
-                    var originalType = element.innerText.trim().toLowerCase();
-                    element.innerText = originalType === 'income' ? '{{ __('income') }}' : '{{ __('outcome') }}';
-                });
-            }
-
-            // Panggil fungsi untuk menerjemahkan tipe transaksi
-            translateTransactionTypes();
-        </script>
-    </div>
-    <hr /> --}}
-
-    {{-- Tabel Income --}}
-    {{-- <div class="mt-3">
-        <table style="border: 1px solid black">
-            <thead style="text-align: center">
-                <tr>
-                    <th>
-                        {{ __('number') }}
-                    </th>
-                    <th>
-                        {{ __('incomeName') }}
-                    </th>
-                    <th>
-                        {{ __('incomeDate') }}
-                    </th>
-                    <th>
-                        {{ __('incomeAmount') }}
-                    </th>
-                    <th>
-                        {{ __('incomeCategory') }}
-                    </th>
-                    <th>
-                        {{ __('action') }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody style="text-align: center">
-                @if (count($incomeTable) === 0)
-                    <tr>
-                        <td colspan="6">{{ __('noIncomeData') }}</td>
-                    </tr>
-                @else
-                    @foreach ($incomeTable as $income)
-                        <tr>
-                            <td>
-                                {{ $income->number }}
-                            </td>
-                            <td>
-                                {{ $income->Income->income_name }}
-                            </td>
-                            <td>
-                                {{ $income->Income->income_date }}
-                            </td>
-                            <td>
-                                {{ 'Rp' . number_format($income->Income->income_amount, 0, ',', '.') }}
-                            </td>
-                            <td class="income-category">
-                                {{ $income->Income->income_category }}
-                            </td>
-                            <td>
-                                <a href="{{ route('updateIncome', ['incomeId' => $income->income_id]) }}"
-                                    class="btn btn-primary">
-                                    {{ __('updateButton') }}
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-
-        <script>
-            var currentLang = '{{ app()->getLocale() }}';
-            var translations = @json(__('incomeCategories'));
-
-            function translateCategories(categories) {
-                return categories.map(category => translations[category] || category);
-            }
-            var categoryElements = document.querySelectorAll('.income-category');
-
-            categoryElements.forEach(function(element) {
-                var originalCategory = element.innerText;
-                element.innerText = translations[originalCategory] || originalCategory;
-            });
-        </script>
-    </div> --}}
-
-    {{-- Tabel Outcome --}}
-    {{-- <div class="mt-3">
-        <table style="border: 1px solid black">
-            <thead style="text-align: center">
-                <tr>
-                    <th>
-                        {{ __('number') }}
-                    </th>
-                    <th>
-                        {{ __('outcomeName') }}
-                    </th>
-                    <th>
-                        {{ __('outcomeDate') }}
-                    </th>
-                    <th>
-                        {{ __('outcomeAmount') }}
-                    </th>
-                    <th>
-                        {{ __('outcomeCategory') }}
-                    </th>
-                    <th>
-                        {{ __('action') }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody style="text-align: center">
-                @if (count($outcomeTable) === 0)
-                    <tr>
-                        <td colspan="6">{{ __('noOutcomeData') }}</td>
-                    </tr>
-                @else
-                    @foreach ($outcomeTable as $outcome)
-                        <tr>
-                            <td>
-                                {{ $outcome->number }}
-                            </td>
-                            <td>
-                                {{ $outcome->Outcome->outcome_name }}
-                            </td>
-                            <td>
-                                {{ $outcome->Outcome->outcome_date }}
-                            </td>
-                            <td>
-                                {{ 'Rp' . number_format($outcome->Outcome->outcome_amount, 0, ',', '.') }}
-                            </td>
-                            <td class="outcome-category">
-                                {{ $outcome->Outcome->outcome_category }}
-                            </td>
-                            <td>
-                                <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->outcome_id]) }}"
-                                    class="btn btn-primary">
-                                    {{ __('updateButton') }}
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-
-        <script>
-            var currentLang = '{{ app()->getLocale() }}';
-            var translations = @json(__('outcomeCategories'));
-
-            function translateCategories(categories) {
-                return categories.map(category => translations[category] || category);
-            }
-
-            var categoryElements = document.querySelectorAll('.outcome-category');
-            categoryElements.forEach(function(element) {
-                var originalCategory = element.innerText;
-                element.innerText = translations[originalCategory] || originalCategory;
-            });
-        </script>
-    </div> --}}
 
     <script>
         function translateDays(labels) {
             return labels.map(label => {
                 var [day, date] = label.split(', ');
                 var translatedDay = translationDayLabel[day] || day;
-                return `${translatedDay}, ${date}`;
+                var [dayNumber, month, year] = date.split(' ');
+                var translatedMonth = translationMonthLabel[month] || month;
+                return `${translatedDay}, ${dayNumber} ${translatedMonth} ${year}`;
             });
         }
     </script>
@@ -1068,6 +859,7 @@
             var incomeFundLabel = @json(__('incomeFund'));
             var myIncomeChart;
             var translationDayLabel = @json(__('days'));
+            var translationMonthLabel = @json(__('months'));
 
             function updateIncomeChart() {
                 if (myIncomeChart) {

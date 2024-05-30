@@ -3,7 +3,8 @@
     <style>
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 10px;
+            background-color: #f6f8ef;
         }
     </style>
 
