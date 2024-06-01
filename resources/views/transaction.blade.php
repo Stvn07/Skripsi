@@ -62,6 +62,28 @@
         .transaction-table th {
             background-color: #f2f2f2;
         }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
     </style>
 
     <div class="content">
@@ -75,6 +97,7 @@
         <table class="transaction-table">
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>Transaction</th>
                     <th>Date</th>
                     <th>Amount</th>
@@ -83,6 +106,36 @@
             </thead>
             <tbody>
                 <!-- Transaction rows will go here -->
+                @if (count($results) === 0)
+                    <tr>
+                        <td style="height: 250px; background-color: white" colspan="5">{{ __('noDataFound') }}
+                        </td>
+                    </tr>
+                @else
+                    @foreach ($results as $transaction)
+                        <tr>
+                            <td>
+                                {{ $transaction->nomor_urut }}
+                            </td>
+                            <td>
+                                {{ $transaction->transaction_name }}
+                            </td>
+                            <td>
+                                {{ $transaction->transaction_date }}
+                            </td>
+                            <td>
+                                {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                            </td>
+                            <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
+                                @if ($transaction->income_id)
+                                    {{ __('income') }}
+                                @else
+                                    {{ __('outcome') }}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
 
@@ -287,11 +340,9 @@
                                     <td>
                                         {{ $transaction->transaction_date }}
                                     </td>
-
                                     <td>
                                         {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
                                     </td>
-
                                     <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
                                         @if ($transaction->income_id)
                                             {{ __('income') }}

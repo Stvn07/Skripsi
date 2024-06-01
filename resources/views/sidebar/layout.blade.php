@@ -97,7 +97,7 @@
 <body>
     <div class="sidebar">
         <div class="logo">
-            <img src="storage/images/LogoNabungKuy.png" alt="Nabung Kuy Logo">
+            <img src="image/LogoNabungKuy.png" alt="Nabung Kuy Logo">
         </div>
         <a href="{{ route('home') }}" class="sidebar-link active">
             <span class="icon">🏠</span>

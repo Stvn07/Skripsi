@@ -103,7 +103,7 @@
         }
 
         .recent-transactions {
-            height: 165px;
+            height: 187px;
         }
 
         .buttons {
@@ -117,7 +117,8 @@
         .buttons .button-boxleft {
             flex-grow: 1;
             width: 50%;
-            margin-right: 15px;
+            margin-right: 10px;
+            margin-left: 30px;
             cursor: pointer;
             background-color: #008312;
             color: white;
@@ -129,7 +130,7 @@
         .buttons .button-boxright {
             flex-grow: 1;
             width: 50%;
-            margin-left: 15px;
+            /* margin-left: 15px; */
             cursor: pointer;
             background-color: #008312;
             color: white;
@@ -149,7 +150,7 @@
         .chart-container {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 300px;
         }
 
         @media (max-width: 768px) {
@@ -247,24 +248,21 @@
         </div>
     @endif
 
-    <!-- Home UI Deric -->
+    <!-- Home Content -->
     <div class="content">
         <div class="header">
             <div class="greeting">{{ __('hello') }} {{ Auth::user()->user_full_name }}!</div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    {{ session()->get('locale', config('app.locale')) }}
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ url('locale/id') }}">id</a></li>
-                    <li><a class="dropdown-item" href="{{ url('locale/en') }}">en</a></li>
-                </ul>
-            </div>
+
             <div class="user-info">
+                <a style="text-decoration: none; font-size: 10px" href="{{ url('locale/id') }}">ID</a>
+                <div class="mx-1" style="font-size: 10px">
+                    |
+                </div>
+                <a style="text-decoration: none; font-size: 10px" href="{{ url('locale/en') }}">EN</a>
+                &nbsp;|&nbsp;
                 <span>{{ Auth::user()->user_full_name }}</span>
                 <a href="{{ route('profile', Auth::user()->id) }}">
-                    <img src="profile-picture.png" alt="Profile Picture" style="width: 40px;">
+                    <img src="/image/profile-picturelogo.jpg" alt="Profile Picture" style="width: 40px;">
                 </a>
             </div>
         </div>
@@ -315,9 +313,138 @@
                         {{ __('addIncome') }}
                     </button>
                     <!-- Add Income Function -->
+                    <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <h2 style="text-align: center">{{ __('addIncome') }}</h2>
 
+                                        <div class="form-group mt-4 mb-4">
+                                            <div class="filter-label">
+                                                <label for="income_name">{{ __('incomeName') }}</label>
+                                            </div>
+
+                                            <div class="filter-inputs">
+                                                <input type="text" id="income_name" name="income_name">
+                                                <span class="error-message" id="income_name_empty"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mt-4 mb-4">
+                                            <div class="filter-label">
+                                                <label for="income_date">{{ __('incomeDate') }}</label>
+                                            </div>
+
+                                            <div class="filter-inputs">
+                                                <input type="date" id="income_date" min="{{ date('Y-m-d') }}"
+                                                    name="income_date">
+                                                <span class="error-message" id="income_date_empty"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mt-4 mb-4">
+                                            <div class="filter-label">
+                                                <label for="income_amount">{{ __('incomeAmount') }}</label>
+                                            </div>
+
+                                            <div class="filter-inputs">
+                                                <input type="number" id="income_amount" name="income_amount">
+                                                <span class="error-message" id="income_amount_empty"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="filter-label">
+                                                <label for="income_category">{{ __('incomeCategory') }}</label>
+                                            </div>
+
+                                            <div class="filter-inputs">
+                                                <select id="category" name="income_category" class="form-control"
+                                                    aria-label="{{ __('selectCategory') }}">
+                                                    <option value="" selected disabled>{{ __('selectCategory') }}
+                                                    </option>
+                                                    <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
+                                                    <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
+                                                    <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}
+                                                    </option>
+                                                    <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
+                                                    <option value="Freelance">{{ __('incomeCategory5') }}</option>
+                                                    <option value="Bonus">{{ __('incomeCategory6') }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="buttons" style="margin-top: 50px;">
+                                            <button type="submit" class="send">{{ __('addButton') }}</button>
+                                            <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
+                                                class="cancel">{{ __('backButton') }}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.getElementById("incomeCancelBtn").addEventListener("click", function() {
+                            document.getElementById("income_name").value = "";
+                            document.getElementById("income_date").value = "";
+                            document.getElementById("income_amount").value = "";
+
+                            document.getElementById("income_name_empty").textContent = "";
+                            document.getElementById("income_date_empty").textContent = "";
+                            document.getElementById("income_amount_empty").textContent = "";
+                        });
+
+                        document.getElementById("incomeForm").addEventListener("submit", function(event) {
+                            var incomeName = document.getElementById("income_name");
+                            var incomeDate = document.getElementById("income_date");
+                            var incomeAmount = document.getElementById("income_amount");
+                            var incomeNameEmpty = document.getElementById("income_name_empty");
+                            var incomeDateEmpty = document.getElementById("income_date_empty");
+                            var incomeAmountEmpty = document.getElementById("income_amount_empty");
+                            var emptyCount = 0;
+                            var translations = {
+                                nameEmpty: @json(__('errorIncomeNameEmpty')),
+                                dateEmpty: @json(__('errorIncomeDateEmpty')),
+                                amountEmpty: @json(__('errorIncomeAmountEmpty'))
+                            }
+
+                            if (incomeName.value.trim() === "") {
+                                incomeNameEmpty.textContent = translations.nameEmpty;
+                                incomeNameEmpty.style.display = "block";
+                                emptyCount++;
+                            } else {
+                                incomeNameEmpty.style.display = "none";
+                            }
+
+                            if (incomeDate.value.trim() === "") {
+                                incomeDateEmpty.textContent = translations.dateEmpty;
+                                incomeDateEmpty.style.display = "block";
+                                emptyCount++;
+                            } else {
+                                incomeDateEmpty.style.display = "none";
+                            }
+
+                            if (incomeAmount.value.trim() === "") {
+                                incomeAmountEmpty.textContent = translations.amountEmpty;
+                                incomeAmountEmpty.style.display = "block";
+                                emptyCount++;
+                            } else {
+                                incomeAmountEmpty.style.display = "none";
+                            }
+
+                            if (emptyCount > 0) {
+                                event.preventDefault();
+                            }
+                        });
+                    </script>
                     <!-- Add Outflow Button -->
-                    <button type="button" class="button-boxright" data-bs-toggle="modal" data-bs-target="#outcomeModal">
+                    <button type="button" class="button-boxright" data-bs-toggle="modal"
+                        data-bs-target="#outcomeModal">
                         {{ __('addOutcome') }}
                     </button>
 
@@ -548,132 +675,9 @@
             {{ __('addIncome') }}
         </button> --}}
 
-        <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <h2 style="text-align: center">{{ __('addIncome') }}</h2>
 
-                            <div class="form-group mt-4 mb-4">
-                                <div class="filter-label">
-                                    <label for="income_name">{{ __('incomeName') }}</label>
-                                </div>
 
-                                <div class="filter-inputs">
-                                    <input type="text" id="income_name" name="income_name">
-                                    <span class="error-message" id="income_name_empty"></span>
-                                </div>
-                            </div>
 
-                            <div class="form-group mt-4 mb-4">
-                                <div class="filter-label">
-                                    <label for="income_date">{{ __('incomeDate') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="date" id="income_date" min="{{ date('Y-m-d') }}"
-                                        name="income_date">
-                                    <span class="error-message" id="income_date_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group mt-4 mb-4">
-                                <div class="filter-label">
-                                    <label for="income_amount">{{ __('incomeAmount') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="number" id="income_amount" name="income_amount">
-                                    <span class="error-message" id="income_amount_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_category">{{ __('incomeCategory') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <select id="category" name="income_category" class="form-control"
-                                        aria-label="{{ __('selectCategory') }}">
-                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
-                                        <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
-                                        <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
-                                        <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}</option>
-                                        <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
-                                        <option value="Freelance">{{ __('incomeCategory5') }}</option>
-                                        <option value="Bonus">{{ __('incomeCategory6') }}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">{{ __('addButton') }}</button>
-                                <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">{{ __('backButton') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
-                document.getElementById("income_name").value = "";
-                document.getElementById("income_date").value = "";
-                document.getElementById("income_amount").value = "";
-
-                document.getElementById("income_name_empty").textContent = "";
-                document.getElementById("income_date_empty").textContent = "";
-                document.getElementById("income_amount_empty").textContent = "";
-            });
-
-            document.getElementById("incomeForm").addEventListener("submit", function(event) {
-                var incomeName = document.getElementById("income_name");
-                var incomeDate = document.getElementById("income_date");
-                var incomeAmount = document.getElementById("income_amount");
-                var incomeNameEmpty = document.getElementById("income_name_empty");
-                var incomeDateEmpty = document.getElementById("income_date_empty");
-                var incomeAmountEmpty = document.getElementById("income_amount_empty");
-                var emptyCount = 0;
-                var translations = {
-                    nameEmpty: @json(__('errorIncomeNameEmpty')),
-                    dateEmpty: @json(__('errorIncomeDateEmpty')),
-                    amountEmpty: @json(__('errorIncomeAmountEmpty'))
-                }
-
-                if (incomeName.value.trim() === "") {
-                    incomeNameEmpty.textContent = translations.nameEmpty;
-                    incomeNameEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeNameEmpty.style.display = "none";
-                }
-
-                if (incomeDate.value.trim() === "") {
-                    incomeDateEmpty.textContent = translations.dateEmpty;
-                    incomeDateEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeDateEmpty.style.display = "none";
-                }
-
-                if (incomeAmount.value.trim() === "") {
-                    incomeAmountEmpty.textContent = translations.amountEmpty;
-                    incomeAmountEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeAmountEmpty.style.display = "none";
-                }
-
-                if (emptyCount > 0) {
-                    event.preventDefault();
-                }
-            });
-        </script>
     </div>
 
     {{-- Bagian Tambah Outcome --}}
