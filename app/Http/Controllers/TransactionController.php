@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    //
     function showTransaction(Request $request)
     {
         $userId = Auth::id();
+        $locale = App::getLocale();
         $search_query = $request->query('search');
         $start_date_query = $request->input('start_date');
         $end_date_query = $request->input('end_date');
@@ -26,6 +26,7 @@ class TransactionController extends Controller
         $end_year_query = $request->input('end_year');
         $date_query = Transaction::query();
         $date_query->where('user_id', $userId);
+        $initialTransactionsCount = Transaction::where('user_id', $userId)->count();
 
         // Untuk Filter Bagian Bulan Saja
         $year = date('Y', strtotime($month_only_query));
@@ -161,7 +162,7 @@ class TransactionController extends Controller
             }
             $hasil = $date_query->get();
         } else {
-            $results = Transaction::where('user_id', $userId)->orderBy('transaction_date', 'desc')->paginate(10);
+            $results = Transaction::where('user_id', $userId)->orderBy('id', 'desc')->paginate(10);
             $nomorUrut = ($results->currentPage() - 1) * $results->perPage() + 1;
             foreach ($results as $result) {
                 $result->nomor_urut = $nomorUrut++;
@@ -175,12 +176,27 @@ class TransactionController extends Controller
             }
             $hasil = $date_query->get();
         }
-        $transactionTable = DB::table('transaction')->get();
+        $errorMessage = null;
+        if ($results->count() === 0) {
+            if ($initialTransactionsCount === 0) {
+                if ($locale === 'id') {
+                    $errorMessage = "Belum ada data transaksi yang ditambahkan";
+                } else {
+                    $errorMessage = "No Transaction Data Added yet";
+                }
+            } else {
+                if ($locale === 'id') {
+                    $errorMessage = "Transaksi tidak ditemukan";
+                } else {
+                    $errorMessage = "Transaction Not Found";
+                }
+            }
+        }
         return view(
             'transaction',
             compact(
                 'results',
-                'transactionTable',
+                'errorMessage',
                 'hasil'
             )
         );

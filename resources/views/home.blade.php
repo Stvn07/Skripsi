@@ -130,7 +130,7 @@
         .buttons .button-boxright {
             flex-grow: 1;
             width: 50%;
-            /* margin-left: 15px; */
+            margin-left: 15px;
             cursor: pointer;
             background-color: #008312;
             color: white;
@@ -141,8 +141,6 @@
         .chart {
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
             max-width: 100%;
             margin: auto;
         }
@@ -309,144 +307,30 @@
 
                 <div class="buttons">
                     <!-- Add Income Button -->
-                    <button type="button" class="button-boxleft" data-bs-toggle="modal" data-bs-target="#incomeModal">
-                        {{ __('addIncome') }}
-                    </button>
+                    @if (!$hasFirstBalance)
+                        <button disabled style="background-color: grey" type="button" class="button-boxleft"
+                            data-bs-toggle="modal" data-bs-target="#incomeModal">
+                            {{ __('addIncome') }}
+                        </button>
+                    @else
+                        <button type="button" class="button-boxleft" data-bs-toggle="modal" data-bs-target="#incomeModal">
+                            {{ __('addIncome') }}
+                        </button>
+                    @endif
                     <!-- Add Income Function -->
-                    <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <h2 style="text-align: center">{{ __('addIncome') }}</h2>
 
-                                        <div class="form-group mt-4 mb-4">
-                                            <div class="filter-label">
-                                                <label for="income_name">{{ __('incomeName') }}</label>
-                                            </div>
-
-                                            <div class="filter-inputs">
-                                                <input type="text" id="income_name" name="income_name">
-                                                <span class="error-message" id="income_name_empty"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group mt-4 mb-4">
-                                            <div class="filter-label">
-                                                <label for="income_date">{{ __('incomeDate') }}</label>
-                                            </div>
-
-                                            <div class="filter-inputs">
-                                                <input type="date" id="income_date" min="{{ date('Y-m-d') }}"
-                                                    name="income_date">
-                                                <span class="error-message" id="income_date_empty"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group mt-4 mb-4">
-                                            <div class="filter-label">
-                                                <label for="income_amount">{{ __('incomeAmount') }}</label>
-                                            </div>
-
-                                            <div class="filter-inputs">
-                                                <input type="number" id="income_amount" name="income_amount">
-                                                <span class="error-message" id="income_amount_empty"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="filter-label">
-                                                <label for="income_category">{{ __('incomeCategory') }}</label>
-                                            </div>
-
-                                            <div class="filter-inputs">
-                                                <select id="category" name="income_category" class="form-control"
-                                                    aria-label="{{ __('selectCategory') }}">
-                                                    <option value="" selected disabled>{{ __('selectCategory') }}
-                                                    </option>
-                                                    <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
-                                                    <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
-                                                    <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}
-                                                    </option>
-                                                    <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
-                                                    <option value="Freelance">{{ __('incomeCategory5') }}</option>
-                                                    <option value="Bonus">{{ __('incomeCategory6') }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="buttons" style="margin-top: 50px;">
-                                            <button type="submit" class="send">{{ __('addButton') }}</button>
-                                            <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
-                                                class="cancel">{{ __('backButton') }}</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <script>
-                        document.getElementById("incomeCancelBtn").addEventListener("click", function() {
-                            document.getElementById("income_name").value = "";
-                            document.getElementById("income_date").value = "";
-                            document.getElementById("income_amount").value = "";
-
-                            document.getElementById("income_name_empty").textContent = "";
-                            document.getElementById("income_date_empty").textContent = "";
-                            document.getElementById("income_amount_empty").textContent = "";
-                        });
-
-                        document.getElementById("incomeForm").addEventListener("submit", function(event) {
-                            var incomeName = document.getElementById("income_name");
-                            var incomeDate = document.getElementById("income_date");
-                            var incomeAmount = document.getElementById("income_amount");
-                            var incomeNameEmpty = document.getElementById("income_name_empty");
-                            var incomeDateEmpty = document.getElementById("income_date_empty");
-                            var incomeAmountEmpty = document.getElementById("income_amount_empty");
-                            var emptyCount = 0;
-                            var translations = {
-                                nameEmpty: @json(__('errorIncomeNameEmpty')),
-                                dateEmpty: @json(__('errorIncomeDateEmpty')),
-                                amountEmpty: @json(__('errorIncomeAmountEmpty'))
-                            }
-
-                            if (incomeName.value.trim() === "") {
-                                incomeNameEmpty.textContent = translations.nameEmpty;
-                                incomeNameEmpty.style.display = "block";
-                                emptyCount++;
-                            } else {
-                                incomeNameEmpty.style.display = "none";
-                            }
-
-                            if (incomeDate.value.trim() === "") {
-                                incomeDateEmpty.textContent = translations.dateEmpty;
-                                incomeDateEmpty.style.display = "block";
-                                emptyCount++;
-                            } else {
-                                incomeDateEmpty.style.display = "none";
-                            }
-
-                            if (incomeAmount.value.trim() === "") {
-                                incomeAmountEmpty.textContent = translations.amountEmpty;
-                                incomeAmountEmpty.style.display = "block";
-                                emptyCount++;
-                            } else {
-                                incomeAmountEmpty.style.display = "none";
-                            }
-
-                            if (emptyCount > 0) {
-                                event.preventDefault();
-                            }
-                        });
-                    </script>
                     <!-- Add Outflow Button -->
-                    <button type="button" class="button-boxright" data-bs-toggle="modal"
-                        data-bs-target="#outcomeModal">
-                        {{ __('addOutcome') }}
-                    </button>
+                    @if (!$hasFirstBalance)
+                        <button disabled type="button" style="background-color: grey" class="button-boxright"
+                            data-bs-toggle="modal" data-bs-target="#outcomeModal">
+                            {{ __('addOutcome') }}
+                        </button>
+                    @else
+                        <button type="button" class="button-boxright" data-bs-toggle="modal"
+                            data-bs-target="#outcomeModal">
+                            {{ __('addOutcome') }}
+                        </button>
+                    @endif
 
                     <!-- Add Outflow Function -->
                 </div>
@@ -458,91 +342,6 @@
                         </div>
                         <button id="prevIncomeChart" class="small-button">{{ __('prevChart') }}</button>
                         <button id="nextIncomeChart" class="small-button">{{ __('nextChart') }}</button>
-
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                            var ctxIncome = document.getElementById('incomeChart').getContext('2d');
-                            var incomeChartsData = @json($incomeChart);
-                            var currentIncomeChart = 0;
-                            var incomeFundLabel = @json(__('incomeFund'));
-                            var myIncomeChart;
-                            var translationDayLabel = @json(__('days'));
-
-                            function updateIncomeChart() {
-                                if (myIncomeChart) {
-                                    myIncomeChart.destroy();
-                                }
-
-                                var currentIncomeChartData = incomeChartsData.charts[currentIncomeChart];
-                                var translatedLabels = translateDays(currentIncomeChartData.labels);
-
-                                myIncomeChart = new Chart(ctxIncome, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: translatedLabels,
-                                        datasets: [{
-                                            label: incomeFundLabel,
-                                            data: currentIncomeChartData.amount,
-                                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                            borderColor: 'rgba(255, 99, 132, 1)',
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        scales: {
-                                            x: {
-                                                ticks: {
-                                                    maxRotation: 45,
-                                                    minRotation: 45,
-                                                    autoSkip: true,
-                                                    maxTicksLimit: 7
-                                                }
-                                            },
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        },
-                                        plugins: {
-                                            legend: {
-                                                display: true,
-                                                position: 'top'
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-
-                            updateIncomeChart();
-
-                            document.getElementById('prevIncomeChart').addEventListener('click', function() {
-                                if (currentIncomeChart > 0) {
-                                    currentIncomeChart--;
-                                    updateIncomeChart();
-                                    document.getElementById('nextIncomeChart').disabled = false;
-                                }
-
-                                if (currentIncomeChart == 0) {
-                                    this.disabled = true;
-                                }
-                            });
-
-                            document.getElementById('nextIncomeChart').addEventListener('click', function() {
-                                if (currentIncomeChart < incomeChartsData.charts.length - 1) {
-                                    currentIncomeChart++;
-                                    updateIncomeChart();
-                                    document.getElementById('prevIncomeChart').disabled = false;
-                                }
-
-                                if (currentIncomeChart == incomeChartsData.charts.length - 1) {
-                                    this.disabled = true;
-                                }
-                            });
-                            window.addEventListener('resize', function() {
-                                updateIncomeChart();
-                            });
-                        </script>
                     </div>
                 </div>
             </div>
@@ -558,17 +357,22 @@
                 <div class="box recent-transactions">
                     <h5>{{ __('recentTransaction') }}</h5>
                     <ul>
-                        @foreach ($transactionData as $key => $transaction)
-                            <li>
-                                Transaksi {{ $key + 1 }} -
-                                {{ $transaction->transaction_date }} -
-                                Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
-                                <span
-                                    class="transaction-type {{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
-                                    {{ ucfirst($transaction->transaction_type) }}
-                                </span>
-                            </li>
-                        @endforeach
+                        @if (count($transactionData) === 0)
+                            {{ __('noTransactionData') }}
+                        @else
+                            @foreach ($transactionData as $key => $transaction)
+                                <li>
+                                    {{ __('transaction') }} {{ $key + 1 }} -
+                                    {{ $transaction->transaction_date }} -
+                                    Rp{{ number_format($transaction->transaction_amount, 0, ',', '.') }} -
+                                    <span
+                                        class="transaction-type {{ $transaction->transaction_type == 'income' ? 'text-success' : 'text-danger' }}">
+                                        {{ ucfirst($transaction->transaction_type) }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        @endif
+
                     </ul>
                 </div>
 
@@ -580,112 +384,188 @@
                         </div>
                         <button id="prevOutcomeChart" class="small-button">{{ __('prevChart') }}</button>
                         <button id="nextOutcomeChart" class="small-button">{{ __('nextChart') }}</button>
-
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                            var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');
-                            var outcomeChartsData = @json($outcomeChart);
-                            var currentOutcomeChart = 0;
-                            var outcomeFundLabel = @json(__('outcomeFund'));
-                            var myOutcomeChart;
-                            var translationDayLabel = @json(__('days'));
-
-                            function updateOutcomeChart() {
-                                if (myOutcomeChart) {
-                                    myOutcomeChart.destroy();
-                                }
-
-                                var currentOutcomeChartData = outcomeChartsData.charts[currentOutcomeChart];
-                                var translatedLabels = translateDays(currentOutcomeChartData.labels);
-
-                                myOutcomeChart = new Chart(ctxOutcome, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: translatedLabels,
-                                        datasets: [{
-                                            label: outcomeFundLabel,
-                                            data: currentOutcomeChartData.amount,
-                                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                            borderColor: 'rgba(255, 99, 132, 1)',
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        scales: {
-                                            x: {
-                                                ticks: {
-                                                    maxRotation: 45,
-                                                    minRotation: 45,
-                                                    autoSkip: true,
-                                                    maxTicksLimit: 7
-                                                }
-                                            },
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        },
-                                        plugins: {
-                                            legend: {
-                                                display: true,
-                                                position: 'top'
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-
-                            updateOutcomeChart();
-
-                            document.getElementById('prevOutcomeChart').addEventListener('click', function() {
-                                if (currentOutcomeChart > 0) {
-                                    currentOutcomeChart--;
-                                    updateOutcomeChart();
-                                    document.getElementById('nextOutcomeChart').disabled = false;
-                                }
-
-                                if (currentOutcomeChart == 0) {
-                                    this.disabled = true;
-                                }
-                            });
-
-                            document.getElementById('nextOutcomeChart').addEventListener('click', function() {
-                                if (currentOutcomeChart < outcomeChartsData.charts.length - 1) {
-                                    currentOutcomeChart++;
-                                    updateOutcomeChart();
-                                    document.getElementById('prevOutcomeChart').disabled = false;
-                                }
-
-                                if (currentOutcomeChart == outcomeChartsData.charts.length - 1) {
-                                    this.disabled = true;
-                                }
-                            });
-                        </script>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     {{-- Bagian Tambah Income --}}
     <div class="mb-2">
-        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
-            {{ __('addIncome') }}
-        </button> --}}
+        <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h2 style="text-align: center">{{ __('addIncome') }}</h2>
 
+                            <div class="form-group mt-4 mb-4">
+                                <div class="filter-label">
+                                    <label for="income_name">{{ __('incomeName') }}</label>
+                                </div>
 
+                                <div class="filter-inputs">
+                                    <input type="text" id="income_name" name="income_name">
+                                    <span class="error-message" id="income_name_empty"></span>
+                                </div>
+                            </div>
 
+                            <div class="form-group mt-4 mb-4">
+                                <div class="filter-label">
+                                    <label for="income_date">{{ __('incomeDate') }}</label>
+                                </div>
 
+                                <div class="filter-inputs">
+                                    <input type="date" id="income_date" min="{{ date('Y-m-d') }}"
+                                        name="income_date">
+                                    <span class="error-message" id="income_date_empty"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4 mb-4">
+                                <div class="filter-label">
+                                    <label for="income_amount">{{ __('incomeAmount') }}</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <input type="number" id="income_amount" name="income_amount">
+                                    <span class="error-message" id="income_amount_empty"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="filter-label">
+                                    <label for="income_category">{{ __('incomeCategory') }}</label>
+                                </div>
+
+                                <div class="filter-inputs">
+                                    <select id="category" name="income_category" class="form-control"
+                                        aria-label="{{ __('selectCategory') }}">
+                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
+                                        <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
+                                        <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
+                                        <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}</option>
+                                        <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
+                                        <option value="Freelance">{{ __('incomeCategory5') }}</option>
+                                        <option value="Bonus">{{ __('incomeCategory6') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="buttons" style="margin-top: 50px;">
+                                <button type="submit" class="send">{{ __('addButton') }}</button>
+                                <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
+                                    class="cancel">{{ __('backButton') }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Konfirmasi -->
+        <div class="modal" id="incomeConfirmModal" tabindex="-1" aria-labelledby="incomeConfirmModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 style="text-align: center">{{ __('confirmationMessage') }}</h5>
+                        <div class="buttons mt-4">
+                            <button type="button" id="incomeConfirmYes" class="send">{{ __('yes') }}</button>
+                            <button type="button" id="incomeConfirmNo" data-bs-toggle="modal"
+                                data-bs-target="#incomeModal" class="cancel">{{ __('no') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
+                var incomeName = document.getElementById("income_name").value.trim();
+                var incomeDate = document.getElementById("income_date").value.trim();
+                var incomeAmount = document.getElementById("income_amount").value.trim();
+
+                if (incomeName !== "" || incomeDate !== "" || incomeAmount !== "") {
+                    var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
+                    incomeConfirmModal.show();
+                } else {
+                    clearForm();
+                    var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
+                    incomeModal.hide();
+                }
+            });
+
+            function clearForm() {
+                document.getElementById("income_name").value = "";
+                document.getElementById("income_date").value = "";
+                document.getElementById("income_amount").value = "";
+                document.getElementById("category").selectedIndex = 0;
+
+                document.getElementById("income_name_empty").textContent = "";
+                document.getElementById("income_date_empty").textContent = "";
+                document.getElementById("income_amount_empty").textContent = "";
+            }
+
+            document.getElementById("incomeConfirmYes").addEventListener("click", function() {
+                clearForm();
+                window.location.href = "{{ url('/') }}";
+            });
+
+            document.getElementById("incomeConfirmNo").addEventListener("click", function() {
+                var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
+                incomeConfirmModal.hide();
+            });
+
+            document.getElementById("incomeForm").addEventListener("submit", function(event) {
+                var incomeName = document.getElementById("income_name");
+                var incomeDate = document.getElementById("income_date");
+                var incomeAmount = document.getElementById("income_amount");
+                var incomeNameEmpty = document.getElementById("income_name_empty");
+                var incomeDateEmpty = document.getElementById("income_date_empty");
+                var incomeAmountEmpty = document.getElementById("income_amount_empty");
+                var emptyCount = 0;
+                var translations = {
+                    nameEmpty: @json(__('errorIncomeNameEmpty')),
+                    dateEmpty: @json(__('errorIncomeDateEmpty')),
+                    amountEmpty: @json(__('errorIncomeAmountEmpty'))
+                }
+
+                if (incomeName.value.trim() === "") {
+                    incomeNameEmpty.textContent = translations.nameEmpty;
+                    incomeNameEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeNameEmpty.style.display = "none";
+                }
+
+                if (incomeDate.value.trim() === "") {
+                    incomeDateEmpty.textContent = translations.dateEmpty;
+                    incomeDateEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeDateEmpty.style.display = "none";
+                }
+
+                if (incomeAmount.value.trim() === "") {
+                    incomeAmountEmpty.textContent = translations.amountEmpty;
+                    incomeAmountEmpty.style.display = "block";
+                    emptyCount++;
+                } else {
+                    incomeAmountEmpty.style.display = "none";
+                }
+
+                if (emptyCount > 0) {
+                    event.preventDefault();
+                }
+            });
+        </script>
     </div>
 
     {{-- Bagian Tambah Outcome --}}
     <div class="mb-2">
-        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outcomeModal">
-            {{ __('addOutcome') }}
-        </button> --}}
-
         <div class="modal modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="outcomeModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -764,15 +644,58 @@
             </div>
         </div>
 
+        <div class="modal" id="outcomeConfirmModal" tabindex="-1" aria-labelledby="outcomeConfirmModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 style="text-align: center">{{ __('confirmationMessage') }}</h5>
+                        <div class="buttons mt-4">
+                            <button type="button" id="outcomeConfirmYes" class="send">{{ __('yes') }}</button>
+                            <button type="button" id="outcomeConfirmNo" data-bs-toggle="modal"
+                                data-bs-target="#outcomeModal" class="cancel">{{ __('no') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
+                var outcomeName = document.getElementById("outcome_name").value.trim();
+                var outcomeDate = document.getElementById("outcome_date").value.trim();
+                var outcomeAmount = document.getElementById("outcome_amount").value.trim();
+
+                if (outcomeName !== "" || outcomeDate !== "" || outcomeAmount !== "") {
+                    var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
+                    outcomeConfirmModal.show();
+                } else {
+                    clearForm();
+                    var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
+                    outcomeModal.hide();
+                }
+            });
+
+            function clearForm() {
                 document.getElementById("outcome_name").value = "";
                 document.getElementById("outcome_date").value = "";
                 document.getElementById("outcome_amount").value = "";
+                document.getElementById("category").selectedIndex = 0;
 
                 document.getElementById("outcome_name_empty").textContent = "";
                 document.getElementById("outcome_date_empty").textContent = "";
                 document.getElementById("outcome_amount_empty").textContent = "";
+            }
+
+
+            document.getElementById("outcomeConfirmYes").addEventListener("click", function() {
+                clearForm();
+                window.location.href = "{{ url('/') }}";
+            });
+
+            document.getElementById("outcomeConfirmNo").addEventListener("click", function() {
+                var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
+                outcomeConfirmModal.hide();
             });
 
             document.getElementById("outcomeForm").addEventListener("submit", function(event) {
@@ -820,20 +743,6 @@
         </script>
     </div>
 
-    {{-- Bagian Mau Ganti Bahasa --}}
-    {{-- <div class="mb-2">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                {{ session()->get('locale', config('app.locale')) }}
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ url('locale/id') }}">id</a></li>
-                <li><a class="dropdown-item" href="{{ url('locale/en') }}">en</a></li>
-            </ul>
-        </div>
-    </div> --}}
-
     <script>
         function translateDays(labels) {
             return labels.map(label => {
@@ -847,156 +756,140 @@
     </script>
 
     {{-- Mau Nunjukkin Diagram Pendapatan --}}
-    <div class="mt-3">
-        {{-- <h1>{{ __('incomeChart') }}</h1>
-        <div class="max-width: 600px; margin:auto;">
-            <canvas id="incomeChart"></canvas>
-        </div>
-        <button id="prevIncomeChart">{{ __('prevChart') }}</button>
-        <button id="nextIncomeChart">{{ __('nextChart') }}</button> --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctxIncome = document.getElementById('incomeChart').getContext('2d');
+        var incomeChartsData = @json($incomeChart);
+        var currentIncomeChart = 0;
+        var incomeFundLabel = @json(__('incomeFund'));
+        var myIncomeChart;
+        var translationDayLabel = @json(__('days'));
+        var translationMonthLabel = @json(__('months'));
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctxIncome = document.getElementById('incomeChart').getContext('2d');
-            var incomeChartsData = @json($incomeChart);
-            var currentIncomeChart = 0;
-            var incomeFundLabel = @json(__('incomeFund'));
-            var myIncomeChart;
-            var translationDayLabel = @json(__('days'));
-            var translationMonthLabel = @json(__('months'));
-
-            function updateIncomeChart() {
-                if (myIncomeChart) {
-                    myIncomeChart.destroy();
-                }
-
-                var currentIncomeChartData = incomeChartsData.charts[currentIncomeChart];
-                var translatedLabels = translateDays(currentIncomeChartData.labels);
-
-                myIncomeChart = new Chart(ctxIncome, {
-                    type: 'bar',
-                    data: {
-                        labels: translatedLabels,
-                        datasets: [{
-                            label: incomeFundLabel,
-                            data: currentIncomeChartData.amount,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
+        function updateIncomeChart() {
+            if (myIncomeChart) {
+                myIncomeChart.destroy();
             }
 
-            updateIncomeChart();
+            var currentIncomeChartData = incomeChartsData.charts[currentIncomeChart];
+            var translatedLabels = translateDays(currentIncomeChartData.labels);
 
-            document.getElementById('prevIncomeChart').addEventListener('click', function() {
-                if (currentIncomeChart > 0) {
-                    currentIncomeChart--;
-                    updateIncomeChart();
-                    document.getElementById('nextIncomeChart').disabled = false;
-                }
-
-                if (currentIncomeChart == 0) {
-                    this.disabled = true;
-                }
-            });
-
-            document.getElementById('nextIncomeChart').addEventListener('click', function() {
-                if (currentIncomeChart < incomeChartsData.charts.length - 1) {
-                    currentIncomeChart++;
-                    updateIncomeChart();
-                    document.getElementById('prevIncomeChart').disabled = false;
-                }
-
-                if (currentIncomeChart == incomeChartsData.charts.length - 1) {
-                    this.disabled = true;
+            myIncomeChart = new Chart(ctxIncome, {
+                type: 'bar',
+                data: {
+                    labels: translatedLabels,
+                    datasets: [{
+                        label: incomeFundLabel,
+                        data: currentIncomeChartData.amount,
+                        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
-            window.addEventListener('resize', function() {
+        }
+
+        updateIncomeChart();
+
+        document.getElementById('prevIncomeChart').addEventListener('click', function() {
+            if (currentIncomeChart > 0) {
+                currentIncomeChart--;
                 updateIncomeChart();
-            });
-        </script>
-    </div>
+                document.getElementById('nextIncomeChart').disabled = false;
+            }
+
+            if (currentIncomeChart == 0) {
+                this.disabled = true;
+            }
+        });
+
+        document.getElementById('nextIncomeChart').addEventListener('click', function() {
+            if (currentIncomeChart < incomeChartsData.charts.length - 1) {
+                currentIncomeChart++;
+                updateIncomeChart();
+                document.getElementById('prevIncomeChart').disabled = false;
+            }
+
+            if (currentIncomeChart == incomeChartsData.charts.length - 1) {
+                this.disabled = true;
+            }
+        });
+        window.addEventListener('resize', function() {
+            updateIncomeChart();
+        });
+    </script>
 
     {{-- Mau Nunjukkin Diagram Pengeluaran --}}
-    <div class="mt-3">
-        {{-- <h1>{{ __('outcomeChart') }}</h1> --}}
-        {{-- <canvas id="outcomeChart" width="400" height="200"></canvas> --}}
-        {{-- <button id="prevOutcomeChart">{{ __('prevChart') }}</button>
-        <button id="nextOutcomeChart">{{ __('nextChart') }}</button> --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');
+        var outcomeChartsData = @json($outcomeChart);
+        var currentOutcomeChart = 0;
+        var outcomeFundLabel = @json(__('outcomeFund'));
+        var myOutcomeChart;
+        var translationDayLabel = @json(__('days'));
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');
-            var outcomeChartsData = @json($outcomeChart);
-            var currentOutcomeChart = 0;
-            var outcomeFundLabel = @json(__('outcomeFund'));
-            var myOutcomeChart;
-            var translationDayLabel = @json(__('days'));
-
-            function updateOutcomeChart() {
-                if (myOutcomeChart) {
-                    myOutcomeChart.destroy();
-                }
-
-                var currentOutcomeChartData = outcomeChartsData.charts[currentOutcomeChart];
-                var translatedLabels = translateDays(currentOutcomeChartData.labels);
-
-                myOutcomeChart = new Chart(ctxOutcome, {
-                    type: 'bar',
-                    data: {
-                        labels: translatedLabels,
-                        datasets: [{
-                            label: outcomeFundLabel,
-                            data: currentOutcomeChartData.amount,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
+        function updateOutcomeChart() {
+            if (myOutcomeChart) {
+                myOutcomeChart.destroy();
             }
 
-            updateOutcomeChart();
+            var currentOutcomeChartData = outcomeChartsData.charts[currentOutcomeChart];
+            var translatedLabels = translateDays(currentOutcomeChartData.labels);
 
-            document.getElementById('prevOutcomeChart').addEventListener('click', function() {
-                if (currentOutcomeChart > 0) {
-                    currentOutcomeChart--;
-                    updateOutcomeChart();
-                    document.getElementById('nextOutcomeChart').disabled = false;
-                }
-
-                if (currentOutcomeChart == 0) {
-                    this.disabled = true;
-                }
-            });
-
-            document.getElementById('nextOutcomeChart').addEventListener('click', function() {
-                if (currentOutcomeChart < outcomeChartsData.charts.length - 1) {
-                    currentOutcomeChart++;
-                    updateOutcomeChart();
-                    document.getElementById('prevOutcomeChart').disabled = false;
-                }
-
-                if (currentOutcomeChart == outcomeChartsData.charts.length - 1) {
-                    this.disabled = true;
+            myOutcomeChart = new Chart(ctxOutcome, {
+                type: 'bar',
+                data: {
+                    labels: translatedLabels,
+                    datasets: [{
+                        label: outcomeFundLabel,
+                        data: currentOutcomeChartData.amount,
+                        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
-        </script>
-    </div>
+        }
+
+        updateOutcomeChart();
+
+        document.getElementById('prevOutcomeChart').addEventListener('click', function() {
+            if (currentOutcomeChart > 0) {
+                currentOutcomeChart--;
+                updateOutcomeChart();
+                document.getElementById('nextOutcomeChart').disabled = false;
+            }
+
+            if (currentOutcomeChart == 0) {
+                this.disabled = true;
+            }
+        });
+
+        document.getElementById('nextOutcomeChart').addEventListener('click', function() {
+            if (currentOutcomeChart < outcomeChartsData.charts.length - 1) {
+                currentOutcomeChart++;
+                updateOutcomeChart();
+                document.getElementById('prevOutcomeChart').disabled = false;
+            }
+
+            if (currentOutcomeChart == outcomeChartsData.charts.length - 1) {
+                this.disabled = true;
+            }
+        });
+    </script>
 @endsection

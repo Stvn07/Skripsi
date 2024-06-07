@@ -115,10 +115,6 @@
             <span class="icon">💲</span>
             {{ __('transaction') }}
         </a>
-        <a href="#" class="sidebar-link">
-            <span class="icon">🪙</span>
-            Budgets
-        </a>
         <a href="{{ route('openReport') }}" class="sidebar-link">
             <span class="icon">📈</span>
             {{ __('report') }}

@@ -25,6 +25,9 @@
     },
 
     "hello": "Hello,",
+    "confirmationMessage": "Do you want to return to the home page?",
+    "yes": "Yes",
+    "no": "No",
     "finalBalance": "Final Balance",
     "income": "Income",
     "outcome": "Outflow",
@@ -159,7 +162,8 @@
     },
     "totalOutcome": "Total Outflow",
 
-    "transactionTable": "Transaction Table",
+    "transactionHistory": "Transaction History",
+    "noTransactionData": "No Transaction Data",
     "filterDataBy": "Filter Data By",
     "day": "Day",
     "rangeDay": "range Day",

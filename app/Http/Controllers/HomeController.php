@@ -72,9 +72,12 @@ class HomeController extends Controller
     function showIncomePage(Request $request)
     {
         $userId = Auth::id();
+        $locale = App::getLocale();
         $date_query = Transaction::query();
         $date_query->where('user_id', $userId);
         $search_query = $request->query('search');
+        $initialTransactionsCount = Transaction::where('user_id', $userId)->whereNull('outcome_id')
+            ->with('Income')->count();
 
         $date_only_query = $request->input('one_date');
         $start_date_query = $request->input('start_date');
@@ -262,15 +265,34 @@ class HomeController extends Controller
             }
             $hasil = $date_query->get();
         }
-        return view('income', compact('results', 'hasil'));
+        $errorMessage = null;
+        if ($results->count() === 0) {
+            if ($initialTransactionsCount === 0) {
+                if ($locale === 'id') {
+                    $errorMessage = "Belum ada pendapatan yang ditambahkan";
+                } else {
+                    $errorMessage = "No income added yet";
+                }
+            } else {
+                if ($locale === 'id') {
+                    $errorMessage = "Pendapatan tidak ditemukan";
+                } else {
+                    $errorMessage = "Income Not Found";
+                }
+            }
+        }
+        return view('income', compact('results', 'hasil', 'errorMessage'));
     }
 
     function showOutcomePage(Request $request)
     {
         $userId = Auth::id();
+        $locale = App::getLocale();
         $date_query = Transaction::query();
         $date_query->where('user_id', $userId);
         $search_query = $request->query('search');
+        $initialTransactionsCount = Transaction::where('user_id', $userId)->whereNull('income_id')
+            ->with('Outcome')->count();
 
         $date_only_query = $request->input('one_date');
         $start_date_query = $request->input('start_date');
@@ -458,7 +480,23 @@ class HomeController extends Controller
             }
             $hasil = $date_query->get();
         }
-        return view('outcome', compact('results', 'hasil'));
+        $errorMessage = null;
+        if ($results->count() === 0) {
+            if ($initialTransactionsCount === 0) {
+                if ($locale === 'id') {
+                    $errorMessage = "Belum ada pengeluaran yang ditambahkan";
+                } else {
+                    $errorMessage = "No outflow added yet";
+                }
+            } else {
+                if ($locale === 'id') {
+                    $errorMessage = "Pengeluaran tidak ditemukan";
+                } else {
+                    $errorMessage = "Outflow Not Found";
+                }
+            }
+        }
+        return view('outcome', compact('results', 'hasil', 'errorMessage'));
     }
 
     function showIncomeChart()
@@ -651,7 +689,7 @@ class HomeController extends Controller
             if ($locale === 'id') {
                 $statusOutcome = 'Belum Ada Pengeluaran';
             } else {
-                $statusOutcome = 'No Spending yet';
+                $statusOutcome = 'No Spending';
             }
         } else {
             $outcomeExpenses = Transaction::where('user_id', $userId)

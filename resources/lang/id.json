@@ -25,6 +25,9 @@
     },
 
     "hello": "Halo,",
+    "confirmationMessage": "Apakah anda ingin kembali ke halaman home?",
+    "yes": "Ya",
+    "no": "No",
     "finalBalance": "Saldo Akhir",
     "income": "Pendapatan",
     "outcome": "Pengeluaran",
@@ -159,7 +162,8 @@
     },
     "totalOutcome": "Total Pengeluaran",
 
-    "transactionTable": "Tabel Transaksi",
+    "transactionHistory": "Riwayat Transaksi",
+    "noTransactionData": "Belum Ada Data Transaksi",
     "filterDataBy": "Filter Data Berdasarkan",
     "day": "Hari",
     "rangeDay": "Rentang Hari",
