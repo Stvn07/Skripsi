@@ -697,8 +697,8 @@ class HomeController extends Controller
                 ->sum('transaction_amount');
             $remainingAmount = $totalBalanceAmount->total_balance_amount;
             $percentage = ($outcomeExpenses / $remainingAmount) * 100;
-            $lowExpenses = 25;
-            $middleExpenses = 50;
+            $lowExpenses = 30;
+            $middleExpenses = 70;
 
             if ($percentage < $lowExpenses) {
                 if ($locale === 'id') {

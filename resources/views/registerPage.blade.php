@@ -1,6 +1,178 @@
 @extends('layout')
 @section('title', 'Register Page')
 @section('content')
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 40px;
+            background-color: #e0f5e9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-container h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-container h6 {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .error-message-2 {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #218838;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #0056b3;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Responsive design */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .form-container,
+            .image-container {
+                flex: 1;
+            }
+
+            .form-container {
+                padding: 40px;
+            }
+
+            .image-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .input-group input {
+                width: calc(100% - 22px);
+            }
+
+            .button-container button {
+                width: 100%;
+            }
+
+            .container {
+                flex-direction: column;
+                margin: 0 10px;
+            }
+        }
+    </style>
     <div class="container">
         <div class="form-container">
             <div class="mb-4">
@@ -16,43 +188,37 @@
 
             <form id="signupForm" action="{{ route('register.post') }}" method="POST" novalidate>
                 @csrf
-                <div class="mt-4 mb-4">
+                <div class="input-group">
                     <label class="form-label" for="user_full_name">{{ __('signUpFullName') }}</label>
-                    <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        id="user_full_name" name="user_full_name">
+                    <input type="text" id="user_full_name" name="user_full_name">
                     <span class="error-message-2" id="user_full_name_empty"></span>
                 </div>
-                <div class="mt-4 mb-4">
+                <div class="input-group">
                     <label class="form-label" for="user_email">{{ __('signUpEmail') }}</label>
-                    <input style="max-width: 270px; border: 2px solid black" type="email" class="form-control"
-                        id="user_email" name="user_email">
+                    <input type="email" id="user_email" name="user_email">
                     <span class="error-message-2" id="user_email_empty"></span>
                 </div>
-                <div class="mt-4 mb-4">
+                <div class="input-group">
                     <label class="form-label" for="password">{{ __('signUpPassword') }}</label>
-                    <input style="max-width: 270px; border: 2px solid black" type="password" class="form-control"
-                        id="password" name="password">
+                    <input type="password" id="password" name="password">
                     <span class="error-message-2" id="password_empty"></span>
                 </div>
-                <div class="mt-4 mb-4">
+                <div class="input-group">
                     <label class="form-label" for="user_address">{{ __('signUpAddress') }}</label>
-                    <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        id="user_address" name="user_address">
+                    <input type="text" id="user_address" name="user_address">
                     <span class="error-message-2" id="user_address_empty"></span>
                 </div>
-                <div class="mt-4 mb-4">
+                <div class="input-group">
                     <label class="form-label" for="user_phone_number">{{ __('signUpPhoneNumber') }}</label>
-                    <input style="max-width: 270px; border: 2px solid black" type="text" class="form-control"
-                        id="user_phone_number" name="user_phone_number"
+                    <input type="text" id="user_phone_number" name="user_phone_number"
                         onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                     <span class="error-message-2" id="user_phone_number_empty"></span>
                 </div>
-                <div style="justify-content: center; align-items: center; margin: 50px 50px 20px;">
-                    <button style="width: 170px; border: 2px solid black" type="submit"
-                        class="btn">{{ __('signUpSubmit') }}</button>
+                <div class="button-container">
+                    <button type="submit">{{ __('signUpSubmit') }}</button>
                 </div>
             </form>
-            <div style="margin: 0 25px">
+            <div class="login-link">
                 <p>{{ __('signUpHaveAcc1') }}<a href="{{ route('login') }}">{{ __('signUpHaveAcc2') }}</a></p>
             </div>
 
@@ -169,8 +335,9 @@
                 });
             </script>
         </div>
-        <div class="banner">
+        <div class="image-container">
             <img src="/image/6333213.jpg" alt="Banner">
         </div>
     </div>
+
 @endsection

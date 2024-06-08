@@ -83,7 +83,10 @@ class AuthController extends Controller
 
         if (!$user) {
             return redirect()->route('register')->with('error', 'Registration failed. Please try again.');
+        } else {
+            \Log::info('User created successfully: ' . $user->id);
         }
+        Auth::login($user);
 
         return redirect()->route('home');
     }

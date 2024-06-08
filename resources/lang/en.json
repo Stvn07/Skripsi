@@ -25,7 +25,8 @@
     },
 
     "hello": "Hello,",
-    "confirmationMessage": "Do you want to return to the home page?",
+    "incomeConfirmationMessage": "Do you want to cancel adding income and return to the home page?",
+    "outcomeConfirmationMessage": "Do you want to cancel adding outflow and return to the home page?",
     "yes": "Yes",
     "no": "No",
     "finalBalance": "Final Balance",
@@ -65,9 +66,11 @@
     "errorIncomeNameEmpty": "Income Name Cannot Be Empty",
     "errorIncomeDateEmpty": "Income Date Cannot Be Empty",
     "errorIncomeAmountEmpty": "Income Amount Cannot Be Empty",
+    "errorIncomeCategoryEmpty": "Income Category Cannot Be Empty",
     "errorOutcomeNameEmpty": "Outflow Name Cannot Be Empty",
     "errorOutcomeDateEmpty": "Outflow Date Cannot Be Empty",
     "errorOutcomeAmountEmpty": "Outflow Amount Cannot Be Empty",
+    "errorOutcomeCategoryEmpty": "Outflow Category Cannot Be Empty",
 
     "signInTitle": "Sign In",
     "signInDesc": "To Get Back In Touch, Kindly Sign In Here",
