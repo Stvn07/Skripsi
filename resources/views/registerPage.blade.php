@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Register Page')
+@section('title', 'Register')
 @section('content')
     <style>
         body {
@@ -24,15 +24,16 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             margin: 20px;
+            padding: 0;
         }
 
         .form-container {
             flex: 1;
-            padding: 40px;
             background-color: #e0f5e9;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border: none;
         }
 
         .form-container h1 {

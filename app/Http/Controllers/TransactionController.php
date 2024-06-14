@@ -180,9 +180,9 @@ class TransactionController extends Controller
         if ($results->count() === 0) {
             if ($initialTransactionsCount === 0) {
                 if ($locale === 'id') {
-                    $errorMessage = "Belum ada data transaksi yang ditambahkan";
+                    $errorMessage = "Belum ada transaksi yang ditambahkan";
                 } else {
-                    $errorMessage = "No Transaction Data Added yet";
+                    $errorMessage = "No Transaction Added yet";
                 }
             } else {
                 if ($locale === 'id') {

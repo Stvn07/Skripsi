@@ -78,7 +78,7 @@
     "signInPassword": "Password",
     "signInSubmit": "Submit",
     "signInNoAcc": "Don't have an account? ",
-    "signInNoAcc2": "sign up",
+    "signInNoAcc2": "Sign Up",
 
     "signUpTitle": "Sign Up",
     "signUpDesc": "To Enjoy The Feature, Please Sign Up First",
@@ -89,7 +89,7 @@
     "signUpPhoneNumber": "Phone Number",
     "signUpSubmit": "Submit",
     "signUpHaveAcc1": "Already have account? ",
-    "signUpHaveAcc2": "sign in",
+    "signUpHaveAcc2": "Sign In",
 
     "addButton": "Add",
     "backButton": "Back",

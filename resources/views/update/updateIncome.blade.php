@@ -47,12 +47,41 @@
                         <span class="error-message" id="income_amount_empty"></span>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="filter-label">
+                        <label for="income_category">{{ __('incomeCategory') }}</label>
+                    </div>
 
-                <div class="buttons" style="margin-top: 50px;">
-                    <button type="submit" class="send">{{ __('updateButton') }}</button>
-                    <a href="{{ route('openIncomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
-                        class="btn btn-danger">{{ __('backButton') }}</a>
-                </div>
+                    <div class="filter-inputs">
+                        <select id="income-category" name="income_category" class="form-control"
+                            aria-label="{{ __('selectCategory') }}">
+                            <option value="" disabled {{ is_null($incomeData->income_category) ? 'selected' : '' }}>
+                                {{ __('selectCategory') }}</option>
+                            <option value="Gaji Tetap"
+                                {{ $incomeData->income_category == 'Gaji Tetap' ? 'selected' : '' }}>
+                                {{ __('incomeCategory1') }}</option>
+                            <option value="Pendapatan Pasif"
+                                {{ $incomeData->income_category == 'Pendapatan Pasif' ? 'selected' : '' }}>
+                                {{ __('incomeCategory2') }}</option>
+                            <option value="Pendapatan Penjualan"
+                                {{ $incomeData->income_category == 'Pendapatan Penjualan' ? 'selected' : '' }}>
+                                {{ __('incomeCategory3') }}</option>
+                            <option value="Pendapatan Bisnis"
+                                {{ $incomeData->income_category == 'Pendapatan Bisnis' ? 'selected' : '' }}>
+                                {{ __('incomeCategory4') }}</option>
+                            <option value="Freelance" {{ $incomeData->income_category == 'Freelance' ? 'selected' : '' }}>
+                                {{ __('incomeCategory5') }}</option>
+                            <option value="Bonus" {{ $incomeData->income_category == 'Bonus' ? 'selected' : '' }}>
+                                {{ __('incomeCategory6') }}</option>
+                        </select>
+                        <span class="error-message" id="income_category_empty"></span>
+                    </div>
+
+                    <div class="buttons" style="margin-top: 50px;">
+                        <button type="submit" class="send">{{ __('updateButton') }}</button>
+                        <a href="{{ route('openIncomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
+                            class="btn btn-danger">{{ __('backButton') }}</a>
+                    </div>
             </form>
         </div>
     </div>

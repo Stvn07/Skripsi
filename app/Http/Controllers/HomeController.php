@@ -679,6 +679,8 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         $locale = App::getLocale();
+        $startDate = Carbon::now()->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
         $statusOutcome = '';
         $totalBalanceAmount = TotalBalance::where('user_id', $userId)
             ->whereNull('first_balance_id')
@@ -695,10 +697,22 @@ class HomeController extends Controller
             $outcomeExpenses = Transaction::where('user_id', $userId)
                 ->whereNull('income_id')
                 ->sum('transaction_amount');
-            $remainingAmount = $totalBalanceAmount->total_balance_amount;
-            $percentage = ($outcomeExpenses / $remainingAmount) * 100;
+
+            $total_income_per_month = Transaction::where('user_id', $userId)
+                ->where('transaction_type', 'income')
+                ->whereBetween('transaction_date', [$startDate, $endDate])
+                ->sum('transaction_amount');
+
+            $total_outcome_per_month = Transaction::where('user_id', $userId)
+                ->where('transaction_type', 'outcome')
+                ->whereBetween('transaction_date', [$startDate, $endDate])
+                ->sum('transaction_amount');
+
+            // $remainingAmount = $totalBalanceAmount->total_balance_amount;
+            // $percentage = ($outcomeExpenses / $remainingAmount) * 100;
+            $percentage = ($total_outcome_per_month / $total_income_per_month) * 100;
             $lowExpenses = 30;
-            $middleExpenses = 70;
+            $middleExpenses = 65;
 
             if ($percentage < $lowExpenses) {
                 if ($locale === 'id') {

@@ -143,7 +143,8 @@ class BalanceController extends Controller
         $request->validate([
             'income_name' => 'nullable|string|max:255',
             'income_date' => 'nullable|date',
-            'income_amount' => 'nullable|numeric|max:999999999999'
+            'income_amount' => 'nullable|numeric|max:999999999999',
+            'income_category' => 'nullable|string|max:255'
         ]);
 
         $userId = Auth::id();
@@ -161,7 +162,8 @@ class BalanceController extends Controller
         $incomeData->update([
             'income_name' => $request->input('income_name', $incomeData->income_name),
             'income_date' => $request->input('income_date', $incomeData->income_date),
-            'income_amount' => $request->input('income_amount', $incomeData->income_amount)
+            'income_amount' => $request->input('income_amount', $incomeData->income_amount),
+            'income_category' => $request->input('income_category', $incomeData->income_category)
         ]);
 
         // Update Data Transaksi
@@ -243,6 +245,6 @@ class BalanceController extends Controller
                 'total_balance_amount' => DB::raw("total_balance_amount - $changeAmount")
             ]);
 
-        return redirect()->route('home');
+        return redirect()->route('openOutcomePage');
     }
 }

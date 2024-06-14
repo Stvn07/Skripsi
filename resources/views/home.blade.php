@@ -82,6 +82,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-top: -10px;
         }
 
         .box .status-bar div {
@@ -108,34 +109,29 @@
 
         .buttons {
             display: flex;
-            justify-content: center;
-            text-align: center;
             margin-bottom: 20px;
-            margin-right: 10px;
         }
 
         .buttons .button-boxleft {
-            flex-grow: 1;
             width: 50%;
-            margin-right: 10px;
-            margin-left: 30px;
             cursor: pointer;
             background-color: #008312;
             color: white;
             border: none;
             padding: 10px;
-            justify-content: center;
+            margin-left: 0;
+            margin-right: 15px;
         }
 
         .buttons .button-boxright {
-            flex-grow: 1;
             width: 50%;
-            margin-left: 15px;
             cursor: pointer;
             background-color: #008312;
             color: white;
             border: none;
             padding: 10px;
+            margin-left: 15px;
+            margin-right: 0;
         }
 
         .chart {
@@ -180,71 +176,7 @@
     </style>
 
     {{-- Bagian First Balance  --}}
-    @if (!$hasFirstBalance)
-        <div class="mb-2">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#firstBalanceModal">
-                {{ __('addFirstBalance') }}
-            </button>
 
-            <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}" method="POST">
-                            @csrf
-                            <div class="modal-body">
-                                <h2 style="text-align: center">{{ __('addFirstBalance') }}</h2>
-                                <div class="form-group">
-                                    <div class="filter-label">
-                                        <label for="first_balance_amount">{{ __('firstBalanceAmount') }}</label>
-                                        <span class="error-message" id="first_balance_amount_empty"></span>
-                                    </div>
-
-                                    <div class="filter-inputs">
-                                        <input type="number" id="first_balance_amount" name="first_balance_amount">
-                                    </div>
-                                </div>
-
-                                <div class="buttons" style="margin-top: 50px;">
-                                    <button type="submit" class="send">{{ __('addButton') }}</button>
-
-                                    <button type="button" id="cancelBtn" data-bs-dismiss="modal"
-                                        class="cancel">{{ __('backButton') }}</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-                document.getElementById("firstBalanceForm").addEventListener("submit", function(event) {
-                    var firstBalanceAmount = document.getElementById("first_balance_amount");
-                    var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
-                    var emptyCount = 0;
-                    var firstBalanceEmpty = @json(__('errorFirstBalanceEmpty'))
-
-                    if (firstBalanceAmount.value.trim() === "") {
-                        firstBalanceAmountEmpty.textContent = firstBalanceEmpty;
-                        firstBalanceAmountEmpty.style.display = "block";
-                        emptyCount++;
-                    } else {
-                        firstBalanceAmountEmpty.style.display = "none";
-                    }
-
-                    if (emptyCount > 0) {
-                        event.preventDefault();
-                    }
-                });
-
-                document.getElementById("cancelBtn").addEventListener("click", function() {
-                    document.getElementById("first_balance_amount").value = "";
-
-                    document.getElementById("first_balance_amount_empty").innerText = "";
-                });
-            </script>
-        </div>
-    @endif
 
     <!-- Home Content -->
     <div class="content">
@@ -252,12 +184,13 @@
             <div class="greeting">{{ __('hello') }} {{ Auth::user()->user_full_name }}!</div>
 
             <div class="user-info">
-                <a style="text-decoration: none; font-size: 10px" href="{{ url('locale/id') }}">ID</a>
-                <div class="mx-1" style="font-size: 10px">
+                <a style="text-decoration: none; font-size: 10px; margin-top:4px;" href="{{ url('locale/id') }}">ID</a>
+                <div class="mx-1 mt-1" style="font-size: 10px">
                     |
                 </div>
-                <a style="text-decoration: none; font-size: 10px" href="{{ url('locale/en') }}">EN</a>
-                &nbsp;|&nbsp;
+                <a style="text-decoration: none; font-size: 10px; margin-right: 20px; margin-top: 4px;"
+                    href="{{ url('locale/en') }}">EN</a>
+                &nbsp;
                 <span>{{ Auth::user()->user_full_name }}</span>
                 <a href="{{ route('profile', Auth::user()->id) }}">
                     <img src="/image/profile-picturelogo.jpg" alt="Profile Picture" style="width: 40px;">
@@ -268,24 +201,103 @@
             <div class="left">
                 <div class="box">
                     <div class="status-bar">
-                        <div>Budget: 1000</div>
-                        <div>Status:
-                            @if ($statusName === 'High Spending' || $statusName === 'Pengeluaran Tinggi')
-                                <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
-                                    {{ $statusName }}
-                                </span>
-                            @elseif ($statusName === 'Medium Spending' || $statusName === 'Pengeluaran Sedang')
-                                <span style="background-color: orange; color: white; padding: 5px; border-radius: 5px;">
-                                    {{ $statusName }}
-                                </span>
-                            @else
-                                <span style="background-color: green; color: white; padding: 5px; border-radius: 5px;">
-                                    {{ $statusName }}
-                                </span>
+                        <div>
+                            @if (!$hasFirstBalance)
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-primary btn_firstBalance" data-bs-toggle="modal"
+                                        data-bs-target="#firstBalanceModal">
+                                        {{ __('addFirstBalance') }}
+                                    </button>
+
+                                    <div class="modal fade modal-form" id="firstBalanceModal" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-md">
+                                            <div class="modal-content">
+                                                <form id="firstBalanceForm" action="{{ route('openFirstBalance.post') }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <h2 style="text-align: center">{{ __('addFirstBalance') }}</h2>
+                                                        <div class="form-group">
+                                                            <div class="filter-label">
+                                                                <label
+                                                                    for="first_balance_amount">{{ __('firstBalanceAmount') }}</label>
+                                                                <span class="error-message"
+                                                                    id="first_balance_amount_empty"></span>
+                                                            </div>
+
+                                                            <div class="filter-inputs">
+                                                                <input type="number" id="first_balance_amount"
+                                                                    name="first_balance_amount">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="buttons" style="margin-top: 50px;">
+                                                            <button type="submit"
+                                                                class="send">{{ __('addButton') }}</button>
+
+                                                            <button type="button" id="cancelBtn" data-bs-dismiss="modal"
+                                                                class="cancel">{{ __('backButton') }}</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        document.getElementById("firstBalanceForm").addEventListener("submit", function(event) {
+                                            var firstBalanceAmount = document.getElementById("first_balance_amount");
+                                            var firstBalanceAmountEmpty = document.getElementById("first_balance_amount_empty");
+                                            var emptyCount = 0;
+                                            var firstBalanceEmpty = @json(__('errorFirstBalanceEmpty'))
+
+                                            if (firstBalanceAmount.value.trim() === "") {
+                                                firstBalanceAmountEmpty.textContent = firstBalanceEmpty;
+                                                firstBalanceAmountEmpty.style.display = "block";
+                                                emptyCount++;
+                                            } else {
+                                                firstBalanceAmountEmpty.style.display = "none";
+                                                // document.getElementsByClassName(".box .status-bar").style.justify - content = "center";
+                                                var statusBars = document.getElementsByClassName("status-bar");
+                                                for (var i = 0; i < statusBars.length; i++) {
+                                                    statusBars[i].style.justifyContent = "center";
+                                                }
+                                            }
+
+                                            if (emptyCount > 0) {
+                                                event.preventDefault();
+                                            }
+                                        });
+
+                                        document.getElementById("cancelBtn").addEventListener("click", function() {
+                                            document.getElementById("first_balance_amount").value = "";
+
+                                            document.getElementById("first_balance_amount_empty").innerText = "";
+                                        });
+                                    </script>
+                                </div>
                             @endif
                         </div>
+                        <div class="status">
+                            Status:
+                            <div>
+                                @if ($statusName === 'High Spending' || $statusName === 'Pengeluaran Tinggi')
+                                    <span style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
+                                        {{ $statusName }}
+                                    </span>
+                                @elseif ($statusName === 'Medium Spending' || $statusName === 'Pengeluaran Sedang')
+                                    <span style="background-color: orange; color: white; padding: 5px; border-radius: 5px;">
+                                        {{ $statusName }}
+                                    </span>
+                                @else
+                                    <span style="background-color: green; color: white; padding: 5px; border-radius: 5px;">
+                                        {{ $statusName }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    <div>you can spend 500 more from your budget</div>
                 </div>
                 <div class="outer-box">
                     <!-- Total Income -->
@@ -317,7 +329,199 @@
                             {{ __('addIncome') }}
                         </button>
                     @endif
+
                     <!-- Add Income Function -->
+                    <div class="mb-2">
+                        <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <h2 style="text-align: center">{{ __('addIncome') }}</h2>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="income_name">{{ __('incomeName') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="text" id="income_name" name="income_name">
+                                                    <span class="error-message" id="income_name_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="income_date">{{ __('incomeDate') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="date" id="income_date" name="income_date"
+                                                        min="{{ date('Y-m-d') }}">
+                                                    <span class="error-message" id="income_date_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="income_amount">{{ __('incomeAmount') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="number" id="income_amount" name="income_amount">
+                                                    <span class="error-message" id="income_amount_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="income_category">{{ __('incomeCategory') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <select id="income-category" name="income_category"
+                                                        class="form-control" aria-label="{{ __('selectCategory') }}">
+                                                        <option value="" selected disabled>
+                                                            {{ __('selectCategory') }}</option>
+                                                        <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
+                                                        <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}
+                                                        </option>
+                                                        <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}
+                                                        </option>
+                                                        <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}
+                                                        </option>
+                                                        <option value="Freelance">{{ __('incomeCategory5') }}</option>
+                                                        <option value="Bonus">{{ __('incomeCategory6') }}</option>
+                                                    </select>
+                                                    <span class="error-message" id="income_category_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="buttons" style="margin-top: 50px;">
+                                                <button type="submit" class="send">{{ __('addButton') }}</button>
+                                                <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
+                                                    class="cancel">{{ __('backButton') }}</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal" id="incomeConfirmModal" tabindex="-1"
+                            aria-labelledby="incomeConfirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <h5 style="text-align: center">{{ __('incomeConfirmationMessage') }}</h5>
+                                        <div class="buttons mt-4">
+                                            <button type="button" id="incomeConfirmYes"
+                                                class="send">{{ __('yes') }}</button>
+                                            <button type="button" id="incomeConfirmNo" data-bs-toggle="modal"
+                                                data-bs-target="#incomeModal" class="cancel">{{ __('no') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function clearIncomeForm() {
+                                document.getElementById("income_name").value = "";
+                                document.getElementById("income_date").value = "";
+                                document.getElementById("income_amount").value = "";
+                                document.getElementById("income-category").selectedIndex = 0;
+
+                                document.getElementById("income_name_empty").textContent = "";
+                                document.getElementById("income_date_empty").textContent = "";
+                                document.getElementById("income_amount_empty").textContent = "";
+                                document.getElementById("income_category_empty").textContent = "";
+                            }
+
+                            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
+                                var incomeName = document.getElementById("income_name").value.trim();
+                                var incomeDate = document.getElementById("income_date").value.trim();
+                                var incomeAmount = document.getElementById("income_amount").value.trim();
+                                var incomeCategory = document.getElementById("income-category").value.trim();
+                                if (incomeName !== "" || incomeDate !== "" || incomeAmount !== "" || incomeCategory !== "") {
+                                    var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
+                                    incomeConfirmModal.show();
+                                } else {
+                                    clearIncomeForm();
+                                    var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
+                                    incomeModal.hide();
+                                }
+                            });
+
+                            document.getElementById("incomeConfirmYes").addEventListener("click", function() {
+                                console.log("Click Yes");
+                                clearIncomeForm();
+                                window.location.href = "{{ url('/') }}";
+                            });
+
+                            document.getElementById("incomeConfirmNo").addEventListener("click", function() {
+                                console.log("Click No");
+                                var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
+                                incomeConfirmModal.hide();
+                            });
+
+                            document.getElementById("incomeForm").addEventListener("submit", function(event) {
+                                var incomeName = document.getElementById("income_name");
+                                var incomeDate = document.getElementById("income_date");
+                                var incomeAmount = document.getElementById("income_amount");
+                                var incomeCategory = document.getElementById("income-category");
+                                var incomeNameEmpty = document.getElementById("income_name_empty");
+                                var incomeDateEmpty = document.getElementById("income_date_empty");
+                                var incomeAmountEmpty = document.getElementById("income_amount_empty");
+                                var incomeCategoryEmpty = document.getElementById("income_category_empty");
+                                var emptyCount = 0;
+                                var translations = {
+                                    nameEmpty: @json(__('errorIncomeNameEmpty')),
+                                    dateEmpty: @json(__('errorIncomeDateEmpty')),
+                                    amountEmpty: @json(__('errorIncomeAmountEmpty')),
+                                    categoryEmpty: @json(__('errorIncomeCategoryEmpty'))
+                                }
+
+                                if (incomeName.value.trim() === "") {
+                                    incomeNameEmpty.textContent = translations.nameEmpty;
+                                    incomeNameEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    incomeNameEmpty.style.display = "none";
+                                }
+
+                                if (incomeDate.value.trim() === "") {
+                                    incomeDateEmpty.textContent = translations.dateEmpty;
+                                    incomeDateEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    incomeDateEmpty.style.display = "none";
+                                }
+
+                                if (incomeAmount.value.trim() === "") {
+                                    incomeAmountEmpty.textContent = translations.amountEmpty;
+                                    incomeAmountEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    incomeAmountEmpty.style.display = "none";
+                                }
+
+                                if (incomeCategory.value.trim() === "") {
+                                    incomeCategoryEmpty.textContent = translations.categoryEmpty;
+                                    incomeCategoryEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    incomeCategoryEmpty.style.display = "none";
+                                }
+
+                                if (emptyCount > 0) {
+                                    event.preventDefault();
+                                }
+                            });
+                        </script>
+                    </div>
 
                     <!-- Add Outflow Button -->
                     @if (!$hasFirstBalance)
@@ -333,6 +537,208 @@
                     @endif
 
                     <!-- Add Outflow Function -->
+                    <div class="mb-2">
+                        <div class="modal modal-form" id="outcomeModal" tabindex="-1"
+                            aria-labelledby="outcomeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <form id="outcomeForm" action="{{ route('addOutcome.post') }}" method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <h2 style="text-align: center">{{ __('addOutcome') }}</h2>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="outcome_name">{{ __('outcomeName') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="text" id="outcome_name" name="outcome_name">
+                                                    <span class="error-message" id="outcome_name_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="outcome_date">{{ __('outcomeDate') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="date" id="outcome_date" name="outcome_date"
+                                                        min="{{ date('Y-m-d') }}">
+                                                    <span class="error-message" id="outcome_date_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="outcome_amount">{{ __('outcomeAmount') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <input type="number" id="outcome_amount" name="outcome_amount">
+                                                    <span class="error-message" id="outcome_amount_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="filter-label">
+                                                    <label for="outcome_category">{{ __('outcomeCategory') }}</label>
+                                                </div>
+
+                                                <div class="filter-inputs">
+                                                    <select id="outcome-category" name="outcome_category"
+                                                        class="form-control" aria-label="{{ __('selectCategory') }}">
+                                                        <option value="" selected disabled>
+                                                            {{ __('selectCategory') }}</option>
+                                                        <option value="Makanan dan Minuman">{{ __('outcomeCategory1') }}
+                                                        </option>
+                                                        <option value="Transportasi">{{ __('outcomeCategory2') }}</option>
+                                                        <option value="Hiburan">{{ __('outcomeCategory3') }}</option>
+                                                        <option value="Kesehatan">{{ __('outcomeCategory4') }}</option>
+                                                        <option value="Tempat Tinggal">{{ __('outcomeCategory5') }}
+                                                        </option>
+                                                        <option value="Pendidikan">{{ __('outcomeCategory6') }}</option>
+                                                        <option value="Belanja Pribadi">{{ __('outcomeCategory7') }}
+                                                        </option>
+                                                        <option value="Tagihan dan Pembayaran Rutin">
+                                                            {{ __('outcomeCategory8') }}
+                                                        </option>
+                                                        <option value="Liburan dan Wisata">{{ __('outcomeCategory9') }}
+                                                        </option>
+                                                        <option value="Tabungan dan Investasi">
+                                                            {{ __('outcomeCategory10') }}</option>
+                                                    </select>
+                                                    <span class="error-message" id="outcome_category_empty"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="buttons" style="margin-top: 50px;">
+                                                <button type="submit" class="send">{{ __('addButton') }}</button>
+                                                <button type="button" id="outcomeCancelBtn" data-bs-dismiss="modal"
+                                                    class="cancel">{{ __('backButton') }}</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal" id="outcomeConfirmModal" tabindex="-1"
+                            aria-labelledby="outcomeConfirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <h5 style="text-align: center">{{ __('outcomeConfirmationMessage') }}</h5>
+                                        <div class="buttons mt-4">
+                                            <button type="button" id="outcomeConfirmYes"
+                                                class="send">{{ __('yes') }}</button>
+                                            <button type="button" id="outcomeConfirmNo" data-bs-toggle="modal"
+                                                data-bs-target="#outcomeModal"
+                                                class="cancel">{{ __('no') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function clearOutcomeForm() {
+                                document.getElementById("outcome_name").value = "";
+                                document.getElementById("outcome_date").value = "";
+                                document.getElementById("outcome_amount").value = "";
+                                document.getElementById("outcome-category").selectedIndex = 0;
+
+                                document.getElementById("outcome_name_empty").textContent = "";
+                                document.getElementById("outcome_date_empty").textContent = "";
+                                document.getElementById("outcome_amount_empty").textContent = "";
+                                document.getElementById("outcome_category_empty").textContent = "";
+                            }
+
+                            document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
+                                var outcomeName = document.getElementById("outcome_name").value.trim();
+                                var outcomeDate = document.getElementById("outcome_date").value.trim();
+                                var outcomeAmount = document.getElementById("outcome_amount").value.trim();
+                                var outcomeCategory = document.getElementById("outcome-category").value.trim();
+
+                                if (outcomeName !== "" || outcomeDate !== "" || outcomeAmount !== "" || outcomeCategory !== "") {
+                                    var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
+                                    outcomeConfirmModal.show();
+                                } else {
+                                    clearOutcomeForm();
+                                    var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
+                                    outcomeModal.hide();
+                                }
+                            });
+
+                            document.getElementById("outcomeConfirmYes").addEventListener("click", function() {
+                                console.log("Click Yes");
+                                clearOutcomeForm();
+                                window.location.href = "{{ url('/') }}";
+                            });
+
+                            document.getElementById("outcomeConfirmNo").addEventListener("click", function() {
+                                console.log("Click No");
+                                var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
+                                outcomeConfirmModal.hide();
+                            });
+
+                            document.getElementById("outcomeForm").addEventListener("submit", function(event) {
+                                var outcomeName = document.getElementById("outcome_name");
+                                var outcomeDate = document.getElementById("outcome_date");
+                                var outcomeAmount = document.getElementById("outcome_amount");
+                                var outcomeCategory = document.getElementById("outcome-category");
+                                var outcomeNameEmpty = document.getElementById("outcome_name_empty");
+                                var outcomeDateEmpty = document.getElementById("outcome_date_empty");
+                                var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
+                                var outcomeCategoryEmpty = document.getElementById("outcome_category_empty");
+                                var emptyCount = 0;
+                                var translations = {
+                                    nameEmpty: @json(__('errorOutcomeNameEmpty')),
+                                    dateEmpty: @json(__('errorOutcomeDateEmpty')),
+                                    amountEmpty: @json(__('errorOutcomeAmountEmpty')),
+                                    categoryEmpty: @json(__('errorOutcomeCategoryEmpty'))
+                                }
+
+                                if (outcomeName.value.trim() === "") {
+                                    outcomeNameEmpty.textContent = translations.nameEmpty;
+                                    outcomeNameEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    outcomeNameEmpty.style.display = "none";
+                                }
+
+                                if (outcomeDate.value.trim() === "") {
+                                    outcomeDateEmpty.textContent = translations.dateEmpty;
+                                    outcomeDateEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    outcomeDateEmpty.style.display = "none";
+                                }
+
+                                if (outcomeAmount.value.trim() === "") {
+                                    outcomeAmountEmpty.textContent = translations.amountEmpty;
+                                    outcomeAmountEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    outcomeAmountEmpty.style.display = "none";
+                                }
+
+                                if (outcomeCategory.value.trim() === "") {
+                                    outcomeCategoryEmpty.textContent = translations.categoryEmpty;
+                                    outcomeCategoryEmpty.style.display = "block";
+                                    emptyCount++;
+                                } else {
+                                    outcomeCategoryEmpty.style.display = "none";
+                                }
+
+                                if (emptyCount > 0) {
+                                    event.preventDefault();
+                                }
+                            });
+                        </script>
+                    </div>
+
                 </div>
                 <div class="box">
                     <div class="chart">
@@ -345,6 +751,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="right">
                 <div class="box total-balance">
                     <div>
@@ -401,388 +808,6 @@
         </div>
     </div>
 
-    {{-- Bagian Tambah Income --}}
-    <div class="mb-2">
-        <div class="modal modal-form" id="incomeModal" tabindex="-1" aria-labelledby="incomeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="incomeForm" action="{{ route('addIncome.post') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <h2 style="text-align: center">{{ __('addIncome') }}</h2>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_name">{{ __('incomeName') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="text" id="income_name" name="income_name">
-                                    <span class="error-message" id="income_name_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_date">{{ __('incomeDate') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="date" id="income_date" name="income_date"
-                                        min="{{ date('Y-m-d') }}">
-                                    <span class="error-message" id="income_date_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_amount">{{ __('incomeAmount') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="number" id="income_amount" name="income_amount">
-                                    <span class="error-message" id="income_amount_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="income_category">{{ __('incomeCategory') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <select id="income-category" name="income_category" class="form-control"
-                                        aria-label="{{ __('selectCategory') }}">
-                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
-                                        <option value="Gaji Tetap">{{ __('incomeCategory1') }}</option>
-                                        <option value="Pendapatan Pasif">{{ __('incomeCategory2') }}</option>
-                                        <option value="Pendapatan Penjualan">{{ __('incomeCategory3') }}</option>
-                                        <option value="Pendapatan Bisnis">{{ __('incomeCategory4') }}</option>
-                                        <option value="Freelance">{{ __('incomeCategory5') }}</option>
-                                        <option value="Bonus">{{ __('incomeCategory6') }}</option>
-                                    </select>
-                                    <span class="error-message" id="income_category_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">{{ __('addButton') }}</button>
-                                <button type="button" id="incomeCancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">{{ __('backButton') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="incomeConfirmModal" tabindex="-1" aria-labelledby="incomeConfirmModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h5 style="text-align: center">{{ __('incomeConfirmationMessage') }}</h5>
-                        <div class="buttons mt-4">
-                            <button type="button" id="incomeConfirmYes" class="send">{{ __('yes') }}</button>
-                            <button type="button" id="incomeConfirmNo" data-bs-toggle="modal"
-                                data-bs-target="#incomeModal" class="cancel">{{ __('no') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function clearIncomeForm() {
-                document.getElementById("income_name").value = "";
-                document.getElementById("income_date").value = "";
-                document.getElementById("income_amount").value = "";
-                document.getElementById("income-category").selectedIndex = 0;
-
-                document.getElementById("income_name_empty").textContent = "";
-                document.getElementById("income_date_empty").textContent = "";
-                document.getElementById("income_amount_empty").textContent = "";
-                document.getElementById("income_category_empty").textContent = "";
-            }
-
-            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
-                var incomeName = document.getElementById("income_name").value.trim();
-                var incomeDate = document.getElementById("income_date").value.trim();
-                var incomeAmount = document.getElementById("income_amount").value.trim();
-                var incomeCategory = document.getElementById("income-category").value.trim();
-                if (incomeName !== "" || incomeDate !== "" || incomeAmount !== "" || incomeCategory !== "") {
-                    var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
-                    incomeConfirmModal.show();
-                } else {
-                    clearIncomeForm();
-                    var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
-                    incomeModal.hide();
-                }
-            });
-
-            document.getElementById("incomeConfirmYes").addEventListener("click", function() {
-                console.log("Click Yes");
-                clearIncomeForm();
-                window.location.href = "{{ url('/') }}";
-            });
-
-            document.getElementById("incomeConfirmNo").addEventListener("click", function() {
-                console.log("Click No");
-                var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
-                incomeConfirmModal.hide();
-            });
-
-            document.getElementById("incomeForm").addEventListener("submit", function(event) {
-                var incomeName = document.getElementById("income_name");
-                var incomeDate = document.getElementById("income_date");
-                var incomeAmount = document.getElementById("income_amount");
-                var incomeCategory = document.getElementById("income-category");
-                var incomeNameEmpty = document.getElementById("income_name_empty");
-                var incomeDateEmpty = document.getElementById("income_date_empty");
-                var incomeAmountEmpty = document.getElementById("income_amount_empty");
-                var incomeCategoryEmpty = document.getElementById("income_category_empty");
-                var emptyCount = 0;
-                var translations = {
-                    nameEmpty: @json(__('errorIncomeNameEmpty')),
-                    dateEmpty: @json(__('errorIncomeDateEmpty')),
-                    amountEmpty: @json(__('errorIncomeAmountEmpty')),
-                    categoryEmpty: @json(__('errorIncomeCategoryEmpty'))
-                }
-
-                if (incomeName.value.trim() === "") {
-                    incomeNameEmpty.textContent = translations.nameEmpty;
-                    incomeNameEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeNameEmpty.style.display = "none";
-                }
-
-                if (incomeDate.value.trim() === "") {
-                    incomeDateEmpty.textContent = translations.dateEmpty;
-                    incomeDateEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeDateEmpty.style.display = "none";
-                }
-
-                if (incomeAmount.value.trim() === "") {
-                    incomeAmountEmpty.textContent = translations.amountEmpty;
-                    incomeAmountEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeAmountEmpty.style.display = "none";
-                }
-
-                if (incomeCategory.value.trim() === "") {
-                    incomeCategoryEmpty.textContent = translations.categoryEmpty;
-                    incomeCategoryEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    incomeCategoryEmpty.style.display = "none";
-                }
-
-                if (emptyCount > 0) {
-                    event.preventDefault();
-                }
-            });
-        </script>
-    </div>
-
-    {{-- Bagian Tambah Outcome --}}
-    <div class="mb-2">
-        <div class="modal modal-form" id="outcomeModal" tabindex="-1" aria-labelledby="outcomeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="outcomeForm" action="{{ route('addOutcome.post') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <h2 style="text-align: center">{{ __('addOutcome') }}</h2>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="outcome_name">{{ __('outcomeName') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="text" id="outcome_name" name="outcome_name">
-                                    <span class="error-message" id="outcome_name_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="outcome_date">{{ __('outcomeDate') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="date" id="outcome_date" name="outcome_date"
-                                        min="{{ date('Y-m-d') }}">
-                                    <span class="error-message" id="outcome_date_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="outcome_amount">{{ __('outcomeAmount') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <input type="number" id="outcome_amount" name="outcome_amount">
-                                    <span class="error-message" id="outcome_amount_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="filter-label">
-                                    <label for="outcome_category">{{ __('outcomeCategory') }}</label>
-                                </div>
-
-                                <div class="filter-inputs">
-                                    <select id="outcome-category" name="outcome_category" class="form-control"
-                                        aria-label="{{ __('selectCategory') }}">
-                                        <option value="" selected disabled>{{ __('selectCategory') }}</option>
-                                        <option value="Makanan dan Minuman">{{ __('outcomeCategory1') }}</option>
-                                        <option value="Transportasi">{{ __('outcomeCategory2') }}</option>
-                                        <option value="Hiburan">{{ __('outcomeCategory3') }}</option>
-                                        <option value="Kesehatan">{{ __('outcomeCategory4') }}</option>
-                                        <option value="Tempat Tinggal">{{ __('outcomeCategory5') }}</option>
-                                        <option value="Pendidikan">{{ __('outcomeCategory6') }}</option>
-                                        <option value="Belanja Pribadi">{{ __('outcomeCategory7') }}</option>
-                                        <option value="Tagihan dan Pembayaran Rutin">{{ __('outcomeCategory8') }}
-                                        </option>
-                                        <option value="Liburan dan Wisata">{{ __('outcomeCategory9') }}</option>
-                                        <option value="Tabungan dan Investasi">{{ __('outcomeCategory10') }}</option>
-                                    </select>
-                                    <span class="error-message" id="outcome_category_empty"></span>
-                                </div>
-                            </div>
-
-                            <div class="buttons" style="margin-top: 50px;">
-                                <button type="submit" class="send">{{ __('addButton') }}</button>
-                                <button type="button" id="outcomeCancelBtn" data-bs-dismiss="modal"
-                                    class="cancel">{{ __('backButton') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="outcomeConfirmModal" tabindex="-1" aria-labelledby="outcomeConfirmModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h5 style="text-align: center">{{ __('outcomeConfirmationMessage') }}</h5>
-                        <div class="buttons mt-4">
-                            <button type="button" id="outcomeConfirmYes" class="send">{{ __('yes') }}</button>
-                            <button type="button" id="outcomeConfirmNo" data-bs-toggle="modal"
-                                data-bs-target="#outcomeModal" class="cancel">{{ __('no') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function clearOutcomeForm() {
-                document.getElementById("outcome_name").value = "";
-                document.getElementById("outcome_date").value = "";
-                document.getElementById("outcome_amount").value = "";
-                document.getElementById("outcome-category").selectedIndex = 0;
-
-                document.getElementById("outcome_name_empty").textContent = "";
-                document.getElementById("outcome_date_empty").textContent = "";
-                document.getElementById("outcome_amount_empty").textContent = "";
-                document.getElementById("outcome_category_empty").textContent = "";
-            }
-
-            document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
-                var outcomeName = document.getElementById("outcome_name").value.trim();
-                var outcomeDate = document.getElementById("outcome_date").value.trim();
-                var outcomeAmount = document.getElementById("outcome_amount").value.trim();
-                var outcomeCategory = document.getElementById("outcome-category").value.trim();
-
-                if (outcomeName !== "" || outcomeDate !== "" || outcomeAmount !== "" || outcomeCategory !== "") {
-                    var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
-                    outcomeConfirmModal.show();
-                } else {
-                    clearOutcomeForm();
-                    var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
-                    outcomeModal.hide();
-                }
-            });
-
-            document.getElementById("outcomeConfirmYes").addEventListener("click", function() {
-                console.log("Click Yes");
-                clearOutcomeForm();
-                window.location.href = "{{ url('/') }}";
-            });
-
-            document.getElementById("outcomeConfirmNo").addEventListener("click", function() {
-                console.log("Click No");
-                var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
-                outcomeConfirmModal.hide();
-            });
-
-            document.getElementById("outcomeForm").addEventListener("submit", function(event) {
-                var outcomeName = document.getElementById("outcome_name");
-                var outcomeDate = document.getElementById("outcome_date");
-                var outcomeAmount = document.getElementById("outcome_amount");
-                var outcomeCategory = document.getElementById("outcome-category");
-                var outcomeNameEmpty = document.getElementById("outcome_name_empty");
-                var outcomeDateEmpty = document.getElementById("outcome_date_empty");
-                var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
-                var outcomeCategoryEmpty = document.getElementById("outcome_category_empty");
-                var emptyCount = 0;
-                var translations = {
-                    nameEmpty: @json(__('errorOutcomeNameEmpty')),
-                    dateEmpty: @json(__('errorOutcomeDateEmpty')),
-                    amountEmpty: @json(__('errorOutcomeAmountEmpty')),
-                    categoryEmpty: @json(__('errorOutcomeCategoryEmpty'))
-                }
-
-                if (outcomeName.value.trim() === "") {
-                    outcomeNameEmpty.textContent = translations.nameEmpty;
-                    outcomeNameEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    outcomeNameEmpty.style.display = "none";
-                }
-
-                if (outcomeDate.value.trim() === "") {
-                    outcomeDateEmpty.textContent = translations.dateEmpty;
-                    outcomeDateEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    outcomeDateEmpty.style.display = "none";
-                }
-
-                if (outcomeAmount.value.trim() === "") {
-                    outcomeAmountEmpty.textContent = translations.amountEmpty;
-                    outcomeAmountEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    outcomeAmountEmpty.style.display = "none";
-                }
-
-                if (outcomeCategory.value.trim() === "") {
-                    outcomeCategoryEmpty.textContent = translations.categoryEmpty;
-                    outcomeCategoryEmpty.style.display = "block";
-                    emptyCount++;
-                } else {
-                    outcomeCategoryEmpty.style.display = "none";
-                }
-
-                if (emptyCount > 0) {
-                    event.preventDefault();
-                }
-            });
-        </script>
-    </div>
-
     <script>
         function translateDays(labels) {
             return labels.map(label => {
@@ -795,7 +820,7 @@
         }
     </script>
 
-    {{-- Mau Nunjukkin Diagram Pendapatan --}}
+    {{-- Show Income Chart --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctxIncome = document.getElementById('incomeChart').getContext('2d');
@@ -866,7 +891,7 @@
         });
     </script>
 
-    {{-- Mau Nunjukkin Diagram Pengeluaran --}}
+    {{-- Show Outflow Chart --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctxOutcome = document.getElementById('outcomeChart').getContext('2d');

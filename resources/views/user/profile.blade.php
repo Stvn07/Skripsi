@@ -1,18 +1,41 @@
 @extends('layout')
 @section('content')
     <style>
+        body {
+            background-color: #f6f8ef;
+        }
+
         .main {
             flex-grow: 1;
             padding: 20px;
         }
 
         .header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #782ec7 0%, #039018 100%);
             padding: 20px;
             color: white;
-            text-align: center;
+            /* text-align: center; */
             border-radius: 10px;
             margin-bottom: 20px;
+            display: flex;
+            width: 100%;
+        }
+
+        .left {
+            width: 28%;
+            margin-top: 10px;
+        }
+
+        .left a {
+            color: white;
+        }
+
+        .middle {
+            width: 60%;
+        }
+
+        .profile-container {
+            border: none;
         }
 
         .header img {
@@ -26,23 +49,14 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin: 10px 0;
             width: 100%;
+        }
+
+        .card h2 {
             text-align: center;
         }
 
-        .form-group {
+        .info-profile {
             margin: 15px 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
         }
 
         .button {
@@ -60,55 +74,43 @@
         }
     </style>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <div class="profile-container">
-        <div class="text-center mb-4">
-            <h2>{{ __('userProfile') }}</h2>
-        </div>
-        <hr>
-        <div>
-            <h4>{{ __('informationProfile') }}</h4>
-            <div>
-                <p><strong>{{ __('nameProfile') }}</strong> {{ $userData->user_full_name }}</p>
-                <p><strong>{{ __('emailProfile') }}</strong> {{ $userData->user_email }}</p>
-                <p><strong>{{ __('addressProfile') }}</strong> {{ $userData->user_address }}</p>
-                <p><strong>{{ __('phoneNumberProfile') }}</strong> {{ $userData->user_phone_number }}</p>
-            </div>
-        </div>
-        <hr>
-        <!-- Tombol untuk mengupdate profil -->
-        <div class="text-center mt-4">
-            <a href="{{ route('updateProfile', Auth::id()) }}" class="btn btn-primary">{{ __('updateProfile') }}</a>
-        </div>
-        <div class="text-center mt-2">
-            <a href="{{ route('home') }}" class="btn btn-primary">{{ __('backButton') }}</a>
-        </div>
-        <div class="text-center mt-2">
-            <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
-        </div>
+        <!-- <div class="text-center mt-2">
+                <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
+            </div> -->
 
         <div class="main">
             <div class="header">
-                <h1>Profile Page</h1>
-                <img src="profile-picture.png" alt="Profile Picture" width="100">
+                <div class="left">
+                    <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i>
+                        {{ __('backButton') }}</a>
+                </div>
+
+                <div class="middle">
+                    <h1>{{ __('userProfile') }}</h1>
+                </div>
             </div>
             <div class="card">
-                <h2>Edit Profile</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" value="Steven Tester 4">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="steven@tester.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password">
-                    </div>
-                    <button type="submit" class="button">Save Changes</button>
-                </form>
+                <div class="info-profile">
+                    <strong>{{ __('nameProfile') }}</strong>
+                    <input type="text" class="form-control mt-2 mb-3" id="user_full_name" name="user_full_name"
+                        value="{{ $userData->user_full_name ?? '' }}" disabled>
+                    <strong>{{ __('emailProfile') }}</strong>
+                    <input type="email" class="form-control mt-2 mb-3" id="user_email" name="user_email"
+                        value="{{ $userData->user_email ?? '' }}" disabled>
+                    <strong>{{ __('addressProfile') }}</strong>
+                    <input type="text" class="form-control mt-2 mb-3" id="user_address" name="user_address"
+                        value="{{ $userData->user_address ?? '' }}" disabled>
+                    <strong>{{ __('phoneNumberProfile') }}</strong>
+                    <input type="text" class="form-control mt-2" id="user_phone_number" name="user_phone_number"
+                        value="{{ $userData->user_phone_number ?? '' }}" disabled>
+                </div>
+
+                <div class="text-center mt-3 mx-4">
+                    <a href="{{ route('updateProfile', Auth::id()) }}" class="button">{{ __('updateProfile') }}</a>
+                </div>
             </div>
         </div>
     </div>
