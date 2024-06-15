@@ -202,7 +202,8 @@ class BalanceController extends Controller
         $request->validate([
             'outcome_name' => 'nullable|string|max:255',
             'outcome_date' => 'nullable|date',
-            'outcome_amount' => 'nullable|numeric|max:999999999999'
+            'outcome_amount' => 'nullable|numeric|max:999999999999',
+            'outcome_category' => 'nullable|string|max:255'
         ]);
 
         $userId = Auth::id();
@@ -221,7 +222,8 @@ class BalanceController extends Controller
         $outcomeData->update([
             'outcome_name' => $request->input('outcome_name', $outcomeData->outcome_name),
             'outcome_date' => $request->input('outcome_date', $outcomeData->outcome_date),
-            'outcome_amount' => $request->input('outcome_amount', $outcomeData->outcome_amount)
+            'outcome_amount' => $request->input('outcome_amount', $outcomeData->outcome_amount),
+            'outcome_category' => $request->input('outcome_category', $outcomeData->outcome_category)
         ]);
 
         // Update Data Transaksi

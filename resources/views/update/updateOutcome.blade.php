@@ -40,11 +40,128 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <div class="filter-label">
+                    <label for="outcome_category">{{ __('outcomeCategory') }}</label>
+                </div>
+
+                <div class="filter-inputs">
+                    <select id="outcome-category" name="outcome_category" class="form-control"
+                        aria-label="{{ __('selectCategory') }}">
+                        <option value="" disabled {{ is_null($outcomeData->outcome_category) ? 'selected' : '' }}>
+                            {{ __('selectCategory') }}</option>
+                        <option value="Makanan dan Minuman"
+                            {{ $outcomeData->outcome_category == 'Makanan dan Minuman' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory1') }}
+                        </option>
+                        <option value="Transportasi"
+                            {{ $outcomeData->outcome_category == 'Transportasi' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory2') }}</option>
+                        <option value="Hiburan" {{ $outcomeData->outcome_category == 'Hiburan' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory3') }}</option>
+                        <option value="Kesehatan" {{ $outcomeData->outcome_category == 'Kesehatan' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory4') }}</option>
+                        <option value="Tempat Tinggal"
+                            {{ $outcomeData->outcome_category == 'Tempat Tinggal' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory5') }}
+                        </option>
+                        <option value="Pendidikan" {{ $outcomeData->outcome_category == 'Pendidikan' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory6') }}</option>
+                        <option value="Belanja Pribadi"
+                            {{ $outcomeData->outcome_category == 'Belanja Pribadi' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory7') }}
+                        </option>
+                        <option value="Tagihan dan Pembayaran Rutin"
+                            {{ $outcomeData->outcome_category == 'Tagihan dan Pembayaran Rutin' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory8') }}
+                        </option>
+                        <option value="Liburan dan Wisata"
+                            {{ $outcomeData->outcome_category == 'Liburan dan Wisata' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory9') }}
+                        </option>
+                        <option value="Tabungan dan Investasi"
+                            {{ $outcomeData->outcome_category == 'Tabungan dan Investasi' ? 'selected' : '' }}>
+                            {{ __('outcomeCategory10') }}</option>
+                    </select>
+                    <span class="error-message" id="income_category_empty"></span>
+                </div>
+            </div>
+
             <div class="buttons" style="margin-top: 50px;">
-                <button type="submit" class="send">{{ __('updateButton') }}</button>
+                <button id="updateBtn" type="submit" class="send">{{ __('updateButton') }}</button>
                 <a href="{{ route('openOutcomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
                     class="btn btn-danger">{{ __('backButton') }}</a>
             </div>
         </form>
+
+        <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 style="text-align: center">{{ __('updateOutcomeConfirmationMessage') }}</h5>
+                        <div class="buttons mt-4">
+                            <button type="button" id="cancelConfirmYes" class="send">{{ __('yes') }}</button>
+                            <button type="button" id="cancelConfirmNo" class="cancel"
+                                data-bs-dismiss="modal">{{ __('no') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="noChangesModal" tabindex="-1" aria-labelledby="noChangesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 style="text-align: center">{{ __('noChangesMessage') }}</h5>
+                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
+                            <button type="button" class="send" data-bs-dismiss="modal">{{ __('close') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('updateOutcomeForm');
+                const cancelBtn = document.getElementById('cancelBtn');
+                const updateBtn = document.getElementById('updateBtn');
+                const confirmCancelModal = new bootstrap.Modal(document.getElementById('confirmCancelModal'));
+                const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
+                let isFormChanged = false;
+
+                // Detect changes in the form
+                form.addEventListener('input', function() {
+                    isFormChanged = true;
+                });
+
+                // Show confirmation modal if form is changed
+                cancelBtn.addEventListener('click', function(event) {
+                    if (isFormChanged) {
+                        event.preventDefault();
+                        confirmCancelModal.show();
+                    } else {
+                        window.location.href = "{{ route('openOutcomePage') }}";
+                    }
+                });
+
+                // Handle confirmation modal buttons
+                document.getElementById('cancelConfirmYes').addEventListener('click', function() {
+                    window.location.href = "{{ route('openOutcomePage') }}";
+                });
+
+                document.getElementById('cancelConfirmNo').addEventListener('click', function() {
+                    confirmCancelModal.hide();
+                });
+                updateBtn.addEventListener('click', function(event) {
+                    if (!isFormChanged) {
+                        event.preventDefault();
+                        noChangesModal.show();
+                    }
+                });
+            });
+        </script>
     </div>
 @endsection

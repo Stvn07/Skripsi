@@ -14,7 +14,6 @@
             background: linear-gradient(135deg, #782ec7 0%, #039018 100%);
             padding: 20px;
             color: white;
-            /* text-align: center; */
             border-radius: 10px;
             margin-bottom: 20px;
             display: flex;
@@ -22,7 +21,7 @@
         }
 
         .left {
-            width: 28%;
+            width: 10%;
             margin-top: 10px;
         }
 
@@ -31,7 +30,9 @@
         }
 
         .middle {
-            width: 60%;
+            width: 80%;
+            text-align: center;
+            margin: 0;
         }
 
         .profile-container {
@@ -78,14 +79,15 @@
 
     <div class="profile-container">
         <!-- <div class="text-center mt-2">
-                <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
-            </div> -->
+                                                        <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
+                                                    </div> -->
 
         <div class="main">
             <div class="header">
                 <div class="left">
                     <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i>
-                        {{ __('backButton') }}</a>
+                    </a>
+                    <!-- {{ __('backButton') }} -->
                 </div>
 
                 <div class="middle">

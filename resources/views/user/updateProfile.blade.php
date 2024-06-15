@@ -22,7 +22,7 @@
         }
 
         .left {
-            width: 28%;
+            width: 10%;
             margin-top: 10px;
         }
 
@@ -31,7 +31,9 @@
         }
 
         .middle {
-            width: 60%;
+            width: 80%;
+            text-align: center;
+            margin: 0;
         }
 
         .profile-container {
@@ -64,6 +66,7 @@
             background-color: #28a745;
             cursor: pointer;
             border: none;
+            margin-top: 10px;
         }
 
         .button:hover {
@@ -77,8 +80,7 @@
         <div class="main">
             <div class="header">
                 <div class="left">
-                    <a href="{{ route('profile', Auth::id()) }}"><i class="fas fa-arrow-left"></i>
-                        {{ __('backButton') }}</a>
+                    <a id="cancelBtn" href="{{ route('profile', Auth::id()) }}"><i class="fas fa-arrow-left"></i></a>
                 </div>
 
                 <div class="middle">
@@ -87,7 +89,7 @@
             </div>
             <div class="card">
                 <div class="info-profile">
-                    <form action="/profile/update/{{ $userData->id }}" method="POST">
+                    <form id="updateProfileForm" action="/profile/update/{{ $userData->id }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <strong><label for="user_full_name"
@@ -124,9 +126,82 @@
                             @enderror
                         </div>
                         <div class="text-center mt-3 mx-4">
-                            <button type="submit" class="button">{{ __('updateButton') }}</button>
+                            <button id="updateBtn" type="submit" class="button">{{ __('updateButton') }}</button>
                         </div>
                     </form>
+
+                    <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h5 style="text-align: center">{{ __('updateProfileConfirmationMessage') }}</h5>
+                                    <div class="buttons mt-4">
+                                        <button type="button" id="cancelConfirmYes"
+                                            class="send">{{ __('yes') }}</button>
+                                        <button type="button" id="cancelConfirmNo" class="cancel"
+                                            data-bs-dismiss="modal">{{ __('no') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="noChangesModal" tabindex="-1" aria-labelledby="noChangesModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h5 style="text-align: center">{{ __('profileNoChangesMessage') }}</h5>
+                                    <div style="justify-content: center; align-content: center" class="buttons mt-4">
+                                        <button type="button" class="send"
+                                            data-bs-dismiss="modal">{{ __('close') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const form = document.getElementById('updateProfileForm');
+                            const cancelBtn = document.getElementById('cancelBtn');
+                            const updateBtn = document.getElementById('updateBtn');
+                            const confirmCancelModal = new bootstrap.Modal(document.getElementById('confirmCancelModal'));
+                            const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
+                            let isFormChanged = false;
+
+                            // Detect changes in the form
+                            form.addEventListener('input', function() {
+                                isFormChanged = true;
+                            });
+
+                            // Show confirmation modal if form is changed
+                            cancelBtn.addEventListener('click', function(event) {
+                                if (isFormChanged) {
+                                    event.preventDefault();
+                                    confirmCancelModal.show();
+                                } else {
+                                    window.location.href = @json(route('profile', Auth::id()));
+                                }
+                            });
+
+                            // Handle confirmation modal buttons
+                            document.getElementById('cancelConfirmYes').addEventListener('click', function() {
+                                window.location.href = @json(route('profile', Auth::id()));
+                            });
+
+                            document.getElementById('cancelConfirmNo').addEventListener('click', function() {
+                                confirmCancelModal.hide();
+                            });
+                            updateBtn.addEventListener('click', function(event) {
+                                if (!isFormChanged) {
+                                    event.preventDefault();
+                                    noChangesModal.show();
+                                }
+                            });
+                        });
+                    </script>
                 </div>
 
 
@@ -134,11 +209,11 @@
         </div>
 
         <!-- <div class="text-center mb-3">
-                                    <button type="submit" class="btn btn-primary">{{ __('updateButton') }}</button>
-                                </div>
-                                <div class="text-center mb-3">
-                                    <a href="{{ route('profile', Auth::id()) }}" class="btn btn-primary">{{ __('backButton') }}</a>
-                                </div> -->
+                                                                                            <button type="submit" class="btn btn-primary">{{ __('updateButton') }}</button>
+                                                                                        </div>
+                                                                                        <div class="text-center mb-3">
+                                                                                            <a href="{{ route('profile', Auth::id()) }}" class="btn btn-primary">{{ __('backButton') }}</a>
+                                                                                        </div> -->
 
     </div>
 @endsection

@@ -47,9 +47,10 @@
             background-color: white;
             padding: 20px;
             margin-bottom: 20px;
-            border: 1px solid black;
+            border: none !important;
             border-radius: 5px;
             text-align: center;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
         }
 
         .box-left {
@@ -58,7 +59,8 @@
             padding: 20px;
             margin-bottom: 10px;
             margin-right: 15px;
-            border: 1px solid black;
+            border: none !important;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             text-align: center;
         }
@@ -69,7 +71,8 @@
             padding: 20px;
             margin-bottom: 10px;
             margin-left: 15px;
-            border: 1px solid black;
+            border: none !important;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             text-align: center;
         }
@@ -174,9 +177,6 @@
             margin-bottom: 10px;
         }
     </style>
-
-    {{-- Bagian First Balance  --}}
-
 
     <!-- Home Content -->
     <div class="content">

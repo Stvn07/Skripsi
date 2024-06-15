@@ -644,9 +644,9 @@ class HomeController extends Controller
 
         $userData = User::find($id);
 
-        if (!$this->isDataChanged($userData, $request)) {
-            return redirect()->back()->with('error', 'Gagal melakukan update, tidak ada perubahan data yang dilakukan.');
-        }
+        // if (!$this->isDataChanged($userData, $request)) {
+        //     return redirect()->back()->with('error', 'Gagal melakukan update, tidak ada perubahan data yang dilakukan.');
+        // }
 
         if ($request->filled('user_full_name')) {
             $userData->user_full_name = $request->user_full_name;

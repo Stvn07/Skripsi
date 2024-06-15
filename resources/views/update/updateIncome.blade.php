@@ -76,13 +76,85 @@
                         </select>
                         <span class="error-message" id="income_category_empty"></span>
                     </div>
+                </div>
 
-                    <div class="buttons" style="margin-top: 50px;">
-                        <button type="submit" class="send">{{ __('updateButton') }}</button>
-                        <a href="{{ route('openIncomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
-                            class="btn btn-danger">{{ __('backButton') }}</a>
-                    </div>
+                <div class="buttons" style="margin-top: 50px;">
+                    <button id="updateBtn" type="submit" class="send">{{ __('updateButton') }}</button>
+                    <a href="{{ route('openIncomePage') }}" id="cancelBtn" style="min-width: 252px; min-height: 44px"
+                        class="btn btn-danger">{{ __('backButton') }}</a>
+                </div>
             </form>
+
+            <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h5 style="text-align: center">{{ __('updateIncomeConfirmationMessage') }}</h5>
+                            <div class="buttons mt-4">
+                                <button type="button" id="cancelConfirmYes" class="send">{{ __('yes') }}</button>
+                                <button type="button" id="cancelConfirmNo" class="cancel"
+                                    data-bs-dismiss="modal">{{ __('no') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="noChangesModal" tabindex="-1" aria-labelledby="noChangesModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h5 style="text-align: center">{{ __('noChangesMessage') }}</h5>
+                            <div style="justify-content: center; align-content: center" class="buttons mt-4">
+                                <button type="button" class="send" data-bs-dismiss="modal">{{ __('close') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('updateIncomeForm');
+                    const cancelBtn = document.getElementById('cancelBtn');
+                    const updateBtn = document.getElementById('updateBtn');
+                    const confirmCancelModal = new bootstrap.Modal(document.getElementById('confirmCancelModal'));
+                    const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
+                    let isFormChanged = false;
+
+                    // Detect changes in the form
+                    form.addEventListener('input', function() {
+                        isFormChanged = true;
+                    });
+
+                    // Show confirmation modal if form is changed
+                    cancelBtn.addEventListener('click', function(event) {
+                        if (isFormChanged) {
+                            event.preventDefault();
+                            confirmCancelModal.show();
+                        } else {
+                            window.location.href = "{{ route('openIncomePage') }}";
+                        }
+                    });
+
+                    // Handle confirmation modal buttons
+                    document.getElementById('cancelConfirmYes').addEventListener('click', function() {
+                        window.location.href = "{{ route('openIncomePage') }}";
+                    });
+
+                    document.getElementById('cancelConfirmNo').addEventListener('click', function() {
+                        confirmCancelModal.hide();
+                    });
+                    updateBtn.addEventListener('click', function(event) {
+                        if (!isFormChanged) {
+                            event.preventDefault();
+                            noChangesModal.show();
+                        }
+                    });
+                });
+            </script>
         </div>
     </div>
 @endsection
