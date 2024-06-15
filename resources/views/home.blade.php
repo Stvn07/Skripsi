@@ -184,11 +184,12 @@
             <div class="greeting">{{ __('hello') }} {{ Auth::user()->user_full_name }}!</div>
 
             <div class="user-info">
-                <a style="text-decoration: none; font-size: 10px; margin-top:4px;" href="{{ url('locale/id') }}">ID</a>
+                <a style="text-decoration: none; font-size: 10px; margin-top:4px; color: black;"
+                    href="{{ url('locale/id') }}">ID</a>
                 <div class="mx-1 mt-1" style="font-size: 10px">
                     |
                 </div>
-                <a style="text-decoration: none; font-size: 10px; margin-right: 20px; margin-top: 4px;"
+                <a style="text-decoration: none; font-size: 10px; margin-right: 20px; margin-top: 4px; color: black;"
                     href="{{ url('locale/en') }}">EN</a>
                 &nbsp;
                 <span>{{ Auth::user()->user_full_name }}</span>
@@ -200,7 +201,7 @@
         <div class="main-content">
             <div class="left">
                 <div class="box">
-                    <div class="status-bar">
+                    <div class="status-bar" id="stat">
                         <div>
                             @if (!$hasFirstBalance)
                                 <div class="mb-2">
@@ -258,12 +259,10 @@
                                                 emptyCount++;
                                             } else {
                                                 firstBalanceAmountEmpty.style.display = "none";
-                                                // document.getElementsByClassName(".box .status-bar").style.justify - content = "center";
-                                                var statusBars = document.getElementsByClassName("status-bar");
-                                                for (var i = 0; i < statusBars.length; i++) {
-                                                    statusBars[i].style.justifyContent = "center";
-                                                }
+                                                document.getElementById("stat").style.display = "block";
+                                                // document.getElementByClassName("status-bar").style.justifyContent: 'center';
                                             }
+
 
                                             if (emptyCount > 0) {
                                                 event.preventDefault();
@@ -514,11 +513,46 @@
                                     emptyCount++;
                                 } else {
                                     incomeCategoryEmpty.style.display = "none";
+
                                 }
 
                                 if (emptyCount > 0) {
                                     event.preventDefault();
                                 }
+                                sessionStorage.setItem('incomeAdded', 'true');
+                            });
+                        </script>
+                    </div>
+
+                    <div>
+                        <div class="modal" id="incomeSuccessModal" tabindex="-1"
+                            aria-labelledby="incomeSuccessModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <h5 style="text-align: center">{{ __('incomeSuccessMessage') }}</h5>
+                                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
+                                            <button type="button" id="incomeSuccessClose" class="send"
+                                                data-bs-dismiss="modal">{{ __('close') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var incomeSuccessModal = new bootstrap.Modal(document.getElementById(
+                                    "incomeSuccessModal"));
+                                if (sessionStorage.getItem('incomeAdded') === 'true') {
+                                    incomeSuccessModal.show();
+                                    sessionStorage.removeItem('incomeAdded');
+                                }
+
+                                document.getElementById("incomeSuccessClose").addEventListener("click", function() {
+                                    var incomeSuccessModal = new bootstrap.Modal(document.getElementById("incomeSuccessModal"));
+                                    incomeSuccessModal.hide();
+                                });
                             });
                         </script>
                     </div>
@@ -735,6 +769,41 @@
                                 if (emptyCount > 0) {
                                     event.preventDefault();
                                 }
+                                sessionStorage.setItem('outcomeAdded', 'true');
+                            });
+                        </script>
+                    </div>
+
+                    <div>
+                        <div class="modal" id="outcomeSuccessModal" tabindex="-1"
+                            aria-labelledby="outcomeSuccessModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <h5 style="text-align: center">{{ __('outcomeSuccessMessage') }}</h5>
+                                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
+                                            <button type="button" id="outcomeSuccessClose" class="send"
+                                                data-bs-dismiss="modal">{{ __('close') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                var outcomeSuccessModal = new bootstrap.Modal(document.getElementById(
+                                    "outcomeSuccessModal"));
+                                if (sessionStorage.getItem('outcomeAdded') === 'true') {
+                                    outcomeSuccessModal.show();
+                                    sessionStorage.removeItem('outcomeAdded');
+                                }
+
+                                document.getElementById("outcomeSuccessClose").addEventListener("click", function() {
+                                    var outcomeSuccessModal = new bootstrap.Modal(document.getElementById(
+                                        "outcomeSuccessModal"));
+                                    outcomeSuccessModal.hide();
+                                });
                             });
                         </script>
                     </div>

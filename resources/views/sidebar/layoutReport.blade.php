@@ -101,7 +101,7 @@
         <div class="logo">
             <img src="image/LogoNabungKuy.png" alt="Nabung Kuy Logo">
         </div>
-        <a href="{{ route('home') }}" class="sidebar-link active">
+        <a href="{{ route('home') }}" class="sidebar-link">
             <span class="icon"><i class="fas fa-home"></i></span>
             Home
         </a>
@@ -117,7 +117,7 @@
             <span class="icon"><i class="fas fa-money-bill-wave-alt"></i></span>
             {{ __('outcome') }}
         </a>
-        <a href="{{ route('openReport') }}" class="sidebar-link">
+        <a href="{{ route('openReport') }}" class="sidebar-link active">
             <span class="icon"><i class="fas fa-chart-pie"></i></span>
             {{ __('report') }}
         </a>

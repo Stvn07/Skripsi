@@ -101,11 +101,12 @@
         <div class="logo">
             <img src="image/LogoNabungKuy.png" alt="Nabung Kuy Logo">
         </div>
-        <a href="{{ route('home') }}" class="sidebar-link active">
+        <a href="{{ route('home') }}" class="sidebar-link">
             <span class="icon"><i class="fas fa-home"></i></span>
             Home
         </a>
-        <a href="{{ route('openTransaction') }}" class="sidebar-link">
+
+        <a href="{{ route('openTransaction') }}" class="sidebar-link active">
             <span class="icon"><i class="fas fa-exchange-alt"></i></span>
             {{ __('transaction') }}
         </a>

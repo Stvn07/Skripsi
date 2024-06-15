@@ -1,4 +1,4 @@
-@extends('sidebar.layout')
+@extends('sidebar.layoutOutflow')
 @section('content')
     <style>
         .content {

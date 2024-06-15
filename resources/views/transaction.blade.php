@@ -1,4 +1,4 @@
-@extends('sidebar.layout')
+@extends('sidebar.layoutTransaction')
 @section('content')
     <style>
         .content {

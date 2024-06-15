@@ -1,4 +1,4 @@
-@extends('sidebar.layout')
+@extends('sidebar.layoutReport')
 @section('content')
     <style>
         .content {
