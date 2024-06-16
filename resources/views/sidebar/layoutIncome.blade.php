@@ -90,6 +90,7 @@
             width: calc(100% - 250px);
             box-sizing: border-box;
             overflow-y: auto;
+            background-color: #f6f8ef;
         }
     </style>
 

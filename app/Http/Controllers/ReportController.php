@@ -15,7 +15,7 @@ class reportController extends Controller
     function showReportTable(Request $request)
     {
         $userId = Auth::id();
-        $bulan = $request->input('bulan');
+        $bulan = $request->input('bulan') ?? date('Y-m');
         $year = date('Y', strtotime($bulan));
         $month = date('m', strtotime($bulan));
         $startDate = date("$year-$month-01");
@@ -77,6 +77,18 @@ class reportController extends Controller
 
             $t->total_balance_per_day = $total_balance_per_day;
         }
-        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_final_balance_bulan', 'expensesByCategory', 'totalExpensesByCategory', 'incomesByCategory', 'totalIncomeByCategory'));
+        return view(
+            'cashflowReport',
+            compact(
+                'hasil_bulan',
+                'total_income_bulan',
+                'total_outcome_bulan',
+                'total_final_balance_bulan',
+                'expensesByCategory',
+                'totalExpensesByCategory',
+                'incomesByCategory',
+                'totalIncomeByCategory'
+            )
+        );
     }
 }

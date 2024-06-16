@@ -79,15 +79,13 @@
 
     <div class="profile-container">
         <!-- <div class="text-center mt-2">
-                                                        <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
-                                                    </div> -->
+                    <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
+                </div> -->
 
         <div class="main">
             <div class="header">
                 <div class="left">
-                    <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i>
-                    </a>
-                    <!-- {{ __('backButton') }} -->
+                    <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i></a>
                 </div>
 
                 <div class="middle">
