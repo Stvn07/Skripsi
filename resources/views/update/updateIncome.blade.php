@@ -1,4 +1,4 @@
-@extends('sidebar.layout')
+@extends('sidebar.layoutIncome')
 @section('content')
     <style>
         .content {
@@ -7,6 +7,7 @@
             background-color: #f6f8ef;
         }
     </style>
+
     <div class="content">
         <div class="profile-container">
             <form id="updateIncomeForm" action="/income/update/{{ $incomeData->id }}" method="POST">
@@ -124,12 +125,10 @@
                     const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
                     let isFormChanged = false;
 
-                    // Detect changes in the form
                     form.addEventListener('input', function() {
                         isFormChanged = true;
                     });
 
-                    // Show confirmation modal if form is changed
                     cancelBtn.addEventListener('click', function(event) {
                         if (isFormChanged) {
                             event.preventDefault();
@@ -139,7 +138,6 @@
                         }
                     });
 
-                    // Handle confirmation modal buttons
                     document.getElementById('cancelConfirmYes').addEventListener('click', function() {
                         window.location.href = "{{ route('openIncomePage') }}";
                     });

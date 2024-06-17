@@ -506,20 +506,16 @@ class HomeController extends Controller
         $startOfMonth = $currentDate->copy()->startOfMonth();
         $endOfMonth = $currentDate->copy()->endOfMonth();
 
-        // Inisialisasi data untuk chart
         $data = [
             'charts' => []
         ];
 
-        // Loop untuk setiap hari dalam bulan ini dengan langkah 3 hari
         for ($day = $startOfMonth->copy(); $day->lte($endOfMonth); $day->addDays(3)) {
-            // Hitung rentang waktu untuk 3 hari ini
             $endOfPeriod = $day->copy()->addDays(2);
             if ($endOfPeriod->gt($endOfMonth)) {
                 $endOfPeriod = $endOfMonth;
             }
 
-            // Ambil data untuk periode ini
             $outcomeTable = Transaction::select(DB::raw('DATE(transaction_date) as transaction_date'), DB::raw('SUM(transaction_amount) as total_amount'))
                 ->where('user_id', $userId)
                 ->whereNull('outcome_id')
@@ -527,21 +523,15 @@ class HomeController extends Controller
                 ->groupBy('transaction_date')
                 ->get();
 
-            // Inisialisasi label dan jumlah untuk periode ini
             $labels = [];
             $amount = [];
 
-            // Loop untuk setiap hari dalam periode ini
             for ($periodDay = $day->copy(); $periodDay->lte($endOfPeriod); $periodDay->addDay()) {
-                // Format label untuk hari
                 $labels[] = $periodDay->format('l, d F Y');
-
-                // Cari total pengeluaran untuk hari ini
                 $totalAmountForDay = $outcomeTable->where('transaction_date', $periodDay->toDateString())->sum('total_amount');
                 $amount[] = $totalAmountForDay;
             }
 
-            // Simpan data periode ini ke dalam array charts
             $data['charts'][] = [
                 'labels' => $labels,
                 'amount' => $amount
@@ -558,20 +548,16 @@ class HomeController extends Controller
         $startOfMonth = $currentDate->copy()->startOfMonth();
         $endOfMonth = $currentDate->copy()->endOfMonth();
 
-        // Inisialisasi data untuk chart
         $data = [
             'charts' => []
         ];
 
-        // Hitung jumlah minggu dalam bulan ini
         for ($day = $startOfMonth->copy(); $day->lte($endOfMonth); $day->addDays(3)) {
-            // Hitung rentang waktu untuk 3 hari ini
             $endOfPeriod = $day->copy()->addDays(2);
             if ($endOfPeriod->gt($endOfMonth)) {
                 $endOfPeriod = $endOfMonth;
             }
 
-            // Ambil data untuk periode ini
             $outcomeTable = Transaction::select(DB::raw('DATE(transaction_date) as transaction_date'), DB::raw('SUM(transaction_amount) as total_amount'))
                 ->where('user_id', $userId)
                 ->whereNull('income_id')
@@ -579,21 +565,15 @@ class HomeController extends Controller
                 ->groupBy('transaction_date')
                 ->get();
 
-            // Inisialisasi label dan jumlah untuk periode ini
             $labels = [];
             $amount = [];
 
-            // Loop untuk setiap hari dalam periode ini
             for ($periodDay = $day->copy(); $periodDay->lte($endOfPeriod); $periodDay->addDay()) {
-                // Format label untuk hari
                 $labels[] = $periodDay->format('l, d F Y');
-
-                // Cari total pengeluaran untuk hari ini
                 $totalAmountForDay = $outcomeTable->where('transaction_date', $periodDay->toDateString())->sum('total_amount');
                 $amount[] = $totalAmountForDay;
             }
 
-            // Simpan data periode ini ke dalam array charts
             $data['charts'][] = [
                 'labels' => $labels,
                 'amount' => $amount
@@ -690,10 +670,6 @@ class HomeController extends Controller
                 $statusOutcome = 'No Spending';
             }
         } else {
-            $outcomeExpenses = Transaction::where('user_id', $userId)
-                ->whereNull('income_id')
-                ->sum('transaction_amount');
-
             $total_income_per_month = Transaction::where('user_id', $userId)
                 ->where('transaction_type', 'income')
                 ->whereBetween('transaction_date', [$startDate, $endDate])
@@ -703,9 +679,6 @@ class HomeController extends Controller
                 ->where('transaction_type', 'outcome')
                 ->whereBetween('transaction_date', [$startDate, $endDate])
                 ->sum('transaction_amount');
-
-            // $remainingAmount = $totalBalanceAmount->total_balance_amount;
-            // $percentage = ($outcomeExpenses / $remainingAmount) * 100;
             $percentage = ($total_outcome_per_month / $total_income_per_month) * 100;
             $lowExpenses = 30;
             $middleExpenses = 65;

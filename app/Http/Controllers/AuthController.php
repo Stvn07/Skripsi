@@ -55,8 +55,7 @@ class AuthController extends Controller
     function registerPost(Request $request)
     {
         $messages = [
-            'user_email.unique' => 'Email pengguna sudah terdaftar, silakan lakukan sign up.',
-            // 'password.regex' => 'Password harus mengandung setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu karakter khusus.'
+            'user_email.unique' => 'Email pengguna sudah terdaftar, silakan lakukan sign up.'
         ];
 
         $request->validate([

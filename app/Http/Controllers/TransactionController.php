@@ -38,6 +38,14 @@ class TransactionController extends Controller
         $end_year = date('Y', strtotime($end_month_query));
         $end_month = date('m', strtotime($end_month_query));
 
+        if ($locale == 'id') {
+            if (strpos(strtolower($search_query), 'pendapatan') !== false) {
+                $search_query = str_ireplace('pendapatan', 'income', $search_query);
+            } elseif (strpos(strtolower($search_query), 'pengeluaran') !== false) {
+                $search_query = str_ireplace('pengeluaran', 'outcome', $search_query);
+            }
+        }
+
         if ($search_query && $search_query != '') {
             $results = Transaction::with(['Income', 'Outcome'])
                 ->where('user_id', $userId)

@@ -14,7 +14,6 @@
             background: linear-gradient(135deg, #782ec7 0%, #039018 100%);
             padding: 20px;
             color: white;
-            /* text-align: center; */
             border-radius: 10px;
             margin-bottom: 20px;
             display: flex;
@@ -171,12 +170,10 @@
                             const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
                             let isFormChanged = false;
 
-                            // Detect changes in the form
                             form.addEventListener('input', function() {
                                 isFormChanged = true;
                             });
 
-                            // Show confirmation modal if form is changed
                             cancelBtn.addEventListener('click', function(event) {
                                 if (isFormChanged) {
                                     event.preventDefault();
@@ -186,7 +183,6 @@
                                 }
                             });
 
-                            // Handle confirmation modal buttons
                             document.getElementById('cancelConfirmYes').addEventListener('click', function() {
                                 window.location.href = @json(route('profile', Auth::id()));
                             });
@@ -203,17 +199,7 @@
                         });
                     </script>
                 </div>
-
-
             </div>
         </div>
-
-        <!-- <div class="text-center mb-3">
-                                                                                            <button type="submit" class="btn btn-primary">{{ __('updateButton') }}</button>
-                                                                                        </div>
-                                                                                        <div class="text-center mb-3">
-                                                                                            <a href="{{ route('profile', Auth::id()) }}" class="btn btn-primary">{{ __('backButton') }}</a>
-                                                                                        </div> -->
-
     </div>
 @endsection

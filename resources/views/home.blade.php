@@ -43,6 +43,14 @@
             width: 49%;
         }
 
+        .status {
+            display: none;
+        }
+
+        .status span {
+            padding: 10px;
+        }
+
         .box {
             background-color: white;
             padding: 20px;
@@ -82,14 +90,15 @@
         }
 
         .box .status-bar {
-            display: flex;
+            display: block;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             margin-top: -10px;
+            height: 70px;
         }
 
-        .box .status-bar div {
-            margin: 5px 0;
+        .filter-label {
+            width: 38%;
         }
 
         .box,
@@ -108,6 +117,17 @@
 
         .recent-transactions {
             height: 187px;
+        }
+
+        .button-firstbalance {
+            background-color: #008312;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            justify-content: center;
+            align-content: center;
+            margin-top: 15px;
         }
 
         .buttons {
@@ -205,7 +225,7 @@
                         <div>
                             @if (!$hasFirstBalance)
                                 <div class="mb-2">
-                                    <button type="button" class="btn btn-primary btn_firstBalance" data-bs-toggle="modal"
+                                    <button type="button" class="button-firstbalance" data-bs-toggle="modal"
                                         data-bs-target="#firstBalanceModal">
                                         {{ __('addFirstBalance') }}
                                     </button>
@@ -260,7 +280,6 @@
                                             } else {
                                                 firstBalanceAmountEmpty.style.display = "none";
                                                 document.getElementById("stat").style.display = "block";
-                                                // document.getElementByClassName("status-bar").style.justifyContent: 'center';
                                             }
 
 
@@ -276,6 +295,18 @@
                                         });
                                     </script>
                                 </div>
+                            @else
+                                <style>
+                                    .box .status-bar {
+                                        display: block;
+                                        justify-content: center;
+                                        height: 70px;
+                                    }
+
+                                    .status {
+                                        display: block;
+                                    }
+                                </style>
                             @endif
                         </div>
                         <div class="status">
@@ -343,6 +374,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="income_name">{{ __('incomeName') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -354,6 +386,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="income_date">{{ __('incomeDate') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -366,6 +399,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="income_amount">{{ __('incomeAmount') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -377,6 +411,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="income_category">{{ __('incomeCategory') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -395,6 +430,11 @@
                                                         <option value="Bonus">{{ __('incomeCategory6') }}</option>
                                                     </select>
                                                     <span class="error-message" id="income_category_empty"></span>
+                                                </div>
+
+                                                <div style= "margin-top: 20px">
+                                                    <span style="color: red">*</span><span
+                                                        style="font-size: 15px; color:gray">{{ __('mustFilled') }}</span>
                                                 </div>
                                             </div>
 
@@ -455,7 +495,6 @@
                             });
 
                             document.getElementById("incomeConfirmYes").addEventListener("click", function() {
-                                console.log("Click Yes");
                                 clearIncomeForm();
                                 window.location.href = "{{ url('/') }}";
                             });
@@ -518,8 +557,9 @@
 
                                 if (emptyCount > 0) {
                                     event.preventDefault();
+                                } else {
+                                    sessionStorage.setItem('incomeAdded', 'true');
                                 }
-                                sessionStorage.setItem('incomeAdded', 'true');
                             });
                         </script>
                     </div>
@@ -584,6 +624,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="outcome_name">{{ __('outcomeName') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -595,6 +636,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="outcome_date">{{ __('outcomeDate') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -607,6 +649,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="outcome_amount">{{ __('outcomeAmount') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -618,6 +661,7 @@
                                             <div class="form-group">
                                                 <div class="filter-label">
                                                     <label for="outcome_category">{{ __('outcomeCategory') }}</label>
+                                                    <span style="color: red">*</span>
                                                 </div>
 
                                                 <div class="filter-inputs">
@@ -645,6 +689,11 @@
                                                     </select>
                                                     <span class="error-message" id="outcome_category_empty"></span>
                                                 </div>
+                                            </div>
+
+                                            <div style= "margin-top: 20px">
+                                                <span style="color: red">*</span><span
+                                                    style="font-size: 15px; color:gray">{{ __('mustFilled') }}</span>
                                             </div>
 
                                             <div class="buttons" style="margin-top: 50px;">
@@ -768,8 +817,9 @@
 
                                 if (emptyCount > 0) {
                                     event.preventDefault();
+                                } else {
+                                    sessionStorage.setItem('outcomeAdded', 'true');
                                 }
-                                sessionStorage.setItem('outcomeAdded', 'true');
                             });
                         </script>
                     </div>
@@ -834,7 +884,10 @@
                     <h5>{{ __('recentTransaction') }}</h5>
                     <ul>
                         @if (count($transactionData) === 0)
-                            {{ __('noTransactionData') }}
+                            <div style="margin-top: 50px;">
+                                {{ __('noTransactionData') }}
+
+                            </div>
                         @else
                             @foreach ($transactionData as $key => $transaction)
                                 <li>

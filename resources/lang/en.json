@@ -25,6 +25,7 @@
     },
 
     "hello": "Hello,",
+    "mustFilled": "All field cannot be empty and must be filled",
     "incomeConfirmationMessage": "Do you want to cancel adding income and return to the home page?",
     "outcomeConfirmationMessage": "Do you want to cancel adding outflow and return to the home page?",
     "updateProfileConfirmationMessage": "Do you want to cancel updating your profile and return to the Profile page?",
@@ -177,7 +178,7 @@
     "noTransactionData": "No Transaction Data",
     "filterDataBy": "Filter Data By",
     "day": "Day",
-    "rangeDay": "range Day",
+    "rangeDay": "Range Day",
     "until": "Until",
     "month": "Month",
     "rangeMonth": "Range Month",

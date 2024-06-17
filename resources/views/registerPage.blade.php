@@ -135,7 +135,6 @@
             height: auto;
         }
 
-        /* Responsive design */
         @media (min-width: 768px) {
             .container {
                 flex-direction: row;
@@ -340,5 +339,4 @@
             <img src="/image/6333213.jpg" alt="Banner">
         </div>
     </div>
-
 @endsection

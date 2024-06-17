@@ -60,6 +60,17 @@
             margin: 15px 0;
         }
 
+        .button-logout {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            background-color: #b92323;
+            cursor: pointer;
+            width: 30%;
+        }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -68,6 +79,7 @@
             text-decoration: none;
             background-color: #28a745;
             cursor: pointer;
+            width: 33%;
         }
 
         .button:hover {
@@ -78,9 +90,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <div class="profile-container">
-        <!-- <div class="text-center mt-2">
-                    <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
-                </div> -->
+
 
         <div class="main">
             <div class="header">
@@ -110,6 +120,9 @@
 
                 <div class="text-center mt-3 mx-4">
                     <a href="{{ route('updateProfile', Auth::id()) }}" class="button">{{ __('updateProfile') }}</a>
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{{ route('logout') }}" class="button-logout"><i class="fa fa-sign-out"></i> Logout</a>
                 </div>
             </div>
         </div>

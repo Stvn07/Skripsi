@@ -148,7 +148,6 @@ class BalanceController extends Controller
         ]);
 
         $userId = Auth::id();
-
         $incomeData = Income::findOrFail($incomeId);
 
         $transactionData = Transaction::where('income_id', $incomeId)->first();
@@ -158,7 +157,6 @@ class BalanceController extends Controller
 
         $oldIncomeAmount = $incomeData->income_amount;
 
-        // Update Data Pendapatan
         $incomeData->update([
             'income_name' => $request->input('income_name', $incomeData->income_name),
             'income_date' => $request->input('income_date', $incomeData->income_date),
@@ -166,7 +164,6 @@ class BalanceController extends Controller
             'income_category' => $request->input('income_category', $incomeData->income_category)
         ]);
 
-        // Update Data Transaksi
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('income_date', $transactionData->transaction_date),
@@ -174,10 +171,8 @@ class BalanceController extends Controller
             ]);
         }
 
-        // Hitung perubahan jumlah pendapatan
         $changeAmount = $request->income_amount - $oldIncomeAmount;
 
-        // Perbarui Total Balance
         $transactionIdsToUpdate = Transaction::where('user_id', $userId)
             ->where('id', '>=', $transactionData->id)
             ->pluck('id');
@@ -207,8 +202,6 @@ class BalanceController extends Controller
         ]);
 
         $userId = Auth::id();
-
-        // Ambil data outcome
         $outcomeData = Outcome::findOrFail($outcomeId);
 
         $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
@@ -218,7 +211,6 @@ class BalanceController extends Controller
 
         $oldOutcomeAmount = $outcomeData->outcome_amount;
 
-        // Update Data Outcome
         $outcomeData->update([
             'outcome_name' => $request->input('outcome_name', $outcomeData->outcome_name),
             'outcome_date' => $request->input('outcome_date', $outcomeData->outcome_date),
@@ -226,7 +218,6 @@ class BalanceController extends Controller
             'outcome_category' => $request->input('outcome_category', $outcomeData->outcome_category)
         ]);
 
-        // Update Data Transaksi
         if ($transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('outcome_date', $transactionData->transaction_date),
@@ -234,10 +225,8 @@ class BalanceController extends Controller
             ]);
         }
 
-        // Hitung perubahan jumlah pengeluaran
         $changeAmount = $request->outcome_amount - $oldOutcomeAmount;
 
-        // Perbarui Total Balance
         $transactionIdsToUpdate = Transaction::where('user_id', $userId)
             ->where('id', '>=', $transactionData->id)
             ->pluck('id');

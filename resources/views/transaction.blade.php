@@ -19,7 +19,6 @@
         }
 
         .search-bar input {
-            /* border: none; */
             background: transparent;
             outline: none;
             flex-grow: 1;
@@ -81,6 +80,10 @@
             margin-right: 10px;
         }
 
+        .filter-inputs {
+            width: 20%;
+        }
+
         .modal-content {
             text-align: left;
             background-color: white;
@@ -107,12 +110,18 @@
         .transaction-table th,
         .transaction-table td {
             padding: 10px;
-            border: 1px solid #ddd;
             text-align: left;
         }
 
+        .transaction-table {
+            width: 100%;
+        }
+
         .transaction-table th {
-            background-color: #f2f2f2;
+            background-color: rgb(70, 70, 70);
+            color: white;
+            border: none;
+            font-weight: normal;
         }
 
         table {
@@ -136,12 +145,19 @@
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
+        .pagination {
+            --bs-pagination-color: #595858;
+            --bs-pagination-active-bg: rgb(70, 70, 70);
+            --bs-pagination-active-border-color: none;
+        }
     </style>
 
     <div class="content">
         <div class="header">
-            <h2>{{ __('transactionHistory') }}</h2>
-            <br>
+            <div style="margin: 0 5px">
+                <h1>{{ __('transactionHistory') }}</h1>
+            </div>
             <div class="search-bar">
                 <div class="input-search">
                     <form action="/transaction">
@@ -150,41 +166,17 @@
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
 
-                    <script>
-                        var searchInput = document.getElementById('search');
-                        searchInput.addEventListener('keydown', function(event) {
-                            if (event.key === 'Enter') {
-                                if (searchInput.value.trim() === '') {
-                                    window.location.href = '/transaction';
-                                }
-
-                            }
-                        });
-
-                        document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
-                            if (searchInput.value.trim() === '') {
-                                window.location.href = '/transaction';
-                                event.preventDefault();
-
-                            }
-                            searchInput.value = "";
-                        });
-                    </script>
                 </div>
-
                 <div class="filter-search">
                     <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="fa fa-filter"></i>Filter
                     </button>
-
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
-                                    {{-- <button type="reset" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button> --}}
                                     <button type="reset" data-bs-dismiss="modal"
                                         style="background-color: transparent; color: black; border: none;"><i
                                             class="fa fa-close"></i></button>
@@ -301,17 +293,47 @@
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                        var searchInput = document.getElementById('search');
+                        searchInput.addEventListener('keydown', function(event) {
+                            if (event.key === 'Enter') {
+                                if (searchInput.value.trim() === '') {
+                                    window.location.href = '/transaction';
+                                }
+                            }
+                        });
+
+                        document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
+                            if (searchInput.value.trim() === '') {
+                                window.location.href = '/transaction';
+                                event.preventDefault();
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
         <table class="transaction-table">
             <thead>
                 <tr>
-                    <th>{{ __('number') }}</th>
-                    <th>{{ __('transactionName') }}</th>
-                    <th>{{ __('transactionDate') }}</th>
-                    <th>{{ __('transactionAmount') }}</th>
-                    <th>{{ __('transactionType') }}</th>
+                <tr>
+                    <th>
+                        {{ __('number') }}
+                    </th>
+                    <th>
+                        {{ __('transactionName') }}
+                    </th>
+                    <th>
+                        {{ __('transactionDate') }}
+                    </th>
+                    <th>
+                        {{ __('transactionAmount') }}
+                    </th>
+                    <th>
+                        {{ __('transactionType') }}
+                    </th>
+                </tr>
                 </tr>
             </thead>
             <tbody>
@@ -371,4 +393,5 @@
             return false;
         }
     </script>
+
 @endsection

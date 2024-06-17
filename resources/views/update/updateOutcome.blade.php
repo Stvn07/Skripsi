@@ -1,5 +1,13 @@
-@extends('sidebar.layout')
+@extends('sidebar.layoutOutflow')
 @section('content')
+    <style>
+        .content {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: #f6f8ef;
+        }
+    </style>
+
     <div class="profile-container">
         <form id="updateOutcomeForm" action="/outcome/update/{{ $outcomeData->id }}" method="POST">
             @csrf
@@ -132,12 +140,10 @@
                 const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
                 let isFormChanged = false;
 
-                // Detect changes in the form
                 form.addEventListener('input', function() {
                     isFormChanged = true;
                 });
 
-                // Show confirmation modal if form is changed
                 cancelBtn.addEventListener('click', function(event) {
                     if (isFormChanged) {
                         event.preventDefault();
@@ -147,7 +153,6 @@
                     }
                 });
 
-                // Handle confirmation modal buttons
                 document.getElementById('cancelConfirmYes').addEventListener('click', function() {
                     window.location.href = "{{ route('openOutcomePage') }}";
                 });

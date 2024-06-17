@@ -29,17 +29,14 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             overflow-x: hidden;
-            /* Prevent horizontal scroll */
         }
 
         .sidebar {
             position: fixed;
-            /* Make sidebar fixed */
             top: 0;
             left: 0;
             width: 250px;
             height: 100%;
-            /* Make sidebar take the full height */
             padding-top: 20px;
             background-color: #dfffcf;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -99,7 +96,9 @@
 <body>
     <div class="sidebar">
         <div class="logo">
-            <img src="image/LogoNabungKuy.png" alt="Nabung Kuy Logo">
+            <a href="{{ route('home') }}">
+                <img src="{{ asset('image/LogoNabungKuy.png') }}" alt="Nabung Kuy Logo">
+            </a>
         </div>
         <a href="{{ route('home') }}" class="sidebar-link active">
             <span class="icon"><i class="fas fa-home"></i></span>
@@ -113,7 +112,7 @@
             <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
             {{ __('income') }}
         </a>
-        <a href="{{ route('openOutcomePage') }}" class="sidebar-link ps-5" style="font-size: 17px;"">
+        <a href="{{ route('openOutcomePage') }}" class="sidebar-link ps-5" style="font-size: 17px;">
             <span class="icon"><i class="fas fa-money-bill-wave-alt"></i></span>
             {{ __('outcome') }}
         </a>

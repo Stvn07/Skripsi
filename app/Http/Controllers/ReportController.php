@@ -34,7 +34,6 @@ class reportController extends Controller
             ->groupBy('income.income_category')
             ->get();
 
-        // Menghitung total pengeluaran untuk setiap kategori
         $totalExpensesByCategory = [];
         foreach ($expensesByCategory as $expense) {
             $totalExpensesByCategory[$expense->outcome_category] = $expense->total_amount;
@@ -45,14 +44,12 @@ class reportController extends Controller
             $totalIncomeByCategory[$income->income_category] = $income->total_amount;
         }
 
-        // Query untuk data transaksi
         $hasil_bulan = Transaction::with('Income', 'Outcome')
             ->where('user_id', $userId)
             ->whereBetween('transaction_date', [$startDate, $endDate])
             ->orderBy('id')
             ->get();
 
-        // Total income, outcome, dan balance
         $total_income_bulan = Transaction::where('user_id', $userId)
             ->where('transaction_type', 'income')
             ->whereBetween('transaction_date', [$startDate, $endDate])
@@ -68,7 +65,6 @@ class reportController extends Controller
             ->latest()
             ->first();
 
-        // Menghitung total_balance_per_day
         foreach ($hasil_bulan as $t) {
             $total_balance_per_day = TotalBalance::where('user_id', $userId)
                 ->where('transaction_id', $t->id)

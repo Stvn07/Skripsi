@@ -25,6 +25,7 @@
     },
 
     "hello": "Halo,",
+    "mustFilled": "Semua field tidak boleh kosong dan harus diisi",
     "incomeConfirmationMessage": "Apakah anda ingin membatalkan penambahan pendapatan dan kembali ke halaman home?",
     "outcomeConfirmationMessage": "Apakah anda ingin membatalkan penambahan pengeluaran dan kembali ke halaman home?",
     "updateProfileConfirmationMessage": "Apakah anda ingin membatalkan perubahan profil dan kembali ke halaman profil?",
@@ -70,7 +71,7 @@
     "errorAddressLength": "Alamat setidaknya harus terdiri dari 10 karakter",
     "errorPhoneNumberEmpty": "Nomor Telfon tidak boleh kosong",
     "errorPhoneNumberLength": "Nomor Telfon harus terdiri dari 12 digit angka",
-    "errorFirstBalanceEmpty": "Nominal First Balance Tidak Boleh Kosong",
+    "errorFirstBalanceEmpty": "Nominal Saldo Awal Tidak Boleh Kosong",
     "errorIncomeNameEmpty": "Nama Pendapatan Tidak Boleh Kosong",
     "errorIncomeDateEmpty": "Tanggal Pendapatan Tidak Boleh Kosong",
     "errorIncomeAmountEmpty": "Nominal Pendapatan Tidak Boleh Kosong",
@@ -97,7 +98,7 @@
     "signUpPhoneNumber": "Nomor Telfon",
     "signUpSubmit": "Kirim",
     "signUpHaveAcc1": "Sudah mempunyai akun? ",
-    "signUpHaveAcc2": "sign in",
+    "signUpHaveAcc2": "masuk",
 
     "addButton": "Tambah",
     "backButton": "Kembali",
@@ -110,8 +111,8 @@
     "totalBalance": "Total Saldo Anda: ",
     "recentTransaction": "Transaksi Terkini",
 
-    "addFirstBalance": "Tambah First Balance",
-    "firstBalanceAmount": "Nominal First Balance",
+    "addFirstBalance": "Tambah Saldo Awal",
+    "firstBalanceAmount": "Nominal Saldo Awal",
     "selectCategory": "Pilih Kategori",
 
     "addIncome": "Tambah Pendapatan",
