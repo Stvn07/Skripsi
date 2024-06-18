@@ -16,9 +16,10 @@
 
     {{-- Icon Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <title>@yield('title')</title>
-</head>
 
 <body>
     <div class="container-fluid">
@@ -39,27 +40,22 @@
                         @if (Auth::check())
                             <li class="active">
                                 <a href="{{ route('profile', Auth::user()->id) }}" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span>
+                                    <i class="fs-4 bi-table"></i> <span
+                                        class="ms-1 d-none d-sm-inline">{{ __('profile') }}</span>
                                 </a>
                             </li>
                         @endif
 
-                        {{-- <a href="{{ route('profile', Auth::user()->id) }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile</span></a> --}}
-
-                        <li>
-                            <a href="" class="nav-link px-0 align-middle ">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Income</span>
-                            </a>
-                        </li>
                         <li>
                             <a href="{{ route('openTransaction') }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Transaction</span>
+                                <i class="fs-4 bi-people"></i> <span
+                                    class="ms-1 d-none d-sm-inline">{{ __('transaction') }}</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('openReport') }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Reports</span>
+                                <i class="fs-4 bi-people"></i> <span
+                                    class="ms-1 d-none d-sm-inline">{{ __('report') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -69,6 +65,7 @@
 
             {{-- Content --}}
             <div class="col py-3">
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                 @yield('content')
             </div>
         </div>
@@ -76,7 +73,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
-</body>
 </body>
 
 </html>

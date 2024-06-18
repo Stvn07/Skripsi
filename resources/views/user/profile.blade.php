@@ -1,31 +1,144 @@
 @extends('layout')
 @section('content')
+    <style>
+        body {
+            background-color: #f6f8ef;
+        }
+
+        .main {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #782ec7 0%, #039018 100%);
+            padding: 20px;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            width: 100%;
+        }
+
+        .left {
+            width: 10%;
+            margin-top: 10px;
+        }
+
+        .left a {
+            color: white;
+        }
+
+        .middle {
+            width: 80%;
+            text-align: center;
+            margin: 0;
+        }
+
+        .profile-container {
+            border: none;
+        }
+
+        .header img {
+            border-radius: 50%;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .card h2 {
+            text-align: center;
+        }
+
+        .info-profile {
+            margin: 15px 0;
+        }
+
+        .button-logout {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            background-color: #b92323;
+            cursor: pointer;
+            width: 30%;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            background-color: #28a745;
+            cursor: pointer;
+            width: 33%;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <div class="profile-container">
-        <div class="text-center mb-4">
-            <h2>Profil Pengguna</h2>
-            <!-- Tambahkan informasi profil lainnya di sini -->
-        </div>
-        <hr>
-        <div>
-            <h4>Informasi Profil</h4>
-            <div>
-                <p><strong>Nama Lengkap:</strong> {{ $userData->user_full_name }}</p>
-                <p><strong>Email:</strong> {{ $userData->user_email }}</p>
-                <p><strong>Alamat:</strong> {{ $userData->user_address }}</p>
-                <p><strong>Nomor Telfon:</strong> {{ $userData->user_phone_number }}</p>
-                <!-- Tambahkan informasi lainnya -->
+        <div class="main">
+            <div class="header">
+                <div class="left">
+                    <a href="{{ route('home') }}"><i class="fas fa-arrow-left"></i></a>
+                </div>
+
+                <div class="middle">
+                    <h1>{{ __('userProfile') }}</h1>
+                </div>
             </div>
-        </div>
-        <hr>
-        <!-- Tombol untuk mengupdate profil -->
-        <div class="text-center mt-4">
-            <a href="{{ route('updateProfile', Auth::id()) }}" class="btn btn-primary">Update Profil</a>
-        </div>
-        <div class="text-center mt-2">
-            <a href="/" class="btn btn-primary">Back</a>
-        </div>
-        <div class="text-center mt-2">
-            <a href="{{ route('logout') }}" class="btn btn-primary">Logout</a>
+
+            <div class="card">
+                <div class="info-profile">
+                    <strong>{{ __('nameProfile') }}</strong>
+                    <input type="text" class="form-control mt-2 mb-3" id="user_full_name" name="user_full_name"
+                        value="{{ $userData->user_full_name ?? '' }}" disabled>
+                    <strong>{{ __('emailProfile') }}</strong>
+                    <input type="email" class="form-control mt-2 mb-3" id="user_email" name="user_email"
+                        value="{{ $userData->user_email ?? '' }}" disabled>
+                    <strong>{{ __('addressProfile') }}</strong>
+                    <input type="text" class="form-control mt-2 mb-3" id="user_address" name="user_address"
+                        value="{{ $userData->user_address ?? '' }}" disabled>
+                    <strong>{{ __('phoneNumberProfile') }}</strong>
+                    <input type="text" class="form-control mt-2" id="user_phone_number" name="user_phone_number"
+                        value="{{ $userData->user_phone_number ?? '' }}" disabled>
+                </div>
+
+                <div class="text-center mt-3 mx-4">
+                    <a href="{{ route('updateProfile', Auth::id()) }}" class="button">{{ __('updateProfile') }}</a>
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{{ route('logout') }}" class="button-logout"><i class="fa fa-sign-out"></i> Logout</a>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        console.log(sessionStorage.getItem('profileChanged'));
+                        if (sessionStorage.getItem('profileChanged') === 'true') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('profileSuccessMessage') }}',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            sessionStorage.removeItem('profileChanged');
+                        }
+                    });
+                </script>
+            </div>
         </div>
     </div>
 @endsection

@@ -1,10 +1,9 @@
-@extends('sidebar.layoutTransaction')
+@extends('sidebar.layoutIncome')
 @section('content')
     <style>
         .content {
             flex-grow: 1;
             padding: 20px;
-            background-color: #f6f8ef;
         }
 
         .header {
@@ -102,22 +101,18 @@
             background-color: white;
         }
 
-        .modal-footer .transaction-table {
+        .income-table {
             width: 100%;
-            border-collapse: collapse;
+            border-radius: 5px;
         }
 
-        .transaction-table th,
-        .transaction-table td {
+        .income-table th,
+        .income-table td {
             padding: 10px;
             text-align: left;
         }
 
-        .transaction-table {
-            width: 100%;
-        }
-
-        .transaction-table th {
+        .income-table th {
             background-color: rgb(70, 70, 70);
             color: white;
             border: none;
@@ -130,6 +125,7 @@
             margin: 20px 0;
             font-size: 18px;
             text-align: left;
+            border-radius: 5px;
         }
 
         th,
@@ -138,12 +134,17 @@
             border-bottom: 1px solid #ddd;
         }
 
-        th {
-            background-color: #f2f2f2;
-        }
-
         tr:nth-child(even) {
             background-color: #f9f9f9;
+        }
+
+        td.action {
+            text-align: center;
+        }
+
+        .far {
+            color: #28a745;
+            text-align: center;
         }
 
         .pagination {
@@ -156,11 +157,11 @@
     <div class="content">
         <div class="header">
             <div style="margin: 0 5px">
-                <h1>{{ __('transactionHistory') }}</h1>
+                <h1>{{ __('income') }}</h1>
             </div>
             <div class="search-bar">
                 <div class="input-search">
-                    <form action="/transaction">
+                    <form action="/income-table">
                         <input type="text" id="search" placeholder="Search..." name="search"
                             value="{{ request('search') }}">
                         <button type="submit"><i class="fa fa-search"></i></button>
@@ -181,7 +182,7 @@
                                         style="background-color: transparent; color: black; border: none;"><i
                                             class="fa fa-close"></i></button>
                                 </div>
-                                <form action="/transaction" method="GET" id="filterForm" onsubmit="return cleanURL()">
+                                <form action="/income-table" method="GET" id="filterForm" onsubmit="return cleanURL()">
                                     <div class="modal-body">
                                         <h3>{{ __('filterDataBy') }}</h3>
 
@@ -299,14 +300,14 @@
                         searchInput.addEventListener('keydown', function(event) {
                             if (event.key === 'Enter') {
                                 if (searchInput.value.trim() === '') {
-                                    window.location.href = '/transaction';
+                                    window.location.href = '/income-table';
                                 }
                             }
                         });
 
                         document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
                             if (searchInput.value.trim() === '') {
-                                window.location.href = '/transaction';
+                                window.location.href = '/income-table';
                                 event.preventDefault();
                             }
                         });
@@ -314,56 +315,58 @@
                 </div>
             </div>
         </div>
-        <table class="transaction-table">
+        <table class="income-table">
             <thead>
-                <tr>
                 <tr>
                     <th>
                         {{ __('number') }}
                     </th>
                     <th>
-                        {{ __('transactionName') }}
+                        {{ __('incomeName') }}
                     </th>
                     <th>
-                        {{ __('transactionDate') }}
+                        {{ __('incomeDate') }}
                     </th>
                     <th>
-                        {{ __('transactionAmount') }}
+                        {{ __('incomeAmount') }}
                     </th>
                     <th>
-                        {{ __('transactionType') }}
+                        {{ __('incomeCategory') }}
                     </th>
-                </tr>
+                    <th>
+                        {{ __('action') }}
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @if (count($results) === 0)
                     <tr>
                         <td style="height: 250px; background-color: white; text-align: center; vertical-align: middle;"
-                            colspan="5">{{ $errorMessage }}
+                            colspan="6">{{ $errorMessage }}
                         </td>
                     </tr>
                 @else
-                    @foreach ($results as $transaction)
+                    @foreach ($results as $income)
                         <tr>
                             <td>
-                                {{ $transaction->nomor_urut }}
+                                {{ $income->nomor_urut }}
                             </td>
                             <td>
-                                {{ $transaction->transaction_name }}
+                                {{ $income->Income->income_name }}
                             </td>
                             <td>
-                                {{ $transaction->transaction_date }}
+                                {{ $income->Income->income_date }}
                             </td>
                             <td>
-                                {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                {{ 'Rp' . number_format($income->Income->income_amount, 0, ',', '.') }}
                             </td>
-                            <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
-                                @if ($transaction->income_id)
-                                    {{ __('income') }}
-                                @else
-                                    {{ __('outcome') }}
-                                @endif
+                            <td class="income-category">
+                                {{ $income->Income->income_category }}
+                            </td>
+                            <td class="action">
+                                <a href="{{ route('updateIncome', ['incomeId' => $income->income_id]) }}">
+                                    <i class="far fa-edit"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -389,9 +392,36 @@
                 }
             });
 
-            window.location.href = '/transaction?' + urlParams.toString();
+            window.location.href = '/income-table?' + urlParams.toString();
             return false;
         }
     </script>
 
+    <script>
+        var currentLang = '{{ app()->getLocale() }}';
+        var translations = @json(__('incomeCategories'));
+
+        function translateCategories(categories) {
+            return categories.map(category => translations[category] || category);
+        }
+
+        var categoryElements = document.querySelectorAll('.income-category');
+        categoryElements.forEach(function(element) {
+            var originalCategory = element.innerText;
+            element.innerText = translations[originalCategory] || originalCategory;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(sessionStorage.getItem('incomeChanged'));
+            if (sessionStorage.getItem('incomeChanged') === 'true') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('incomeChangedSuccessMessage') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                sessionStorage.removeItem('incomeChanged');
+            }
+        });
+    </script>
 @endsection

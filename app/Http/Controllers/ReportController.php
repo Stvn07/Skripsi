@@ -15,7 +15,7 @@ class reportController extends Controller
     function showReportTable(Request $request)
     {
         $userId = Auth::id();
-        $bulan = $request->input('bulan');
+        $bulan = $request->input('bulan') ?? date('Y-m');
         $year = date('Y', strtotime($bulan));
         $month = date('m', strtotime($bulan));
         $startDate = date("$year-$month-01");
@@ -27,20 +27,29 @@ class reportController extends Controller
             ->groupBy('outcome.outcome_category')
             ->get();
 
-        // Menghitung total pengeluaran untuk setiap kategori
+        $incomesByCategory = Transaction::select('income_category', DB::raw('SUM(transaction_amount) as total_amount'))
+            ->join('income', 'transaction.income_id', '=', 'income.id')
+            ->where('transaction.user_id', $userId)
+            ->whereBetween('transaction.transaction_date', [$startDate, $endDate])
+            ->groupBy('income.income_category')
+            ->get();
+
         $totalExpensesByCategory = [];
         foreach ($expensesByCategory as $expense) {
             $totalExpensesByCategory[$expense->outcome_category] = $expense->total_amount;
         }
 
-        // Query untuk data transaksi
+        $totalIncomeByCategory = [];
+        foreach ($incomesByCategory as $income) {
+            $totalIncomeByCategory[$income->income_category] = $income->total_amount;
+        }
+
         $hasil_bulan = Transaction::with('Income', 'Outcome')
             ->where('user_id', $userId)
             ->whereBetween('transaction_date', [$startDate, $endDate])
             ->orderBy('id')
             ->get();
 
-        // Total income, outcome, dan balance
         $total_income_bulan = Transaction::where('user_id', $userId)
             ->where('transaction_type', 'income')
             ->whereBetween('transaction_date', [$startDate, $endDate])
@@ -56,7 +65,6 @@ class reportController extends Controller
             ->latest()
             ->first();
 
-        // Menghitung total_balance_per_day
         foreach ($hasil_bulan as $t) {
             $total_balance_per_day = TotalBalance::where('user_id', $userId)
                 ->where('transaction_id', $t->id)
@@ -65,6 +73,18 @@ class reportController extends Controller
 
             $t->total_balance_per_day = $total_balance_per_day;
         }
-        return view('cashflowReport', compact('hasil_bulan', 'total_income_bulan', 'total_outcome_bulan', 'total_final_balance_bulan', 'expensesByCategory', 'totalExpensesByCategory'));
+        return view(
+            'cashflowReport',
+            compact(
+                'hasil_bulan',
+                'total_income_bulan',
+                'total_outcome_bulan',
+                'total_final_balance_bulan',
+                'expensesByCategory',
+                'totalExpensesByCategory',
+                'incomesByCategory',
+                'totalIncomeByCategory'
+            )
+        );
     }
 }

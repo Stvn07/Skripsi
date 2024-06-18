@@ -1,10 +1,9 @@
-@extends('sidebar.layoutTransaction')
+@extends('sidebar.layoutOutflow')
 @section('content')
     <style>
         .content {
             flex-grow: 1;
             padding: 20px;
-            background-color: #f6f8ef;
         }
 
         .header {
@@ -102,22 +101,18 @@
             background-color: white;
         }
 
-        .modal-footer .transaction-table {
+        .outcome-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .transaction-table th,
-        .transaction-table td {
+        .outcome-table th,
+        .outcome-table td {
             padding: 10px;
             text-align: left;
         }
 
-        .transaction-table {
-            width: 100%;
-        }
-
-        .transaction-table th {
+        .outcome-table th {
             background-color: rgb(70, 70, 70);
             color: white;
             border: none;
@@ -146,21 +141,29 @@
             background-color: #f9f9f9;
         }
 
+        td.action {
+            text-align: center;
+        }
+
+        .far {
+            color: #28a745;
+            text-align: center;
+        }
+
         .pagination {
             --bs-pagination-color: #595858;
             --bs-pagination-active-bg: rgb(70, 70, 70);
             --bs-pagination-active-border-color: none;
         }
     </style>
-
     <div class="content">
         <div class="header">
             <div style="margin: 0 5px">
-                <h1>{{ __('transactionHistory') }}</h1>
+                <h1>{{ __('outcome') }}</h1>
             </div>
             <div class="search-bar">
                 <div class="input-search">
-                    <form action="/transaction">
+                    <form action="/outflow-table">
                         <input type="text" id="search" placeholder="Search..." name="search"
                             value="{{ request('search') }}">
                         <button type="submit"><i class="fa fa-search"></i></button>
@@ -181,7 +184,7 @@
                                         style="background-color: transparent; color: black; border: none;"><i
                                             class="fa fa-close"></i></button>
                                 </div>
-                                <form action="/transaction" method="GET" id="filterForm" onsubmit="return cleanURL()">
+                                <form action="/outflow-table" method="GET" id="filterForm" onsubmit="return cleanURL()">
                                     <div class="modal-body">
                                         <h3>{{ __('filterDataBy') }}</h3>
 
@@ -299,14 +302,14 @@
                         searchInput.addEventListener('keydown', function(event) {
                             if (event.key === 'Enter') {
                                 if (searchInput.value.trim() === '') {
-                                    window.location.href = '/transaction';
+                                    window.location.href = '/outflow-table';
                                 }
                             }
                         });
 
                         document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
                             if (searchInput.value.trim() === '') {
-                                window.location.href = '/transaction';
+                                window.location.href = '/outflow-table';
                                 event.preventDefault();
                             }
                         });
@@ -314,7 +317,7 @@
                 </div>
             </div>
         </div>
-        <table class="transaction-table">
+        <table class="outcome-table">
             <thead>
                 <tr>
                 <tr>
@@ -322,16 +325,19 @@
                         {{ __('number') }}
                     </th>
                     <th>
-                        {{ __('transactionName') }}
+                        {{ __('outcomeName') }}
                     </th>
                     <th>
-                        {{ __('transactionDate') }}
+                        {{ __('outcomeDate') }}
                     </th>
                     <th>
-                        {{ __('transactionAmount') }}
+                        {{ __('outcomeAmount') }}
                     </th>
                     <th>
-                        {{ __('transactionType') }}
+                        {{ __('outcomeCategory') }}
+                    </th>
+                    <th>
+                        {{ __('action') }}
                     </th>
                 </tr>
                 </tr>
@@ -340,30 +346,31 @@
                 @if (count($results) === 0)
                     <tr>
                         <td style="height: 250px; background-color: white; text-align: center; vertical-align: middle;"
-                            colspan="5">{{ $errorMessage }}
+                            colspan="6">{{ $errorMessage }}
                         </td>
                     </tr>
                 @else
-                    @foreach ($results as $transaction)
+                    @foreach ($results as $outcome)
                         <tr>
                             <td>
-                                {{ $transaction->nomor_urut }}
+                                {{ $outcome->nomor_urut }}
                             </td>
                             <td>
-                                {{ $transaction->transaction_name }}
+                                {{ $outcome->Outcome->outcome_name }}
                             </td>
                             <td>
-                                {{ $transaction->transaction_date }}
+                                {{ $outcome->Outcome->outcome_date }}
                             </td>
                             <td>
-                                {{ 'Rp' . number_format($transaction->transaction_amount, 0, ',', '.') }}
+                                {{ 'Rp' . number_format($outcome->Outcome->outcome_amount, 0, ',', '.') }}
                             </td>
-                            <td class="{{ $transaction->income_id ? 'green-text' : 'red-text' }}">
-                                @if ($transaction->income_id)
-                                    {{ __('income') }}
-                                @else
-                                    {{ __('outcome') }}
-                                @endif
+                            <td class="outcome-category">
+                                {{ $outcome->Outcome->outcome_category }}
+                            </td>
+                            <td class="action">
+                                <a href="{{ route('updateOutcome', ['outcomeId' => $outcome->outcome_id]) }}">
+                                    <i class="far fa-edit"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -389,9 +396,36 @@
                 }
             });
 
-            window.location.href = '/transaction?' + urlParams.toString();
+            window.location.href = '/outflow-table?' + urlParams.toString();
             return false;
         }
     </script>
 
+    <script>
+        var currentLang = '{{ app()->getLocale() }}';
+        var translations = @json(__('outcomeCategories'));
+
+        function translateCategories(categories) {
+            return categories.map(category => translations[category] || category);
+        }
+
+        var categoryElements = document.querySelectorAll('.outcome-category');
+        categoryElements.forEach(function(element) {
+            var originalCategory = element.innerText;
+            element.innerText = translations[originalCategory] || originalCategory;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(sessionStorage.getItem('outcomeChanged'));
+            if (sessionStorage.getItem('outcomeChanged') === 'true') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('outcomeChangedSuccessMessage') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                sessionStorage.removeItem('outcomeChanged');
+            }
+        });
+    </script>
 @endsection
