@@ -218,6 +218,7 @@
                 </a>
             </div>
         </div>
+
         <div class="main-content">
             <div class="left">
                 <div class="box">
@@ -449,150 +450,122 @@
                             </div>
                         </div>
 
-                        <div class="modal" id="incomeConfirmModal" tabindex="-1"
-                            aria-labelledby="incomeConfirmModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <h5 style="text-align: center">{{ __('incomeConfirmationMessage') }}</h5>
-                                        <div class="buttons mt-4">
-                                            <button type="button" id="incomeConfirmYes"
-                                                class="send">{{ __('yes') }}</button>
-                                            <button type="button" id="incomeConfirmNo" data-bs-toggle="modal"
-                                                data-bs-target="#incomeModal" class="cancel">{{ __('no') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <script>
-                            function clearIncomeForm() {
-                                document.getElementById("income_name").value = "";
-                                document.getElementById("income_date").value = "";
-                                document.getElementById("income_amount").value = "";
-                                document.getElementById("income-category").selectedIndex = 0;
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const clearIncomeForm = () => {
+                                    document.getElementById("income_name").value = "";
+                                    document.getElementById("income_date").value = "";
+                                    document.getElementById("income_amount").value = "";
+                                    document.getElementById("income-category").selectedIndex = 0;
 
-                                document.getElementById("income_name_empty").textContent = "";
-                                document.getElementById("income_date_empty").textContent = "";
-                                document.getElementById("income_amount_empty").textContent = "";
-                                document.getElementById("income_category_empty").textContent = "";
-                            }
+                                    document.getElementById("income_name_empty").textContent = "";
+                                    document.getElementById("income_date_empty").textContent = "";
+                                    document.getElementById("income_amount_empty").textContent = "";
+                                    document.getElementById("income_category_empty").textContent = "";
+                                };
 
-                            document.getElementById("incomeCancelBtn").addEventListener("click", function() {
-                                var incomeName = document.getElementById("income_name").value.trim();
-                                var incomeDate = document.getElementById("income_date").value.trim();
-                                var incomeAmount = document.getElementById("income_amount").value.trim();
-                                var incomeCategory = document.getElementById("income-category").value.trim();
-                                if (incomeName !== "" || incomeDate !== "" || incomeAmount !== "" || incomeCategory !== "") {
-                                    var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
-                                    incomeConfirmModal.show();
-                                } else {
-                                    clearIncomeForm();
-                                    var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
-                                    incomeModal.hide();
-                                }
-                            });
+                                const showIncomeConfirmation = () => {
+                                    Swal.fire({
+                                        title: '{{ __('confirmationMessageTitle') }}',
+                                        text: '{{ __('incomeConfirmationMessage') }}',
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#4caf50",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: '{{ __('yes') }}',
+                                        cancelButtonText: '{{ __('no') }}'
+                                    }).then((result) => {
+                                        var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
+                                        if (result.isConfirmed) {
+                                            clearIncomeForm();
+                                            incomeModal.hide();
+                                        } else {
+                                            incomeModal.show();
+                                        }
+                                    });
+                                };
 
-                            document.getElementById("incomeConfirmYes").addEventListener("click", function() {
-                                clearIncomeForm();
-                                window.location.href = "{{ url('/') }}";
-                            });
+                                document.getElementById("incomeCancelBtn").addEventListener("click", function() {
+                                    var incomeName = document.getElementById("income_name").value.trim();
+                                    var incomeDate = document.getElementById("income_date").value.trim();
+                                    var incomeAmount = document.getElementById("income_amount").value.trim();
+                                    var incomeCategory = document.getElementById("income-category").value.trim();
 
-                            document.getElementById("incomeConfirmNo").addEventListener("click", function() {
-                                console.log("Click No");
-                                var incomeConfirmModal = new bootstrap.Modal(document.getElementById("incomeConfirmModal"));
-                                incomeConfirmModal.hide();
-                            });
+                                    if (incomeName !== "" || incomeDate !== "" || incomeAmount !== "" || incomeCategory !==
+                                        "") {
+                                        showIncomeConfirmation();
+                                    } else {
+                                        clearIncomeForm();
+                                        var incomeModal = new bootstrap.Modal(document.getElementById("incomeModal"));
+                                        incomeModal.hide();
+                                    }
+                                });
 
-                            document.getElementById("incomeForm").addEventListener("submit", function(event) {
-                                var incomeName = document.getElementById("income_name");
-                                var incomeDate = document.getElementById("income_date");
-                                var incomeAmount = document.getElementById("income_amount");
-                                var incomeCategory = document.getElementById("income-category");
-                                var incomeNameEmpty = document.getElementById("income_name_empty");
-                                var incomeDateEmpty = document.getElementById("income_date_empty");
-                                var incomeAmountEmpty = document.getElementById("income_amount_empty");
-                                var incomeCategoryEmpty = document.getElementById("income_category_empty");
-                                var emptyCount = 0;
-                                var translations = {
-                                    nameEmpty: @json(__('errorIncomeNameEmpty')),
-                                    dateEmpty: @json(__('errorIncomeDateEmpty')),
-                                    amountEmpty: @json(__('errorIncomeAmountEmpty')),
-                                    categoryEmpty: @json(__('errorIncomeCategoryEmpty'))
-                                }
+                                document.getElementById("incomeForm").addEventListener("submit", function(event) {
+                                    var incomeName = document.getElementById("income_name");
+                                    var incomeDate = document.getElementById("income_date");
+                                    var incomeAmount = document.getElementById("income_amount");
+                                    var incomeCategory = document.getElementById("income-category");
+                                    var incomeNameEmpty = document.getElementById("income_name_empty");
+                                    var incomeDateEmpty = document.getElementById("income_date_empty");
+                                    var incomeAmountEmpty = document.getElementById("income_amount_empty");
+                                    var incomeCategoryEmpty = document.getElementById("income_category_empty");
+                                    var emptyCount = 0;
+                                    var translations = {
+                                        nameEmpty: @json(__('errorIncomeNameEmpty')),
+                                        dateEmpty: @json(__('errorIncomeDateEmpty')),
+                                        amountEmpty: @json(__('errorIncomeAmountEmpty')),
+                                        categoryEmpty: @json(__('errorIncomeCategoryEmpty'))
+                                    }
 
-                                if (incomeName.value.trim() === "") {
-                                    incomeNameEmpty.textContent = translations.nameEmpty;
-                                    incomeNameEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    incomeNameEmpty.style.display = "none";
-                                }
+                                    if (incomeName.value.trim() === "") {
+                                        incomeNameEmpty.textContent = translations.nameEmpty;
+                                        incomeNameEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        incomeNameEmpty.style.display = "none";
+                                    }
 
-                                if (incomeDate.value.trim() === "") {
-                                    incomeDateEmpty.textContent = translations.dateEmpty;
-                                    incomeDateEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    incomeDateEmpty.style.display = "none";
-                                }
+                                    if (incomeDate.value.trim() === "") {
+                                        incomeDateEmpty.textContent = translations.dateEmpty;
+                                        incomeDateEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        incomeDateEmpty.style.display = "none";
+                                    }
 
-                                if (incomeAmount.value.trim() === "") {
-                                    incomeAmountEmpty.textContent = translations.amountEmpty;
-                                    incomeAmountEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    incomeAmountEmpty.style.display = "none";
-                                }
+                                    if (incomeAmount.value.trim() === "") {
+                                        incomeAmountEmpty.textContent = translations.amountEmpty;
+                                        incomeAmountEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        incomeAmountEmpty.style.display = "none";
+                                    }
 
-                                if (incomeCategory.value.trim() === "") {
-                                    incomeCategoryEmpty.textContent = translations.categoryEmpty;
-                                    incomeCategoryEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    incomeCategoryEmpty.style.display = "none";
+                                    if (incomeCategory.value.trim() === "") {
+                                        incomeCategoryEmpty.textContent = translations.categoryEmpty;
+                                        incomeCategoryEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        incomeCategoryEmpty.style.display = "none";
+                                    }
 
-                                }
+                                    if (emptyCount > 0) {
+                                        event.preventDefault();
+                                    } else {
+                                        sessionStorage.setItem('incomeAdded', 'true');
+                                    }
+                                });
 
-                                if (emptyCount > 0) {
-                                    event.preventDefault();
-                                } else {
-                                    sessionStorage.setItem('incomeAdded', 'true');
-                                }
-                            });
-                        </script>
-                    </div>
-
-                    <div>
-                        <div class="modal" id="incomeSuccessModal" tabindex="-1"
-                            aria-labelledby="incomeSuccessModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <h5 style="text-align: center">{{ __('incomeSuccessMessage') }}</h5>
-                                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
-                                            <button type="button" id="incomeSuccessClose" class="send"
-                                                data-bs-dismiss="modal">{{ __('close') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var incomeSuccessModal = new bootstrap.Modal(document.getElementById(
-                                    "incomeSuccessModal"));
                                 if (sessionStorage.getItem('incomeAdded') === 'true') {
-                                    incomeSuccessModal.show();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: '{{ __('incomeSuccessMessage') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
                                     sessionStorage.removeItem('incomeAdded');
                                 }
-
-                                document.getElementById("incomeSuccessClose").addEventListener("click", function() {
-                                    var incomeSuccessModal = new bootstrap.Modal(document.getElementById("incomeSuccessModal"));
-                                    incomeSuccessModal.hide();
-                                });
                             });
                         </script>
                     </div>
@@ -707,153 +680,122 @@
                             </div>
                         </div>
 
-                        <div class="modal" id="outcomeConfirmModal" tabindex="-1"
-                            aria-labelledby="outcomeConfirmModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <h5 style="text-align: center">{{ __('outcomeConfirmationMessage') }}</h5>
-                                        <div class="buttons mt-4">
-                                            <button type="button" id="outcomeConfirmYes"
-                                                class="send">{{ __('yes') }}</button>
-                                            <button type="button" id="outcomeConfirmNo" data-bs-toggle="modal"
-                                                data-bs-target="#outcomeModal"
-                                                class="cancel">{{ __('no') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <script>
-                            function clearOutcomeForm() {
-                                document.getElementById("outcome_name").value = "";
-                                document.getElementById("outcome_date").value = "";
-                                document.getElementById("outcome_amount").value = "";
-                                document.getElementById("outcome-category").selectedIndex = 0;
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const clearOutcomeForm = () => {
+                                    document.getElementById("outcome_name").value = "";
+                                    document.getElementById("outcome_date").value = "";
+                                    document.getElementById("outcome_amount").value = "";
+                                    document.getElementById("outcome-category").selectedIndex = 0;
 
-                                document.getElementById("outcome_name_empty").textContent = "";
-                                document.getElementById("outcome_date_empty").textContent = "";
-                                document.getElementById("outcome_amount_empty").textContent = "";
-                                document.getElementById("outcome_category_empty").textContent = "";
-                            }
+                                    document.getElementById("outcome_name_empty").textContent = "";
+                                    document.getElementById("outcome_date_empty").textContent = "";
+                                    document.getElementById("outcome_amount_empty").textContent = "";
+                                    document.getElementById("outcome_category_empty").textContent = "";
+                                };
 
-                            document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
-                                var outcomeName = document.getElementById("outcome_name").value.trim();
-                                var outcomeDate = document.getElementById("outcome_date").value.trim();
-                                var outcomeAmount = document.getElementById("outcome_amount").value.trim();
-                                var outcomeCategory = document.getElementById("outcome-category").value.trim();
+                                const showOutcomeConfirmation = () => {
+                                    Swal.fire({
+                                        title: '{{ __('confirmationMessageTitle') }}',
+                                        text: '{{ __('outcomeConfirmationMessage') }}',
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#4caf50",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: '{{ __('yes') }}',
+                                        cancelButtonText: '{{ __('no') }}'
+                                    }).then((result) => {
+                                        var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
+                                        if (result.isConfirmed) {
+                                            clearOutcomeForm();
+                                            outcomeModal.hide();
+                                        } else {
+                                            outcomeModal.show();
+                                        }
+                                    });
+                                };
 
-                                if (outcomeName !== "" || outcomeDate !== "" || outcomeAmount !== "" || outcomeCategory !== "") {
-                                    var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
-                                    outcomeConfirmModal.show();
-                                } else {
-                                    clearOutcomeForm();
-                                    var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
-                                    outcomeModal.hide();
-                                }
-                            });
+                                document.getElementById("outcomeCancelBtn").addEventListener("click", function() {
+                                    var outcomeName = document.getElementById("outcome_name").value.trim();
+                                    var outcomeDate = document.getElementById("outcome_date").value.trim();
+                                    var outcomeAmount = document.getElementById("outcome_amount").value.trim();
+                                    var outcomeCategory = document.getElementById("outcome-category").value.trim();
 
-                            document.getElementById("outcomeConfirmYes").addEventListener("click", function() {
-                                console.log("Click Yes");
-                                clearOutcomeForm();
-                                window.location.href = "{{ url('/') }}";
-                            });
+                                    if (outcomeName !== "" || outcomeDate !== "" || outcomeAmount !== "" || outcomeCategory !==
+                                        "") {
+                                        showOutcomeConfirmation();
+                                    } else {
+                                        clearOutcomeForm();
+                                        var outcomeModal = new bootstrap.Modal(document.getElementById("outcomeModal"));
+                                        outcomeModal.hide();
+                                    }
+                                });
 
-                            document.getElementById("outcomeConfirmNo").addEventListener("click", function() {
-                                console.log("Click No");
-                                var outcomeConfirmModal = new bootstrap.Modal(document.getElementById("outcomeConfirmModal"));
-                                outcomeConfirmModal.hide();
-                            });
+                                document.getElementById("outcomeForm").addEventListener("submit", function(event) {
+                                    var outcomeName = document.getElementById("outcome_name");
+                                    var outcomeDate = document.getElementById("outcome_date");
+                                    var outcomeAmount = document.getElementById("outcome_amount");
+                                    var outcomeCategory = document.getElementById("outcome-category");
+                                    var outcomeNameEmpty = document.getElementById("outcome_name_empty");
+                                    var outcomeDateEmpty = document.getElementById("outcome_date_empty");
+                                    var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
+                                    var outcomeCategoryEmpty = document.getElementById("outcome_category_empty");
+                                    var emptyCount = 0;
+                                    var translations = {
+                                        nameEmpty: @json(__('errorOutcomeNameEmpty')),
+                                        dateEmpty: @json(__('errorOutcomeDateEmpty')),
+                                        amountEmpty: @json(__('errorOutcomeAmountEmpty')),
+                                        categoryEmpty: @json(__('errorOutcomeCategoryEmpty'))
+                                    }
 
-                            document.getElementById("outcomeForm").addEventListener("submit", function(event) {
-                                var outcomeName = document.getElementById("outcome_name");
-                                var outcomeDate = document.getElementById("outcome_date");
-                                var outcomeAmount = document.getElementById("outcome_amount");
-                                var outcomeCategory = document.getElementById("outcome-category");
-                                var outcomeNameEmpty = document.getElementById("outcome_name_empty");
-                                var outcomeDateEmpty = document.getElementById("outcome_date_empty");
-                                var outcomeAmountEmpty = document.getElementById("outcome_amount_empty");
-                                var outcomeCategoryEmpty = document.getElementById("outcome_category_empty");
-                                var emptyCount = 0;
-                                var translations = {
-                                    nameEmpty: @json(__('errorOutcomeNameEmpty')),
-                                    dateEmpty: @json(__('errorOutcomeDateEmpty')),
-                                    amountEmpty: @json(__('errorOutcomeAmountEmpty')),
-                                    categoryEmpty: @json(__('errorOutcomeCategoryEmpty'))
-                                }
+                                    if (outcomeName.value.trim() === "") {
+                                        outcomeNameEmpty.textContent = translations.nameEmpty;
+                                        outcomeNameEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        outcomeNameEmpty.style.display = "none";
+                                    }
 
-                                if (outcomeName.value.trim() === "") {
-                                    outcomeNameEmpty.textContent = translations.nameEmpty;
-                                    outcomeNameEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    outcomeNameEmpty.style.display = "none";
-                                }
+                                    if (outcomeDate.value.trim() === "") {
+                                        outcomeDateEmpty.textContent = translations.dateEmpty;
+                                        outcomeDateEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        outcomeDateEmpty.style.display = "none";
+                                    }
 
-                                if (outcomeDate.value.trim() === "") {
-                                    outcomeDateEmpty.textContent = translations.dateEmpty;
-                                    outcomeDateEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    outcomeDateEmpty.style.display = "none";
-                                }
+                                    if (outcomeAmount.value.trim() === "") {
+                                        outcomeAmountEmpty.textContent = translations.amountEmpty;
+                                        outcomeAmountEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        outcomeAmountEmpty.style.display = "none";
+                                    }
 
-                                if (outcomeAmount.value.trim() === "") {
-                                    outcomeAmountEmpty.textContent = translations.amountEmpty;
-                                    outcomeAmountEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    outcomeAmountEmpty.style.display = "none";
-                                }
+                                    if (outcomeCategory.value.trim() === "") {
+                                        outcomeCategoryEmpty.textContent = translations.categoryEmpty;
+                                        outcomeCategoryEmpty.style.display = "block";
+                                        emptyCount++;
+                                    } else {
+                                        outcomeCategoryEmpty.style.display = "none";
+                                    }
 
-                                if (outcomeCategory.value.trim() === "") {
-                                    outcomeCategoryEmpty.textContent = translations.categoryEmpty;
-                                    outcomeCategoryEmpty.style.display = "block";
-                                    emptyCount++;
-                                } else {
-                                    outcomeCategoryEmpty.style.display = "none";
-                                }
+                                    if (emptyCount > 0) {
+                                        event.preventDefault();
+                                    } else {
+                                        sessionStorage.setItem('outcomeAdded', 'true');
+                                    }
+                                });
 
-                                if (emptyCount > 0) {
-                                    event.preventDefault();
-                                } else {
-                                    sessionStorage.setItem('outcomeAdded', 'true');
-                                }
-                            });
-                        </script>
-                    </div>
-
-                    <div>
-                        <div class="modal" id="outcomeSuccessModal" tabindex="-1"
-                            aria-labelledby="outcomeSuccessModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <h5 style="text-align: center">{{ __('outcomeSuccessMessage') }}</h5>
-                                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
-                                            <button type="button" id="outcomeSuccessClose" class="send"
-                                                data-bs-dismiss="modal">{{ __('close') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                var outcomeSuccessModal = new bootstrap.Modal(document.getElementById(
-                                    "outcomeSuccessModal"));
                                 if (sessionStorage.getItem('outcomeAdded') === 'true') {
-                                    outcomeSuccessModal.show();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: '{{ __('outcomeSuccessMessage') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
                                     sessionStorage.removeItem('outcomeAdded');
                                 }
-
-                                document.getElementById("outcomeSuccessClose").addEventListener("click", function() {
-                                    var outcomeSuccessModal = new bootstrap.Modal(document.getElementById(
-                                        "outcomeSuccessModal"));
-                                    outcomeSuccessModal.hide();
-                                });
                             });
                         </script>
                     </div>

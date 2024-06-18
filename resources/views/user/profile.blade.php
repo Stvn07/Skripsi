@@ -90,8 +90,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <div class="profile-container">
-
-
         <div class="main">
             <div class="header">
                 <div class="left">
@@ -102,6 +100,7 @@
                     <h1>{{ __('userProfile') }}</h1>
                 </div>
             </div>
+
             <div class="card">
                 <div class="info-profile">
                     <strong>{{ __('nameProfile') }}</strong>
@@ -124,6 +123,21 @@
                 <div class="text-center mt-2">
                     <a href="{{ route('logout') }}" class="button-logout"><i class="fa fa-sign-out"></i> Logout</a>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        console.log(sessionStorage.getItem('profileChanged'));
+                        if (sessionStorage.getItem('profileChanged') === 'true') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('profileSuccessMessage') }}',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            sessionStorage.removeItem('profileChanged');
+                        }
+                    });
+                </script>
             </div>
         </div>
     </div>

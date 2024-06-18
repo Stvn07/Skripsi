@@ -414,5 +414,18 @@
             var originalCategory = element.innerText;
             element.innerText = translations[originalCategory] || originalCategory;
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(sessionStorage.getItem('outcomeChanged'));
+            if (sessionStorage.getItem('outcomeChanged') === 'true') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('outcomeChangedSuccessMessage') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                sessionStorage.removeItem('outcomeChanged');
+            }
+        });
     </script>
 @endsection

@@ -410,5 +410,18 @@
             var originalCategory = element.innerText;
             element.innerText = translations[originalCategory] || originalCategory;
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(sessionStorage.getItem('incomeChanged'));
+            if (sessionStorage.getItem('incomeChanged') === 'true') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('incomeChangedSuccessMessage') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                sessionStorage.removeItem('incomeChanged');
+            }
+        });
     </script>
 @endsection

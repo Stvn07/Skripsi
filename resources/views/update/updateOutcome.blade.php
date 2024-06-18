@@ -102,7 +102,7 @@
             </div>
         </form>
 
-        <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
+        {{-- <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -129,15 +129,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.getElementById('updateOutcomeForm');
                 const cancelBtn = document.getElementById('cancelBtn');
                 const updateBtn = document.getElementById('updateBtn');
-                const confirmCancelModal = new bootstrap.Modal(document.getElementById('confirmCancelModal'));
-                const noChangesModal = new bootstrap.Modal(document.getElementById('noChangesModal'));
                 let isFormChanged = false;
 
                 form.addEventListener('input', function() {
@@ -147,23 +145,39 @@
                 cancelBtn.addEventListener('click', function(event) {
                     if (isFormChanged) {
                         event.preventDefault();
-                        confirmCancelModal.show();
+                        Swal.fire({
+                            title: '{{ __('confirmationMessageTitle') }}',
+                            text: '{{ __('updateOutcomeConfirmationMessage') }}',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: '{{ __('yes') }}',
+                            cancelButtonText: '{{ __('no') }}',
+                            confirmButtonColor: "#4caf50",
+                            cancelButtonColor: "#d33",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ route('openOutcomePage') }}";
+                            }
+                        });
                     } else {
                         window.location.href = "{{ route('openOutcomePage') }}";
                     }
                 });
 
-                document.getElementById('cancelConfirmYes').addEventListener('click', function() {
-                    window.location.href = "{{ route('openOutcomePage') }}";
-                });
-
-                document.getElementById('cancelConfirmNo').addEventListener('click', function() {
-                    confirmCancelModal.hide();
-                });
                 updateBtn.addEventListener('click', function(event) {
                     if (!isFormChanged) {
                         event.preventDefault();
-                        noChangesModal.show();
+                        Swal.fire({
+                            title: '{{ __('noChangesMessage') }}',
+                            icon: 'info',
+                            confirmButtonText: '{{ __('close') }}',
+                            customClass: {
+                                confirmButton: 'button send-button'
+                            },
+                            buttonsStyling: false
+                        });
+                    } else {
+                        sessionStorage.setItem('outcomeChanged', 'true');
                     }
                 });
             });
