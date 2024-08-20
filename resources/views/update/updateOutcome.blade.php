@@ -102,35 +102,6 @@
             </div>
         </form>
 
-        {{-- <div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h5 style="text-align: center">{{ __('updateOutcomeConfirmationMessage') }}</h5>
-                        <div class="buttons mt-4">
-                            <button type="button" id="cancelConfirmYes" class="send">{{ __('yes') }}</button>
-                            <button type="button" id="cancelConfirmNo" class="cancel"
-                                data-bs-dismiss="modal">{{ __('no') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="noChangesModal" tabindex="-1" aria-labelledby="noChangesModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h5 style="text-align: center">{{ __('noChangesMessage') }}</h5>
-                        <div style="justify-content: center; align-content: center" class="buttons mt-4">
-                            <button type="button" class="send" data-bs-dismiss="modal">{{ __('close') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.getElementById('updateOutcomeForm');

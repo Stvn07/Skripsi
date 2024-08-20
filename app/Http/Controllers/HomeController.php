@@ -662,23 +662,40 @@ class HomeController extends Controller
             ->whereNull('first_balance_id')
             ->latest('created_at')
             ->first();
+        $total_income_per_month = Transaction::where('user_id', $userId)
+            ->where('transaction_type', 'income')
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->sum('transaction_amount');
+        $total_outcome_per_month = Transaction::where('user_id', $userId)
+            ->where('transaction_type', 'outcome')
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->sum('transaction_amount');
 
         if ($totalBalanceAmount === null) {
             if ($locale === 'id') {
-                $statusOutcome = 'Belum Ada Pengeluaran';
+                $statusOutcome = '-';
             } else {
-                $statusOutcome = 'No Spending';
+                $statusOutcome = '-';
+            }
+        } elseif ($total_income_per_month == 0 && $total_outcome_per_month == 0) {
+            if ($locale === 'id') {
+                $statusOutcome = '-';
+            } else {
+                $statusOutcome = '-';
+            }
+        } elseif ($total_income_per_month == 0) {
+            if ($locale === 'id') {
+                $statusOutcome = '-';
+            } else {
+                $statusOutcome = '-';
+            }
+        } elseif ($total_outcome_per_month == 0) {
+            if ($locale === 'id') {
+                $statusOutcome = '-';
+            } else {
+                $statusOutcome = '-';
             }
         } else {
-            $total_income_per_month = Transaction::where('user_id', $userId)
-                ->where('transaction_type', 'income')
-                ->whereBetween('transaction_date', [$startDate, $endDate])
-                ->sum('transaction_amount');
-
-            $total_outcome_per_month = Transaction::where('user_id', $userId)
-                ->where('transaction_type', 'outcome')
-                ->whereBetween('transaction_date', [$startDate, $endDate])
-                ->sum('transaction_amount');
             $percentage = ($total_outcome_per_month / $total_income_per_month) * 100;
             $lowExpenses = 30;
             $middleExpenses = 65;

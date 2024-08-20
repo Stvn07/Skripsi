@@ -126,7 +126,6 @@
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
-                        console.log(sessionStorage.getItem('profileChanged'));
                         if (sessionStorage.getItem('profileChanged') === 'true') {
                             Swal.fire({
                                 icon: 'success',

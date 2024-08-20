@@ -170,15 +170,15 @@
 
         <div class="chart-title">
             <div class="outcome-title">
-                <h3>Outflow Chart</h3>
+                <h3>{{ __('outcomeChart') }}</h3>
             </div>
             <div class="income-title">
-                <h3>Income Chart</h3>
+                <h3>{{ __('incomeChart') }}</h3>
             </div>
         </div>
 
         <hr>
-        <h3>Cashflow Table</h3>
+        <h3>{{ __('cashflowTable') }}</h3>
         <table class="mt-3 mb-3" style="border: 1px solid black">
             <thead style="text-align: center">
                 <tr>
@@ -186,10 +186,10 @@
                         {{ __('transactionDate') }}
                     </th>
                     <th>
-                        {{ __('transactionDate') }}
+                        {{ __('transactionAmount') }}
                     </th>
                     <th>
-                        {{ __('transactionAmount') }}
+                        {{ __('transactionType') }}
                     </th>
                     <th>
                         {{ __('income') }}

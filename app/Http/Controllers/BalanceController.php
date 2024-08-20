@@ -148,13 +148,11 @@ class BalanceController extends Controller
         ]);
 
         $userId = Auth::id();
+
+        $transaction = Transaction::where('income_id', $incomeId)->firstOrFail();
+        $transactions = Transaction::where('income_id', $incomeId)->get();
+
         $incomeData = Income::findOrFail($incomeId);
-
-        $transactionData = Transaction::where('income_id', $incomeId)->first();
-        if ($transactionData && $transactionData->user_id !== $userId) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $oldIncomeAmount = $incomeData->income_amount;
 
         $incomeData->update([
@@ -164,7 +162,7 @@ class BalanceController extends Controller
             'income_category' => $request->input('income_category', $incomeData->income_category)
         ]);
 
-        if ($transactionData) {
+        foreach ($transactions as $transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('income_date', $transactionData->transaction_date),
                 'transaction_amount' => $request->input('income_amount', $transactionData->transaction_amount)
@@ -173,14 +171,16 @@ class BalanceController extends Controller
 
         $changeAmount = $request->income_amount - $oldIncomeAmount;
 
-        $transactionIdsToUpdate = Transaction::where('user_id', $userId)
-            ->where('id', '>=', $transactionData->id)
-            ->pluck('id');
+        if ($transactions->isNotEmpty()) {
+            $transactionIdsToUpdate = Transaction::where('user_id', $userId)
+                ->where('id', '>=', $transactions->first()->id)
+                ->pluck('id');
 
-        TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
-            ->update([
-                'total_balance_amount' => DB::raw("total_balance_amount + $changeAmount")
-            ]);
+            TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
+                ->update([
+                    'total_balance_amount' => DB::raw("total_balance_amount + $changeAmount")
+                ]);
+        }
 
         return redirect()->route('openIncomePage');
     }
@@ -202,13 +202,11 @@ class BalanceController extends Controller
         ]);
 
         $userId = Auth::id();
+
+        $transaction = Transaction::where('outcome_id', $outcomeId)->firstOrFail();
+        $transactions = Transaction::where('outcome_id', $outcomeId)->get();
+
         $outcomeData = Outcome::findOrFail($outcomeId);
-
-        $transactionData = Transaction::where('outcome_id', $outcomeId)->first();
-        if ($transactionData && $transactionData->user_id !== $userId) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $oldOutcomeAmount = $outcomeData->outcome_amount;
 
         $outcomeData->update([
@@ -218,7 +216,7 @@ class BalanceController extends Controller
             'outcome_category' => $request->input('outcome_category', $outcomeData->outcome_category)
         ]);
 
-        if ($transactionData) {
+        foreach ($transactions as $transactionData) {
             $transactionData->update([
                 'transaction_date' => $request->input('outcome_date', $transactionData->transaction_date),
                 'transaction_amount' => $request->input('outcome_amount', $transactionData->transaction_amount)
@@ -227,14 +225,16 @@ class BalanceController extends Controller
 
         $changeAmount = $request->outcome_amount - $oldOutcomeAmount;
 
-        $transactionIdsToUpdate = Transaction::where('user_id', $userId)
-            ->where('id', '>=', $transactionData->id)
-            ->pluck('id');
+        if ($transactions->isNotEmpty()) {
+            $transactionIdsToUpdate = Transaction::where('user_id', $userId)
+                ->where('id', '>=', $transactions->first()->id)
+                ->pluck('id');
 
-        TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
-            ->update([
-                'total_balance_amount' => DB::raw("total_balance_amount - $changeAmount")
-            ]);
+            TotalBalance::whereIn('transaction_id', $transactionIdsToUpdate)
+                ->update([
+                    'total_balance_amount' => DB::raw("total_balance_amount - $changeAmount")
+                ]);
+        }
 
         return redirect()->route('openOutcomePage');
     }

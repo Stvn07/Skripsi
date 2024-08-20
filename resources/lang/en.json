@@ -49,6 +49,7 @@
     "transaction": "Transaction",
     "report": "Report",
     "profile": "Profile",
+    "cashflowTable": "Cashflow Table",
     "incomeChart": "Income Chart",
     "outcomeChart": "Outflow Chart",
     "prevChart": "Previous Chart",

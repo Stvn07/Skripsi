@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 
 
-class reportController extends Controller
+class ReportController extends Controller
 {
     function showReportTable(Request $request)
     {
