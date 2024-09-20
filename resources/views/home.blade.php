@@ -326,6 +326,36 @@
                                         {{ $statusName }}
                                     </span>
                                 @endif
+
+                                @if ($statusName !== '-')
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            Swal.fire({
+                                                title: '{{ session('statusOutcome.title') }}',
+                                                text: '{{ session('statusOutcome.message') }}',
+                                                icon: '{{ session('statusOutcome.icon') }}',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        });
+                                    </script>
+                                @endif
+
+                                @if (
+                                    $statusName === 'High Spending' ||
+                                        $statusName === 'Pengeluaran Tinggi' ||
+                                        $statusName === 'Medium Spending' ||
+                                        $statusName === 'Pengeluaran Sedang')
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            Swal.fire({
+                                                title: '{{ session('statusOutcome.title') }}',
+                                                text: '{{ session('statusOutcome.message') }}',
+                                                icon: '{{ session('statusOutcome.icon') }}',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        });
+                                    </script>
+                                @endif
                             </div>
                         </div>
                     </div>
